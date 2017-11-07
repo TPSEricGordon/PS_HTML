@@ -1,0 +1,924 @@
+
+<#include "/pss-macros.ftl" />
+<@get_js_texts prefix="psx.jsftl.admin_health.studenthealthscreeninglist."/>
+
+<#assign dateFormat><@pss.getDateFormat content="mmddyyyy"/></#assign>
+
+
+<link rel="stylesheet" type="text/css" href="${application.imageBaseUrl!}/scripts/yui/2.7.0/assets/skins/sam/skin.css" />
+<link rel="stylesheet" type="text/css" href="${application.imageBaseUrl!}/scripts/glowbutton.css"/>
+<link rel="stylesheet" type="text/css" href="${application.imageBaseUrl!}/scripts/div_popup.css"/>
+
+<link rel="stylesheet" type="text/css" href="${application.imageBaseUrl!}/images/screeningtable.css" />
+
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/jquery.cookie.js"></script>
+
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/yui/2.7.0/utilities/utilities.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/yui/2.7.0/container/container-min.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/yui/2.7.0/menu/menu-min.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/yui/2.7.0/button/button-min.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/yui/2.7.0/json/json-min.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/yui/2.7.0/resize/resize-min.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/yui/2.7.0/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/yui/2.7.0/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/yui/2.7.0/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/struts/css_xhtml/validation.js"></script>
+<@get_js_texts prefix="psx.js.scripts.tooltips." />
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/tooltips.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/glowbutton.js"></script>
+<@get_js_texts prefix="psx.js.scripts.submitprogress." />
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/submitprogress-min.js"></script>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/datatable.js"></script>
+<@get_js_texts "psx.js.scripts.incident_validation."/>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/incident_validation.js"></script>
+<@get_js_texts "psx.js.scripts.incident_popup."/>
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/incident_popup.js"></script>
+<@get_js_texts prefix="psx.js.scripts.formsave_msg." />
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/formsave_msg.js"></script>
+<@get_js_texts prefix="psx.js.scripts.datejswidgethandler." />
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/datejswidget.js"></script>
+<@get_js_texts prefix="psx.js.scripts_health.health_common." />
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/health/health_common.js"></script>
+<@get_js_texts prefix="psx.js.scripts_health.screening_table." />
+<script type="text/javascript" src="${application.imageBaseUrl!}/scripts/health/screening_table.js"></script>
+
+<style>
+.yui-skin-sam .yui-dt th.yui-dt-col-col2 {
+		width: 80%;
+	}
+
+</style>
+
+    <script type="text/javascript">
+
+    var providerNameCookieName='health_providerName';
+    var providerTypeFitnessCookieName='fitness_providerType';
+    var providerTypeHearingCookieName='hearing_providerType';
+    var providerTypeVisionCookieName='vision_providerType';
+    var providerTypeTbCookieName='tb_providerType';
+    var providerTypeScolioCookieName='scolio_providerType';
+    var providerTypeOralCookieName='oral_providerType';
+
+    var strProviderName='';
+    var strFitnessProviderType='';
+    var strHearingProviderType='';
+    var strTbProviderType='';
+    var strVisionProviderType='';
+    var strScolioProviderType='';
+    var strOralProviderType='';
+
+    /* we will get the screening data and setup a json array which will be used as data source by the data table for display. options field will be used for the edit and
+       store hidden values of a screening data. This hidden values will be get/set by the javascript edit function to populate the form when edit is clicked and then saved upon
+       update button click and eventually these are posted by submit action. */
+
+
+	var MY_TBL_DIV="screeningtable";
+
+    var screeningTypeMap = [
+    	<#list screeningTypes?sort_by("displayName") as scrnType>
+    	  	{id:${scrnType.id?c}, name:'${scrnType.code}', displayName:'${scrnType.displayName} Screening'}
+    	  <#if scrnType_has_next>,</#if>
+    	</#list>
+	];
+	var waiverTypeMap = [
+    	<#list waiverTypes?sort_by("displayName") as scrnType>
+    	  	{id:${scrnType.id?c}, name:'${scrnType.code}', displayName:'${scrnType.displayName} Waiver'}
+    	  <#if scrnType_has_next>,</#if>
+    	</#list>
+	];
+
+	<#assign gradeLevelDefaultValue = gradeLevel!"" />
+	<#if (gradeLevelDefaultValue == "0")>
+		<#assign gradeLevelDefaultValue = "K"/>
+	<#elseif (gradeLevelDefaultValue == "-1")>
+		<#assign gradeLevelDefaultValue = "PK4"/>
+	<#elseif (gradeLevelDefaultValue == "-2")>
+		<#assign gradeLevelDefaultValue = "PK3"/>
+	</#if>
+
+	<#assign _locale=locale />
+    <#assign firstItem=1 />
+	var myJsonData = [
+		<#list screeningTypes?sort_by("id") as sType>
+
+			<#if (sType.id == 1)> /* fitness */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+
+					id:${sType.id?c},
+					fields:['screenDate', 'fitnessScreenOutcomeLUID','screenComment', 'screenerName', 'fitnessScreenerTypeLUID','gradeLevelAtScreen','height','heightPercentile','weight','weightPercentile','weightStatusLUID',
+    	  					'bmi','systolicBloodPressure','diastolicBloodPressure','restingHeartRate','temperature','changeReason','screeningStudentFitnessID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_date_2'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_outcome5'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment2'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_name3'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_type5'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_7'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.height_'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.height_percentile_'),
+    	  					pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.weight_'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.weight_percentile_'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.weight_status'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.bmi'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.systolic_blood_pressure'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.diastolic_blood_pressure'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.resting_heart_rate'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.temperature'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.change_reason_3'),''
+    	  				],
+    	  			defaultvalues:[{field:'screenDate', value:'${todayString}'},{field:'gradeLevelAtScreen', value:'${gradeLevelDefaultValue!""}'}
+    	  							,{field:'screenerName', value:''}
+    	  							,{field:'fitnessScreenerTypeLUID', value: '${fitnessScreenTypeDefault!""}'}
+    	  							,{field:'weightStatusLUID', value: '${fitnessWeightStatusDefault!""}'}
+    	  							,{field:'fitnessScreenOutcomeLUID', value: '${fitnessScreenOutcomeDefault!""}'}
+    	  				],
+    	  			validations:[{index:'0', validationType:'notblank'},{index:'0', validationType:'date'},{index:'0', validationType:'duplicatewithintypedate'},
+    	  						{index:'6', validationType:'decimal'},{index:'8', validationType:'decimal'},
+    	  						{index:'5', validationType:'notblank'},{index:'16',validationType:'notblankifupdate'}
+    	  				],
+    	  			tooltips: [3,4,5,6,7,8,9,10,11,12,13,14,15], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'fitnessScreenings',
+					data: [
+						<#list fitnessScreenings![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.screenDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.fitnessScreenOutcomeLUID?c)!""}",
+							"${(scrn.screenComment!"")?js_string?html}",
+							"${(scrn.screenerName!"")?js_string?html}",
+							"${(scrn.fitnessScreenerTypeLUID?c)!""}",
+							"${scrn.gradeLevelAtScreen!""}",
+							"${(scrn.height?c)!""}",
+							"${(scrn.heightPercentile!"")?js_string?html}",
+							"${(scrn.weight?c)!""}",
+							"${(scrn.weightPercentile!"")?js_string?html}",
+							"${(scrn.weightStatusLUID?c)!""}",
+							"${(scrn.bmi?c)!""}",
+							"${(scrn.systolicBloodPressure!"")?js_string?html}",
+							"${(scrn.diastolicBloodPressure!"")?js_string?html}",
+							"${(scrn.restingHeartRate!"")?js_string?html}",
+							"${(scrn.temperature!"")?js_string?html}",
+							"",
+							"${scrn.screeningStudentFitnessID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.screeningStudentFitnessID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+
+			<#if (sType.id == 2)> /* hearing */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+					id:${sType.id?c},
+					fields:['screenDate', 'hearingScreenOutcomeLUID', 'screenComment', 'screenerName', 'hearingScreenerTypeLUID','gradeLevelAtScreen','leftEarTestLUID','rightEarTestLUID','examTypeLUID','referalDate','hearingAid',
+							'testConductedLate','changeReason','screeningStudentHearingID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_date_5'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_outcome3'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment10'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_name'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_type'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.left_ear_test_result'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.right_ear_test_result'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.test_type'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.hearing_referral_date'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.hearing_aid'),
+							pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.test_conducted_late'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.change_reason_5'),''
+    	  				],
+    	  			validations:[{index:0, validationType:'date'},{index:0, validationType:'notblank'},{index:0, validationType:'duplicatewithintypedate'},{index:9, validationType:'date'},
+    	  							{index:5, validationType:'notblank'},{index:'12',validationType:'notblankifupdate'}
+    	  				],
+    	  			defaultvalues:[{field:'screenDate', value:'${todayString}'},{field:'gradeLevelAtScreen', value:'${gradeLevelDefaultValue!""}'}
+    	  					,{field:'screenerName', value:''}
+    	  					,{field:'hearingScreenerTypeLUID', value:'${hearingScreenTypeDefault!""}'}
+    	  					,{field:'leftEarTestLUID', value:'${leftEarTestDefault!""}'}
+    	  					,{field:'rightEarTestLUID', value:'${rightEarTestDefault!""}'}
+    	  					,{field:'examTypeLUID', value:'${examTypeDefault!""}'}
+    	  					,{field:'hearingScreenOutcomeLUID', value:'${hearingScreenOutcomeDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6,7,8,9,10,11], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'hearingScreenings',
+					data: [
+						<#list hearingScreenings![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.screenDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.hearingScreenOutcomeLUID?c)!""}",
+							"${(scrn.screenComment!"")?js_string?html}",
+							"${(scrn.screenerName!"")?js_string?html}",
+							"${(scrn.hearingScreenerTypeLUID?c)!""}",
+							"${scrn.gradeLevelAtScreen!""}",
+							"${(scrn.leftEarTestLUID?c)!""}",
+							"${(scrn.rightEarTestLUID?c)!""}",
+							"${(scrn.examTypeLUID?c)!""}",
+							<#setting locale="en">
+							"${(scrn.referalDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.hearingAid!"")?js_string?html}",
+							"${(scrn.testConductedLate?c)!""}",
+							"",
+							"${scrn.screeningStudentHearingID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.screeningStudentHearingID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+
+			<#if (sType.id == 3)> /* oral */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+					id:${sType.id?c},
+					fields:['screenDate','oralScreenOutcomeLUID', 'screenComment', 'screenerName', 'oralScreenerTypeLUID','gradeLevelAtScreen','isDentalSealantPresent','isMalocclusionPresent',
+							'isHistoryCariesPresent','isUntreatedCariesPresent','treatUrgencyLUID','changeReason','screeningStudentOralID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_date_'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_outcome2'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment11'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_name4'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_type2'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_2'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.dental_sealants_present'),
+    	  						 pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.malocclusion'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.history_of_caries_present'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.untreated_caries_present'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.treatment_urgency'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.change_reason_4'),''
+    	  				],
+    	  			validations:[{index:0, validationType:'date'},{index:0, validationType:'notblank'},{index:0, validationType:'duplicatewithintypedate'},
+    	  							{index:5, validationType:'notblank'},{index:'11',validationType:'notblankifupdate'}
+    	  				],
+    	  			defaultvalues:[{field:'screenDate', value:'${todayString}'},{field:'gradeLevelAtScreen', value:'${gradeLevelDefaultValue!""}'}
+    	  							,{field:'screenerName', value:''}
+    	  							,{field:'oralScreenerTypeLUID', value:'${oralScreenTypeDefault!""}'}
+    	  							,{field:'treatUrgencyLUID', value:'${treatUrgencyDefault!""}'}
+    	  							,{field:'oralScreenOutcomeLUID', value:'${oralScreenOutcomeDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6,7,8,9,10], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'oralScreenings',
+					data: [
+						<#list oralScreenings![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.screenDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.oralScreenOutcomeLUID?c)!""}",
+							"${(scrn.screenComment!"")?js_string?html}",
+							"${(scrn.screenerName!"")?js_string?html}",
+							"${(scrn.oralScreenerTypeLUID?c)!""}",
+							"${scrn.gradeLevelAtScreen!""}",
+							"${(scrn.isDentalSealantPresent?c)!""}",
+							"${(scrn.isMalocclusionPresent?c)!""}",
+							"${(scrn.isHistoryCariesPresent?c)!""}",
+							"${(scrn.isUntreatedCariesPresent?c)!""}",
+							"${(scrn.treatUrgencyLUID?c)!""}",
+							"",
+							"${scrn.screeningStudentOralID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.screeningStudentOralID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+
+			<#if (sType.id == 4)> /* scoliosis */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+					id:${sType.id?c},
+					fields:['screenDate', 'scolioScreenOutcomeLUID','screenComment', 'screenerName','scolioScreenerTypeLUID','gradeLevelAtScreen', 'rayFilmDate', 'xrayFilmImpresLUID',
+							'changeReason','screeningStudentScoliosisID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_date_4'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_outcome4'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment7'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_name5'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_type4'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_4'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.xray_film_date'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.xray_film_impression'),
+    	  							pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.change_reason_1'),''
+    	  				],
+    	  			validations:[{index:0, validationType:'date'},{index:0, validationType:'notblank'},{index:0, validationType:'duplicatewithintypedate'}, {index:6, validationType:'date'},
+    	  							{index:5, validationType:'notblank'},{index:'8',validationType:'notblankifupdate'}
+    	  				],
+    	  			defaultvalues:[{field:'screenDate', value:'${todayString}'},{field:'gradeLevelAtScreen', value:'${gradeLevelDefaultValue!""}'}
+    	  							,{field:'screenerName', value:''}
+    	  							,{field:'scolioScreenerTypeLUID', value:'${scoliosisScreenTypeDefault!""}'}
+    	  							,{field:'xrayFilmImpresLUID', value:'${xRayFilmImpresDefault!""}'}
+    	  							,{field:'scolioScreenOutcomeLUID', value:'${scoliosisScreenOutcomeDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6,7], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'scoliosisScreenings',
+					data: [
+						<#list scoliosisScreenings![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.screenDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.scolioScreenOutcomeLUID?c)!""}",
+							"${(scrn.screenComment!"")?js_string?html}",
+							"${(scrn.screenerName!"")?js_string?html}",
+							"${(scrn.scolioScreenerTypeLUID?c)!""}",
+							"${scrn.gradeLevelAtScreen!""}",
+							<#setting locale="en">
+							"${(scrn.rayFilmDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.xrayFilmImpresLUID?c)!""}",
+							"",
+							"${scrn.screeningStudentScoliosisID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.screeningStudentScoliosisID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+
+			<#if (sType.id == 5)> /* TB */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+					id:${sType.id?c},
+					fields:['screenDate','tbScreenOutcomeLUID', 'screenComment', 'screenerName', 'tbScreenerTypeLUID','gradeLevelAtScreen','skinTestGivenDate', 'skinTestReadDate',
+					'skinTestTypeLUID','indurationSize', 'impressionResultLUID','chestXRayFilmDate','chestXRayImpresLUID','changeReason','screeningStudentTBID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_date_3'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_outcome'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment6'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_name1'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_type3'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_6'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.skin_test_given_date'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.skin_test_read_date'),
+    	  			pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.skin_test_type'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.induration_size_mm'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.skin_test_result'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.chest_xray_film_date'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.chest_xray_impression'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.change_reason_'),''
+    	  				],
+    	  			validations:[{index:'0', validationType:'date'},{index:'0', validationType:'notblank'},{index:'0', validationType:'duplicatewithintypedate'},
+    	  							{index:'5', validationType:'notblank'},{index:'6', validationType:'date'},{index:'7', validationType:'date'},
+    	  							{index:'11', validationType:'date'},{index:'9', validationType:'decimal'},{index:'13',validationType:'notblankifupdate'}
+    	  				],
+    	  			defaultvalues:[{field:'screenDate', value:'${todayString}'},{field:'gradeLevelAtScreen', value:'${gradeLevelDefaultValue!""}'}
+    	  							,{field:'screenerName', value:''}
+    	  							,{field:'tbScreenerTypeLUID', value:'${tbScreenerTypeDefault!""}'}
+    	  							,{field:'skinTestTypeLUID', value:'${skinTestTypeDefault!""}'}
+    	  							,{field:'impressionResultLUID', value:'${impressionResultDefault!""}'}
+    	  							,{field:'chestXRayImpresLUID', value:'${chestXRayImpresDefault!""}'}
+    	  							,{field:'tbScreenOutcomeLUID', value:'${tbScreenOutcomeDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6,7,8,9,10,11,12], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'tbScreenings',
+					data: [
+						<#list tbScreenings![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.screenDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.tbScreenOutcomeLUID?c)!""}",
+							"${(scrn.screenComment!"")?js_string?html}",
+							"${(scrn.screenerName!"")?js_string?html}",
+							"${(scrn.tbScreenerTypeLUID?c)!""}",
+							"${scrn.gradeLevelAtScreen!""}",
+							<#setting locale="en">
+							"${(scrn.skinTestGivenDate?string(dateFormat))!""}",
+							"${(scrn.skinTestReadDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.skinTestTypeLUID?c)!""}",
+							"${(scrn.indurationSize?c)!""}",
+							"${(scrn.impressionResultLUID?c)!""}",
+							<#setting locale="en">
+							"${(scrn.chestXRayFilmDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.chestXRayImpresLUID?c)!""}",
+							"",
+							"${scrn.screeningStudentTBID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.screeningStudentTBID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+
+			<#if (sType.id == 6)> /* vision */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+					id:${sType.id?c},
+    	  			fields:['screenDate', 'visionScreenOutcomeLUID','screenComment', 'screenerName','visionScreenerTypeLUID', 'gradeLevelAtScreen','testConductedLate', 
+    	  			'leftEyeTestLUID','rightEyeTestLUID','colorBlindTestLUID','visionAid','changeReason','screeningStudentVisionID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_date_1'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_outcome1'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment9'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_name2'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.screening_provider_type1'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_8'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.vision_referral_date'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.test_conducted_late1'),
+    	  			pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.left_eye_vision_test_result'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.right_eye_vision_test_result'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.color_blind_test_result'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.vision_aid'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.change_reason_2'),''
+    	  				],
+    	  			validations:[{index:'0', validationType:'date'},{index:'0', validationType:'notblank'},{index:'0', validationType:'duplicatewithintypedate'},{index:'6', validationType:'date'},
+    	  							{index:'5', validationType:'notblank'},{index:'12',validationType:'notblankifupdate'}
+    	  				],
+    	  			defaultvalues:[{field:'screenDate', value:'${todayString}'},{field:'gradeLevelAtScreen', value:'${gradeLevelDefaultValue!""}'}
+    	  						,{field:'screenerName', value:''}
+    	  						,{field:'visionScreenerTypeLUID', value:'${visionScreenTypeDefault!""}'}
+    	  						,{field:'leftEyeTestLUID', value:'${leftEyeTestDefault!""}'}
+    	  						,{field:'rightEyeTestLUID', value:'${rightEyeTestDefault!""}'}
+    	  						,{field:'colorBlindTestLUID', value:'${colorBlindTestDefault!""}'}
+    	  						,{field:'visionScreenOutcomeLUID', value:'${visionScreenOutcomeDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6,7,8,9,10,11], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'visionScreenings',
+					data: [
+						<#list visionScreenings![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.screenDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.visionScreenOutcomeLUID?c)!""}",
+							"${(scrn.screenComment!"")?js_string?html}",
+							"${(scrn.screenerName!"")?js_string?html}",
+							"${(scrn.visionScreenerTypeLUID?c)!""}",
+							"${scrn.gradeLevelAtScreen!""}",
+							<#setting locale="en">
+							"${(scrn.referralDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"${(scrn.testConductedLate?c)!""}",
+							"${(scrn.leftEyeTestLUID?c)!""}",
+							"${(scrn.rightEyeTestLUID?c)!""}",
+							"${(scrn.colorBlindTestLUID?c)!""}",
+							"${(scrn.visionAid!"")?js_string?html}",
+							"",
+							"${scrn.screeningStudentVisionID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.screeningStudentVisionID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+
+			<#if (sType.id == 7)> /* nurse office visit */
+
+			</#if>
+
+		</#list>
+
+
+		<#list waiverTypes?sort_by("id") as sType>
+
+			<#if (sType.id == 11)> /* fitness */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+
+					id:${sType.id?c},
+					fields:['waiverDate', 'waiverOutcome', 'waiverComment','guardianName','gradeLevelAtWaiver','waiverReasonLUID','waiverType','healthScreenWaiverID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_date_2'),'', pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment3'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.parentguardian_requesting_waiver_4'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_9'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_reason_1'), '',''
+
+    	  				],
+    	  			validations:[{index:'0', validationType:'notblank'},{index:'0', validationType:'date'},{index:'0', validationType:'duplicatewithintypedate'},
+    	  						{index:'3', validationType:'notblank'},{index:'4', validationType:'notblank'},{index:'5', validationType:'notblank'}
+    	  				],
+    	  			defaultvalues:[{field:'waiverType', value:'${sType.code!""}' }, {field:'waiverOutcome', value:'<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>'},
+    	  						{field:'gradeLevelAtWaiver', value:'${gradeLevelDefaultValue!""}'}
+    	  						,{field:'waiverReasonLUID', value:'${fitnessWaiverDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'fitnessWaivers',
+					data: [
+						<#list fitnessWaivers![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.waiverDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>",
+							"${(scrn.waiverComment!"")?js_string?html}",
+							"${(scrn.guardianName!"")?js_string?html}",
+							"${scrn.gradeLevelAtWaiver!""}",
+							"${(scrn.waiverReasonLUID?c)!""}",
+							"${sType.code}",
+							"${scrn.healthScreenWaiverID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.healthScreenWaiverID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+			<#if (sType.id == 12)> /* hearing */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+
+					id:${sType.id?c},
+					fields:['waiverDate', 'waiverOutcome', 'waiverComment','guardianName','gradeLevelAtWaiver','waiverReasonLUID','waiverType','healthScreenWaiverID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_date_5'),"", pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment4'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.parentguardian_requesting_waiver_2'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_10'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_reason_3'), '',''
+
+    	  				],
+    	  			validations:[{index:'0', validationType:'notblank'},{index:'0', validationType:'date'},{index:'0', validationType:'duplicatewithintypedate'},
+    	  						{index:'3', validationType:'notblank'},{index:'4', validationType:'notblank'},{index:'5', validationType:'notblank'}
+    	  				],
+    	  			defaultvalues:[{field:'waiverType', value:'${sType.code!""}' }, {field:'waiverOutcome', value:'<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>'},
+    	  						{field:'gradeLevelAtWaiver', value:'${gradeLevelDefaultValue!""}'}
+    	  						,{field:'waiverReasonLUID', value:'${hearingWaiverDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'hearingWaivers',
+					data: [
+						<#list hearingWaivers![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.waiverDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>",
+							"${(scrn.waiverComment!"")?js_string?html}",
+							"${(scrn.guardianName!"")?js_string?html}",
+							"${scrn.gradeLevelAtWaiver!""}",
+							"${(scrn.waiverReasonLUID?c)!""}",
+							"${sType.code}",
+							"${scrn.healthScreenWaiverID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.healthScreenWaiverID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+			<#if (sType.id == 13)> /* oral */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+
+					id:${sType.id?c},
+					fields:['waiverDate', 'waiverOutcome', 'waiverComment','guardianName','gradeLevelAtWaiver','waiverReasonLUID','waiverType','healthScreenWaiverID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_date_4'),"", pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.parentguardian_requesting_waiver_'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_11'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_reason_2'), '',''
+
+    	  				],
+    	  			validations:[{index:'0', validationType:'notblank'},{index:'0', validationType:'date'},{index:'0', validationType:'duplicatewithintypedate'},
+    	  						{index:'3', validationType:'notblank'},{index:'4', validationType:'notblank'},{index:'5', validationType:'notblank'}
+    	  				],
+    	  			defaultvalues:[{field:'waiverType', value:'${sType.code!""}'}, {field:'waiverOutcome', value:'<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>'},
+    	  						{field:'gradeLevelAtWaiver', value:'${gradeLevelDefaultValue!""}'}
+    	  						,{field:'waiverReasonLUID', value:'${oralWaiverDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'oralWaivers',
+					data: [
+						<#list oralWaivers![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.waiverDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>",
+							"${(scrn.waiverComment!"")?js_string?html}",
+							"${(scrn.guardianName!"")?js_string?html}",
+							"${scrn.gradeLevelAtWaiver!""}",
+							"${(scrn.waiverReasonLUID?c)!""}",
+							"${sType.code}",
+							"${scrn.healthScreenWaiverID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.healthScreenWaiverID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+			<#if (sType.id == 14)> /* scoliosis */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+
+					id:${sType.id?c},
+					fields:['waiverDate', 'waiverOutcome', 'waiverComment','guardianName','gradeLevelAtWaiver','waiverReasonLUID','waiverType','healthScreenWaiverID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_date_1'),"", pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment1'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.parentguardian_requesting_waiver_1'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_1'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_reason_5'), '',''
+
+    	  				],
+    	  			validations:[{index:'0', validationType:'notblank'},{index:'0', validationType:'date'},{index:'0', validationType:'duplicatewithintypedate'},
+    	  						{index:'3', validationType:'notblank'},{index:'4', validationType:'notblank'},{index:'5', validationType:'notblank'}
+    	  				],
+    	  			defaultvalues:[{field:'waiverType', value:'${sType.code!""}' }, {field:'waiverOutcome', value:'<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>'},
+    	  						{field:'gradeLevelAtWaiver', value:'${gradeLevelDefaultValue!""}'}
+    	  						,{field:'waiverReasonLUID', value:'${scoliosisWaiverDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'scoliosisWaivers',
+					data: [
+						<#list scoliosisWaivers![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.waiverDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>",
+							"${(scrn.waiverComment!"")?js_string?html}",
+							"${(scrn.guardianName!"")?js_string?html}",
+							"${scrn.gradeLevelAtWaiver!""}",
+							"${(scrn.waiverReasonLUID?c)!""}",
+							"${sType.code}",
+							"${scrn.healthScreenWaiverID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.healthScreenWaiverID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+			<#if (sType.id == 15)> /* TB */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+
+					id:${sType.id?c},
+					fields:['waiverDate','waiverOutcome', 'waiverComment','guardianName','gradeLevelAtWaiver','waiverReasonLUID','waiverType','healthScreenWaiverID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_date_'), "", pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment8'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.parentguardian_requesting_waiver_3'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_3'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_reason_4'), '',''
+    	  				],
+    	  			validations:[{index:'0', validationType:'notblank'},{index:'0', validationType:'date'},{index:'0', validationType:'duplicatewithintypedate'},
+    	  						{index:'3', validationType:'notblank'},{index:'4', validationType:'notblank'},{index:'5', validationType:'notblank'}
+    	  				],
+    	  			defaultvalues:[{field:'waiverType', value:'${sType.code!""}' }, {field:'waiverOutcome', value:'<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>'},
+    	  						{field:'gradeLevelAtWaiver', value:'${gradeLevelDefaultValue!""}'}
+    	  						,{field:'waiverReasonLUID', value:'${tbWaiverDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'tbWaivers',
+					data: [
+						<#list tbWaivers![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.waiverDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>",
+							"${(scrn.waiverComment!"")?js_string?html}",
+							"${(scrn.guardianName!"")?js_string?html}",
+							"${scrn.gradeLevelAtWaiver!""}",
+							"${(scrn.waiverReasonLUID?c)!""}",
+							"${sType.code}",
+							"${scrn.healthScreenWaiverID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.healthScreenWaiverID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+			<#if (sType.id == 16)> /* vision */
+				<#if (firstItem == 0)>,</#if><#assign firstItem=0 />
+				{
+
+					id:${sType.id?c},
+					fields:['waiverDate', 'waiverOutcome', 'waiverComment','guardianName','gradeLevelAtWaiver','waiverReasonLUID','waiverType','healthScreenWaiverID','viewOnly'
+    	  				],
+    	  			fieldLabels:[pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_date_3'),'', pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.comment5'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.parentguardian_requesting_waiver_5'),pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.grade_level_5'), pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.waiver_reason_'),'',''
+
+    	  				],
+    	  			validations:[{index:'0', validationType:'notblank'},{index:'0', validationType:'date'},{index:'0', validationType:'duplicatewithintypedate'},
+    	  						{index:'3', validationType:'notblank'},{index:'4', validationType:'notblank'},{index:'5', validationType:'notblank'}
+    	  				],
+    	  			defaultvalues:[{field:'waiverType', value:'${sType.code!""}' }, {field:'waiverOutcome', value:'<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>'},
+    	  						{field:'gradeLevelAtWaiver', value:'${gradeLevelDefaultValue!""}'}
+    	  						,{field:'waiverReasonLUID', value:'${visionWaiverDefault!""}'}
+    	  				],
+    	  			tooltips: [3,4,5,6], /* fields that are shown in tooltips in the order listed here */
+    	  			vo_method:'visionWaivers',
+					data: [
+						<#list visionWaivers![] as scrn>
+							{
+							values:[
+							<#setting locale="en">
+							"${(scrn.waiverDate?string(dateFormat))!""}",
+							<#setting locale=_locale>
+							"<@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.na"/>",
+							"${(scrn.waiverComment!"")?js_string?html}",
+							"${(scrn.guardianName!"")?js_string?html}",
+							"${scrn.gradeLevelAtWaiver!""}",
+							"${(scrn.waiverReasonLUID?c)!""}",
+							"${sType.code}",
+							"${scrn.healthScreenWaiverID?c}",
+							"${scrn.viewOnly?string("true", "false")}"
+							],
+							key_id: ${scrn.healthScreenWaiverID?c},
+							type_id: ${sType.id?c},
+							view_only:${scrn.viewOnly?string("true", "false")}
+							}
+						<#if scrn_has_next>,</#if></#list>
+						]
+					}
+			</#if>
+
+		</#list>
+    ];
+
+
+    // Setup load event for building YUI objects on load
+// ----------------------------------------------------------------
+var myScrnTbl = new ScreenTbl();
+
+jQuery(document).ready(function (){
+	if ($j.cookie === undefined) {
+        $j.getScript("${application.imageBaseUrl!}/scripts/jquery.cookie.js", function () {'use strict';loadHealthTable();});
+    }
+    else {
+        loadHealthTable();
+    }
+});
+
+function getHCookie(name) {
+	var x = '';
+	if ($j && $j.cookie) {
+		x = $j.cookie(name);
+		if (x === undefined)
+			x = '';
+	}
+	return x;
+}
+
+function loadHealthTable() {
+
+initYUIElements();
+	var myColumnDefs = [
+			{key:"type", label:"<b><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.type"/></b>", width:160, sortable:true, resizeable:false},
+			{key:"col1", label:"<b><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.date"/></b>", width:120, sortable:true, resizeable:false,className:'align-center', formatter:YAHOO.widget.DataTable.formatDate},
+			{key:"col2", label:"<b><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.outcome"/></b>", sortable:true, resizeable:true},
+			{key:"col3", label:"<b><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.comments"/></b>", width:300, sortable:true, resizeable:true},
+			{key:"edit", label:"<b><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.edit"/></b>", sortable:false, resizeable:false},
+			{key:"del", label:"<b><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.delete"/></b>", sortable:false, resizeable:false}
+        ];
+
+    var my_menu_map = [
+    	{label: "Screening", map: screeningTypeMap, div:"add_screening_button"},
+    	{label: "Waiver", map: waiverTypeMap, div:"add_screening_button2"}
+    ];
+
+    <#if (securityLevel > 2)>
+		var myJs = {'div_id':MY_TBL_DIV, 'col_defs': myColumnDefs, 'data':myJsonData, 'menu_map':my_menu_map, 'can_modify':true, 'can_delete':true};
+	</#if>
+	<#if (securityLevel = 2)>
+		var myJs = {'div_id':MY_TBL_DIV, 'col_defs': myColumnDefs, 'data':myJsonData, 'menu_map':my_menu_map, 'can_modify':true, 'can_delete':false};
+	</#if>
+	<#if (securityLevel = 1)>
+		myColumnDefs[3].label="<b><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.view"/></b>";
+		var myJs = {'div_id':MY_TBL_DIV, 'col_defs': myColumnDefs, 'data':myJsonData, 'menu_map':my_menu_map, 'can_modify':false, 'can_delete':false};
+	</#if>
+	myScrnTbl.create(myJs);
+
+	<#if (securityLevel > 1)>
+	myScrnTbl.subscribe("postEdit", function(values) {
+			if (myScrnTbl.getDirtyCount(myScrnTbl) > 0) {
+				document.getElementById("button_submit_all").className="gb_button";
+				showChangesNotSaved();
+
+				if (myScrnTbl.getCurrentItemId() < 7) {
+					setUICookie(providerNameCookieName, values[3]);// save screener name
+					strProviderName = values[3];
+					myScrnTbl.setFieldDefaultValue('screenerName', strProviderName);
+				}
+			}
+		});
+
+	myScrnTbl.subscribe("postAdd", function(values) {
+		document.getElementById("button_submit_all").className="gb_button";
+		showChangesNotSaved();
+
+		if (myScrnTbl.getCurrentItemId() < 7) {
+			setUICookie(providerNameCookieName, values[3]);// save screener name
+			strProviderName = values[3];
+			myScrnTbl.setFieldDefaultValue('screenerName', strProviderName);
+		}
+	});
+
+	myScrnTbl.subscribe("postDelete", function(count) {
+		if (count>0) {
+			document.getElementById("button_submit_all").className="gb_button";
+			showChangesNotSaved();
+		}
+		else {
+			document.getElementById("button_submit_all").className="buttonDisabledOpacity gb_button";
+			clearFormSaveMessage();
+		}
+	});
+	</#if>
+}
+
+
+
+function saveAll() {
+	<#if (securityLevel > 1)>
+	if (document.getElementById("button_submit_all").className.indexOf("buttonDisabledOpacity") == -1){
+		myScrnTbl.convertFormToChangesOnly(myScrnTbl);
+		document.getElementById('myForm').submit();
+		}
+
+	</#if>
+}
+
+
+YAHOO.util.Event.onContentReady("add_screening_button", function () {
+
+		var el = document.getElementsByTagName('textarea');
+		for(var i = 0; i < el.length; i++)
+		{
+			el[i].onblur = fn_onblur;
+		}
+});
+
+
+document.onkeypress = function(e) {
+	// disable enter key for all non-textarea fields
+	// to prevent unintended form submission
+	var e = (e) ? e : ((event) ? event : null);
+	var el = (e.target) ? e.target : ((e.srcElement) ? e.srcElement : null);
+	if ((e.keyCode == 13) && (el.type!="textarea"))
+	{
+		return false;
+	}
+
+if ((el.type =="textarea") && ((e.keyCode != 8) && (e.keyCode != 9) && (e.keyCode != 46) && ((e.keyCode < 33) || (e.keyCode > 40)))) { // do max length validation textarea
+		var maxLength = el.getAttribute("maxlength");
+		if (maxLength == null) return;
+		var length = el.value.length;
+		if (length >= maxLength)
+			return false;
+	}
+}
+
+var fn_onblur = function() {
+	var el = this;
+	if (el.type =="textarea") { // do max length validation textarea
+		var maxLength = el.getAttribute("maxlength");
+		if (maxLength == null) return;
+		var length = this.value.length;
+		if (length >= maxLength) {
+			var x=el.value.substring(0,maxLength);
+			el.value=x;
+		}
+	}
+}
+
+window.onload=function(){
+	<#setting locale="en">
+	document.getElementById('id_studdob').innerHTML="&nbsp;"+pss_text('psx.jsftl.admin_health.studenthealthscreeninglist.dob')+" ${studentDob}";
+	<#setting locale=_locale>
+}
+
+</script>
+
+
+<!-- start of content and bounding box -->
+
+
+<#if (securityLevel==0)>
+	<div class="box-round">
+		<h2><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.screening_records"/></h2>
+		<div class="feedback-alert"><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.insufficient_security_privilege_to_view_screening_data"/></div>
+	</div>
+<#else>
+	<@brijformTableless actionNamespace="health"
+		   actionName="SaveStudentScreening"
+		   formAction="/admin/students/health/home_screen.html"
+		   doc="/admin/students/health/home_screen.html">
+
+		<div class="row hide">
+			 <div class="add_things_div">
+
+				<@popPanel panelID="create_Fitness_div" panelFTL="/admin/health/screening_fitness_panel.ftl" />
+
+				<@popPanel panelID="create_Hearing_div" panelFTL="/admin/health/screening_hearing_panel.ftl" />
+
+				<@popPanel panelID="create_Scoliosis_div" panelFTL="/admin/health/screening_scoliosis_panel.ftl" />
+
+				<@popPanel panelID="create_Oral_div" panelFTL="/admin/health/screening_oral_panel.ftl" />
+
+				<@popPanel panelID="change_Tb_div" panelFTL="/admin/health/screening_tb_panel.ftl" />
+
+				<@popPanel panelID="change_Vision_div" panelFTL="/admin/health/screening_vision_panel.ftl" />
+
+				<@popPanel panelID="create_fitnesswaiver_div" panelFTL="/admin/health/screening_fitnesswaiver_panel.ftl" />
+				<@popPanel panelID="create_hearingwaiver_div" panelFTL="/admin/health/screening_hearingwaiver_panel.ftl" />
+				<@popPanel panelID="create_oralwaiver_div" panelFTL="/admin/health/screening_oralwaiver_panel.ftl" />
+				<@popPanel panelID="create_scoliosiswaiver_div" panelFTL="/admin/health/screening_scoliosiswaiver_panel.ftl" />
+				<@popPanel panelID="create_tbwaiver_div" panelFTL="/admin/health/screening_tbwaiver_panel.ftl" />
+				<@popPanel panelID="create_visionwaiver_div" panelFTL="/admin/health/screening_visionwaiver_panel.ftl" />
+
+				<@popPanel panelID="change_reason_div" panelFTL="/admin/health/view-scrnchange-reasons.ftl" />
+			 </div>
+		</div>
+		<div class="box-round">
+			<h2><@s.text name="psx.ftl.admin_health.studenthealthscreeninglist.screening_records"/></h2>
+
+		 	<div class="button-row<#if (securityLevel > 1)><#else> hide</#if>">
+		     	<div id="add_screening_button2"></div>
+		      	<div id="add_screening_button"></div>
+			</div>
+
+			<div class="datatable" id="screeningtable"></div>
+
+			<div class="button-row">
+
+					<div id="viewChangeReasonsButton" class="gb_button "></div>
+					<#if (securityLevel > 1)>
+						<div id="button_submit_all" class="buttonDisabledOpacity gb_button"></div>
+					</#if>
+			</div>
+			<input type="hidden" name="frn" value='${frn}'>
+		</div>
+
+  </@brijformTableless>
+</#if>
+
+
+
+<!-- end of content of bounding box -->

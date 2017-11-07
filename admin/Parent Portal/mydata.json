@@ -1,0 +1,17 @@
+[
+	~[tlist_sql;
+		SELECT
+                  CONCAT('/admin/parent_coaches/edit_parent.html?id=',ID) LINK,
+									  ID,
+										FAMILY_ID,
+										FIRST_NAME,
+										LAST_NAME
+                FROM
+                    U_PARENT_DATA
+                WHERE
+                    FIRST_NAME IN ('Verthis','Oliver','Cynthia','Elisa')
+
+	]
+		{"link":"~(link)", "id":"~(id)","family_id":"~(family_id)","first_name":"~(first_name)","last_name":"~(last_name)"},
+	[/tlist_sql]
+{}]

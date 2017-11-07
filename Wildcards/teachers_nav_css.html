@@ -1,0 +1,71 @@
+<!-- start gel tabs navigation -->
+<div id="nav-main">
+  <h3>~[text:psx.txt.wildcards.teachers_nav_css.navigation]</h3>
+  <ul>
+	  <li id="btn-navHome">
+		<a href="/teachers/home.html" id="navHome" title="~[text:psx.txt.wildcards.teachers_nav_css.start_page]">~[text:psx.txt.wildcards.teachers_nav_css.start_page]</a>
+	  </li>
+	  <li id="btn-navDirectory">
+		<a href="/teachers/facultydirectory.html" id="navDirectory" title="~[text:psx.txt.wildcards.teachers_nav_css.staff_directory]">~[text:psx.txt.wildcards.teachers_nav_css.staff_directory]</a>
+	  </li>
+	  <li id="btn-navPersonalize">
+		<a href="/teachers/userpreferences.html?frn=~(userfrn)" id="navPersonalize" title="~[text:psx.txt.wildcards.teachers_nav_css.personalize]">~[text:psx.txt.wildcards.teachers_nav_css.personalize]</a>
+		</li>
+	  <li id="btn-navReports">
+		<a href="/teachers/reportsall.html?ac=selectstudentsforteacher&teacherid=~[x:userid]" id="navReports" title="~[text:psx.txt.wildcards.teachers_nav_css.run_reports]">~[text:psx.txt.wildcards.teachers_nav_css.reports]</a>
+	  </li>
+	  ~[pluginnavlinks:teacher.left_nav]
+<!-- Start State LDS Links -->
+ <!-- After we verify that the use of insert file tag will not
+     break any teacher pages, state specific stuff should
+      be moved to state specific html fragments and a single
+      insert file tag should be used here for all states
+  -->
+~[if.stateabbr.ga]
+~[SetPostValue:TNN$externalLinks_0.linkUrl=https://slds.gadoe.org/sldsweb/?clientid=${relyingParty.providerEntityName}]
+~[SetPostValue:TNN$externalLinks_0.linkLabel=Georgia LDS]
+~[SetPostValue:TNN$relyingPartyName=ga.lds]
+~[brij_render:security-ps;:renderTeacherNavLDSLinks;prefix:TNN]
+[/if]
+<!-- End State LDS Links -->
+
+  	~[if.CNFG.~(id).com.pearson.powerschool.sso.outbound.enabled=1]
+      <li><a href="/ssorequest/" id="navPSStudio" title="~[text:psx.txt.wildcards.teachers_nav_css.powerschool_studio]">~[text:psx.txt.wildcards.teachers_nav_css.powerschool_studio1]</a></li>
+	[/if]
+
+  </ul>
+  <div id="cust-leftnav-footer">~[cust.insertion_point:leftnav.footer]</div>
+  <p class="center">
+
+	<div class="box-round" id="ptgNewLaunchBox">
+	    <script language="javascript">
+            $j(document).ready(function(){
+                // Expand the old gradebook installer and old launcher
+                $j('#ptgExpandLaunchBtn').click(function() {
+                    $j('.old-gradebook-launch-link').toggleClass('hidden');
+                });
+            });
+        </script>
+		<h2 class="center">~[text:psx.txt.wildcards.teachers_nav_css.ptg_28]</h2>
+		<p>
+		    <a class="button" id="ptgNewLaunchBtn" href="/teachers/LaunchGradebook.ptg" title="~[text:psx.txt.wildcards.teachers_nav_css.instantly_launch_gradebook]">~[text:psx.txt.wildcards.teachers_nav_css.launch_the_gradebook.button]</a>
+		    <a class="button" id="ptgExpandLaunchBtn" title="~[text:psx.txt.wildcards.teachers_nav_css.expand]"><em class="ui-icon ui-icon-white ui-icon-triangle-1-s">&nbsp;</em></a>
+        </p>
+		<p class="hidden old-gradebook-launch-link"><a href="/teachers/gradebook/home.html#ptgInstall" id="gotoInstallTab" class="linkInstallTab" style="display: inline;">~[text:psx.txt.wildcards.teachers_nav_css.run_the_installer.installer]</a></p>
+		<p class="hidden old-gradebook-launch-link"><a href="/teachers/launchgradebook" title="~[text:psx.txt.wildcards.teachers_nav_css.instantly_launch_gradebook]"
+			 name="navGblaunch"
+			 data-track-event-click="true"
+			 data-track-event-action="launch"
+			 data-track-event-category="PowerTeacher Grade Book"
+			 data-track-event-data="Instantly Launch Grade Book"
+		  	 id="icon-btn-gblaunch">~[text:psx.txt.wildcards.teachers_nav_css.launch_the_gradebook.older_launch]</a></p>
+		<hr/>
+		<iframe frameBorder="0" scrolling="no" allowtransparency="true" src="https://support.powerschool.com/public/ios/powerschool_teacher.html?districtCode=~[displaypref:mobile_district_code]" width="100%" height="100"></iframe>
+	</div>
+
+
+  </p>
+</div>
+<!-- end gel tabs navigation -->
+<div id="content-main">
+<!--start of content-main-->

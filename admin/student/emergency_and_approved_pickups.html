@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<!-- start right frame -->
+<head>
+    <title>Emergency Contacts and Approved Pickups</title>
+    ~[wc:UI_js_includes]
+    ~[wc:commonscripts]
+    <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+<link href="/images/css/print.css" rel="stylesheet" media="print">
+    <link rel="stylesheet" type="text/css" href="/images/boxing.css">
+
+    <script language="JavaScript" src="/admin/javascript/student_copyAddress.js"></script>
+		<style>
+			.clickable { cursor:pointer; }
+		</style>
+
+<script type="text/javascript">
+    var selectedAdapter = "~[displaypref:mappingadapter.selected]";
+    var mapKey = "~[x:selectedvalidationmappingadapterkey]";
+
+    function load(){
+		prepPage();
+		// If they don't select any of the visible options for ethnicity, choose "-1" for them ...
+		var defaultEthnicity = document.getElementById("defaultEthnicity");
+		if ( defaultEthnicity ) {
+			defaultEthnicity.value = "-1";
+		}
+    }
+</script>
+
+~[x:renderboundaryobject]
+
+~[get_js_texts:psx.js.admin_validation.validationCommon.]
+<script language="JavaScript" src="/admin/validation/validationCommon.js"></script>
+</head>
+<body onload="load()">
+
+<form action="/admin/changesrecorded.white.html" method="POST" onSubmit="return validateInput()">
+~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">~[text:psx.html.admin_students.generaldemographics.start_page]</a> &gt; <a
+        href="home.html?selectstudent=nosearch" target="_top">~[text:psx.html.admin_students.generaldemographics.student_selection]</a> &gt; Approved Pickups<!-- breadcrumb end -->~[wc:admin_navigation_frame_css]
+
+~[wc:title_student_begin_css]Approved Pickups~[wc:title_student_end_css]
+
+
+<!-- Start of shaded content table and bounding box -->
+<div class="box-round">
+
+<table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
+<colgroup><col style="width:20%"><col></colgroup>
+
+<tr class="headerrow">
+       <td colspan="2" class="bold">Emergency Contacts</td>
+</tr>
+
+
+<tr colspan="2">
+   <td class="bold" >~[text:psx.html.admin_students.emergency.contact_]</td>
+   <td>Contact Name<br>
+        <input type="text" name="[01]Emerg_Contact_1" value="" size="25"><br />
+        ~[text:psx.html.admin_students.emergency.relationship]<br>
+        <select name="[01]Emerg_1_Rel">
+           <option>
+           <option value="Aunt">~[text:psx.html.admin_students.emergency.aunt]
+           <option value="Brother">~[text:psx.html.admin_students.emergency.brother]
+           <option value="Father">~[text:psx.html.admin_students.emergency.father]
+           <option value="Friend">~[text:psx.html.admin_students.emergency.friend]
+           <option value="Grandfather">~[text:psx.html.admin_students.emergency.grandfather]
+           <option value="Grandmother">~[text:psx.html.admin_students.emergency.grandmother]
+           <option value="Mother">~[text:psx.html.admin_students.emergency.mother]
+           <option value="Neighbor">~[text:psx.html.admin_students.emergency.neighbor]
+           <option value="Other">~[text:psx.html.admin_students.emergency.other]
+           <option value="Family Friend">Family Friend
+           <option value="Sister">~[text:psx.html.admin_students.emergency.sister]
+           <option value="Uncle">~[text:psx.html.admin_students.emergency.uncle]
+        </select>
+   <br />~[text:psx.html.admin_students.emergency.phone]<br>
+     <input type="text" name="[01]Emerg_Phone_1" value="" size="15"><br />
+   </td>
+</tr>
+
+
+<tr colspan="2">
+   <td class="bold" >~[text:psx.html.admin_students.emergency.contact_1]</td>
+   <td>Contact Name<br>
+     <input type="text" name="[01]Emerg_Contact_2" value="" size="25"><br />
+     ~[text:psx.html.admin_students.emergency.relationship1]<br>
+      <select name="[01]Emerg_2_Rel">
+         <option>
+         <option value="Aunt">~[text:psx.html.admin_students.emergency.aunt1]
+         <option value="Brother">~[text:psx.html.admin_students.emergency.brother1]
+         <option value="Father">~[text:psx.html.admin_students.emergency.father1]
+         <option value="Friend">~[text:psx.html.admin_students.emergency.friend1]
+         <option value="Grandfather">~[text:psx.html.admin_students.emergency.grandfather1]
+         <option value="Grandmother">~[text:psx.html.admin_students.emergency.grandmother1]
+         <option value="Mother">~[text:psx.html.admin_students.emergency.mother1]
+         <option value="Neighbor">~[text:psx.html.admin_students.emergency.neighbor1]
+         <option value="Other">~[text:psx.html.admin_students.emergency.other1]
+         <option value="Family Friend">Family Friend
+         <option value="Sister">~[text:psx.html.admin_students.emergency.sister1]
+         <option value="Uncle">~[text:psx.html.admin_students.emergency.uncle1]
+      </select><br />
+   ~[text:psx.html.admin_students.emergency.phone1]<br>
+     <input type="text" name="[01]Emerg_Phone_2" value="" size="15"><br />
+   </td>
+</tr>
+
+<tr colspan="2">
+   <td class="bold" >~[text:psx.html.admin_students.emergency.contact_2]</td>
+   <td>Contact Name<br>
+     <input type="text" name="[01]emerg_contact_3" value="" size="25"><br />
+     ~[text:psx.html.admin_students.emergency.relationship2]<br>
+      <select name="[01]emerg_3_rel">
+         <option>
+         <option value="Aunt">~[text:psx.html.admin_students.emergency.aunt2]
+         <option value="Brother">~[text:psx.html.admin_students.emergency.brother2]
+         <option value="Father">~[text:psx.html.admin_students.emergency.father2]
+         <option value="Friend">~[text:psx.html.admin_students.emergency.friend2]
+         <option value="Grandfather">~[text:psx.html.admin_students.emergency.grandfather2]
+         <option value="Grandmother">~[text:psx.html.admin_students.emergency.grandmother2]
+         <option value="Mother">~[text:psx.html.admin_students.emergency.mother2]
+         <option value="Neighbor">~[text:psx.html.admin_students.emergency.neighbor2]
+         <option value="Other">~[text:psx.html.admin_students.emergency.other2]
+         <option value="Family Friend">Family Friend
+         <option value="Sister">~[text:psx.html.admin_students.emergency.sister2]
+         <option value="Uncle">~[text:psx.html.admin_students.emergency.uncle2]
+      </select>
+   <br />~[text:psx.html.admin_students.emergency.phone2]<br>
+     <input type="text" name="[01]emerg_3_phone" value="" size="15"><br />
+   </td>
+</tr>
+
+<tr class="headerrow">
+       <td colspan="2" class="bold">Other Approved Pickups</td>
+</tr>
+
+<tr colspan="2">
+   <td class="bold" >Approved Pickup #4</td>
+   <td>Contact Name<br>
+     <input type="text" name="[Students.U_Students_Extension]APPROVED_PICKUP_4" value="" size="25"><br />
+
+     Relationship<br>
+      <select name="[Students.U_Students_Extension]AP_RELATIONSHIP4">
+         <option>
+         <option value="Aunt">Aunt
+         <option value="Brother">Brother
+         <option value="Father">Father
+         <option value="Friend">Friend
+         <option value="Grandfather">Grandfather
+         <option value="Grandmother">Grandmother
+         <option value="Mother">Mother
+         <option value="Neighbor">Neighbor
+         <option value="Other">Other
+         <option value="Family Friend">Family Friend
+         <option value="Sister">Sister
+         <option value="Uncle">Uncler
+      </select>
+   <br />Phone<br>
+     <input type="text" name="[Students.U_Students_Extension]AP_PHONE4" value="" size="15"><br />
+
+   </td>
+</tr>
+
+
+
+<tr colspan="2">
+   <td class="bold" >Approved Pickup #5</td>
+   <td>Contact Name<br>
+     <input type="text" name="[Students.U_Students_Extension]APPROVED_PICKUP_5" value="" size="25"><br />
+
+     Relationship<br>
+      <select name="[Students.U_Students_Extension]AP_RELATIONSHIP5">
+         <option>
+         <option value="Aunt">Aunt
+         <option value="Brother">Brother
+         <option value="Father">Father
+         <option value="Friend">Friend
+         <option value="Grandfather">Grandfather
+         <option value="Grandmother">Grandmother
+         <option value="Mother">Mother
+         <option value="Neighbor">Neighbor
+         <option value="Other">Other
+         <option value="Family Friend">Family Friend
+         <option value="Sister">Sister
+         <option value="Uncle">Uncler
+      </select>
+   <br />Phone<br>
+     <input type="text" name="[Students.U_Students_Extension]AP_PHONE5" value="" size="15"><br />
+
+   </td>
+</tr>
+
+
+
+<tr colspan="2">
+   <td class="bold" >Approved Pickup #6</td>
+   <td>Contact Name<br>
+     <input type="text" name="[Students.U_Students_Extension]APPROVED_PICKUP_6" value="" size="25"><br />
+
+     Relationship<br>
+      <select name="[Students.U_Students_Extension]AP_RELATIONSHIP6">
+         <option>
+         <option value="Aunt">Aunt
+         <option value="Brother">Brother
+         <option value="Father">Father
+         <option value="Friend">Friend
+         <option value="Grandfather">Grandfather
+         <option value="Grandmother">Grandmother
+         <option value="Mother">Mother
+         <option value="Neighbor">Neighbor
+         <option value="Other">Other
+         <option value="Family Friend">Family Friend
+         <option value="Sister">Sister
+         <option value="Uncle">Uncler
+      </select>
+   <br />Phone<br>
+     <input type="text" name="[Students.U_Students_Extension]AP_PHONE6" value="" size="15"><br />
+
+   </td>
+</tr>
+
+
+
+
+<tr colspan="2">
+   <td class="bold" >Approved Pickup #7</td>
+   <td>Contact Name<br>
+     <input type="text" name="[Students.U_Students_Extension]APPROVED_PICKUP_7" value="" size="25"><br />
+
+     Relationship<br>
+      <select name="[Students.U_Students_Extension]AP_RELATIONSHIP7">
+         <option>
+         <option value="Aunt">Aunt
+         <option value="Brother">Brother
+         <option value="Father">Father
+         <option value="Friend">Friend
+         <option value="Grandfather">Grandfather
+         <option value="Grandmother">Grandmother
+         <option value="Mother">Mother
+         <option value="Neighbor">Neighbor
+         <option value="Other">Other
+         <option value="Family Friend">Family Friend
+         <option value="Sister">Sister
+         <option value="Uncle">Uncler
+      </select>
+   <br />Phone<br>
+     <input type="text" name="[Students.U_Students_Extension]AP_PHONE7" value="" size="15"><br />
+
+   </td>
+</tr>
+
+
+
+
+
+<tr colspan="2">
+   <td class="bold" >Approved Pickup #8</td>
+   <td>Contact Name<br>
+     <input type="text" name="[Students.U_Students_Extension]APPROVED_PICKUP_8" value="" size="25"><br />
+
+     Relationship<br>
+      <select name="[Students.U_Students_Extension]AP_RELATIONSHIP8">
+         <option>
+         <option value="Aunt">Aunt
+         <option value="Brother">Brother
+         <option value="Father">Father
+         <option value="Friend">Friend
+         <option value="Grandfather">Grandfather
+         <option value="Grandmother">Grandmother
+         <option value="Mother">Mother
+         <option value="Neighbor">Neighbor
+         <option value="Other">Other
+         <option value="Family Friend">Family Friend
+         <option value="Sister">Sister
+         <option value="Uncle">Uncler
+      </select>
+   <br />Phone<br>
+     <input type="text" name="[Students.U_Students_Extension]AP_PHONE8" value="" size="15"><br />
+
+   </td>
+</tr>
+
+
+
+
+
+
+</table>
+
+<div class="button-row"><input type="hidden" name="ac" value="prim">~[submitbutton]</div>
+</div>
+<!-- End of shaded content table and bounding box -->
+
+~[wc:admin_footer_frame_css]
+</form>
+<!--</script>-->
+~[if.~[displaypref:mappingadapter.selected]=""]
+[else]
+<script type="text/javascript">
+    addYuiButton("validatePrimaryAddress", validatePrimaryAddress);
+    addYuiButton("validateMailingAddress", validateMailingAddress);
+</script>
+[/if]
+</body>
+</html><!-- end right frame -->

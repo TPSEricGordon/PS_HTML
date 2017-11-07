@@ -1,0 +1,181 @@
+<!--
+This File is found in  - FTL Admin - Health - student_officevisits_panel.ftl
+-->
+
+<div id="create_officevisits_div" class="popPanel">
+
+<script type='text/javascript' src='${imageServer!""}/scripts/timeentry_widget.js'></script>
+	<div class="hd">
+		<div class='tl'></div>
+		<span>
+			<@s.text name="psx.ftl.admin_health.student_officevisits_panel.add_office_visit"/>
+		</span>
+		<div class='tr'></div>
+	</div>
+	<div class="bd">
+		<div class="box-round">
+	    	<h2><@s.text name="psx.ftl.admin_health.student_officevisits_panel.visit_details"/></h2>
+    		<div id="codeCat" class="visible">
+              <table border="0" cellspacing="0" cellpadding="4" width="100%">
+			  <tbody>
+
+			  <tr class="<@evenOddRow />">
+					<td><label id="lbl_officevisits_visitTypeLUID" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.student_officevisits_panel.visit_type"/></label></td>
+						<td>
+						<div id="wwgrp_officevisits_visitTypeLUID" class="wwgrp">
+						<div id="wwctrl_officevisits_visitTypeLUID" class="wwctrl">
+							<select id="officevisits_visitTypeLUID" name="officevisits_visitTypeLUID" data_index="0">
+									<#if officeVisitTypeList?? >
+   									<#list officeVisitTypeList as ovType>
+    	  								<option isActive="${ovType.isActive!"1"}" value="${ovType.screeningLookUpID?c}">${ovType.healthCategory!""}</option>
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+					<td>&nbsp;</td>
+					<td>
+						<div id="wwgrp_officevisits_isGuardianContacted" class="wwgrp">
+						<div style="width:75% " id="wwctrl_officevisits_isGuardianContacted" class="wwctrl">
+							<input id="officevisits_isGuardianContacted" type="checkbox" name="officevisits_isGuardianContacted" value="0"/><label id="lbl_officevisits_isGuardianContacted"></label>
+						</div></div>
+					</td>
+				</tr>
+
+			  <tr class="<@evenOddRow />">
+					<td><label id="lbl_officevisits_screenerName" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.student_officevisits_panel.provider_name"/></label></td>
+						<td>
+						<div id="wwgrp_officevisits_screenerName" class="wwgrp">
+						<div id="wwctrl_officevisits_screenerName" class="wwctrl">
+							<input type="text" name="officevisits_screenerName" id="officevisits_screenerName" maxlength="25" width="25" />
+						</div></div>
+					</td>
+				</tr>
+
+
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_officevisits_visitDate" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.student_officevisits_panel.visit_date"/></label></td>
+						<td>
+						<div id="wwgrp_officevisits_visitDate" class="wwgrp">
+						<div id="wwctrl_officevisits_visitDate" class="wwctrl">
+						<input type="text" name="officevisits_visitDate" id="officevisits_visitDate" value="" size="12" class="psDateWidget" />
+						</div></div>
+					</td>
+
+					<td></td>
+						<td>
+					</td>
+				</tr>
+
+        <tr class="<@evenOddRow />">
+   <td><label id="lbl_officevisits_visitTimeInHour" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.student_officevisits_panel.visit_time_in"/></label></td>
+   <td>
+     <div id="wwgrp_officevisits_visitTimeInHour" class="wwgrp">
+     <div id="wwctrl_officevisits_visitTimeInHour" class="wwctrl">
+       <input type="text" id="officevisits_visitTimeIni18" value="officevisits_visitTimeIni18" size="20" class="timeEntry" />
+     </div></div>
+   </td>
+
+   <td><label id="lbl_officevisits_visitTimeOutHour" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.student_officevisits_panel.visit_time_out"/></label></td>
+   <td>
+     <div id="wwgrp_officevisits_visitTimeOutHour" class="wwgrp">
+     <div id="wwctrl_officevisits_visitTimeOutHour" class="wwctrl">
+       <input type="text" id="officevisits_visitTimeOuti18" value="officevisits_visitTimeOuti18" size="20" class="timeEntryNowOnClick" />
+     </div></div>
+
+   </td>
+ </tr>
+
+
+			<tbody>
+          </table>
+
+	      				</div>
+        		</div>
+
+	<div class="box-round">
+		<h2><@s.text name="psx.ftl.admin_health.student_officevisits_panel.visit_reasons"/></h2>
+    		<div id="codeCat" class="visible">
+
+			<table border="0" cellspacing="0" cellpadding="4" width="100%">
+			  <tbody>
+
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_officevisits_visitReasonDesc" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.student_officevisits_panel.visit_reason"/></label></td>
+					<td>
+						<div id="wwgrp_officevisits_visitReasonDesc" class="wwgrp">
+						<div id="wwctrl_officevisits_visitReasonDesc" class="wwctrl">
+							<textarea cols="28" rows="4" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"  id="officevisits_visitReasonDesc" name="officevisits_visitReasonDesc" maxlength="512" /></textarea>
+						</div></div>
+					</td>
+
+				</tr>
+				<tbody>
+          </table>
+
+
+	      				</div>
+        		</div>
+
+	<div class="box-round">
+	    <h2><@s.text name="Action Taken"/></h2>
+    				<div id="codeCat" class="visible">
+
+
+			<table border="0" cellspacing="0" cellpadding="4" width="100%">
+			  <tbody>
+
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_officevisits_visitOutcomeLUID" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.student_officevisits_panel.outcome"/></label></td>
+					<td colspan="3" width="*">
+						<div id="wwgrp_officevisits_visitOutcomeLUID" class="wwgrp">
+						<div id="wwctrl_officevisits_visitOutcomeLUID" class="wwctrl">
+							<select id="officevisits_visitOutcomeLUID" name="officevisits_visitOutcomeLUID"  data_index="10">
+   								<option value=""> </option>
+   								<#if officeVisitOutcomeList?? >
+   									<#list officeVisitOutcomeList as ovOut>
+    	  								<option isActive="${ovOut.isActive!"1"}" value="${ovOut.screeningLookUpID?c}">${ovOut.healthCategory!""}</option>
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+				</tr>
+
+				<tr class="<@evenOddRow />">
+                    <td valign="top"><label id="lbl_officevisits_actions" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.student_officevisits_panel.actions"/></label></td>
+                    <td colspan="3">
+                    	<div id="wwgrp_officevisits_actions" class="wwgrp">
+						<div id="wwctrl_officevisits_actions" class="wwctrl">
+                       		<textarea cols="68" rows="4" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"   id="officevisits_actions" name="officevisits_actions" maxlength="512" /></textarea>
+                       </div></div>
+                    </td>
+                </tr>
+
+                <tbody>
+          </table>
+
+	      				</div>
+        		</div>
+
+
+		<div id="officevisits_changeReason_updateonly" style="display:none;align:center;width=100%;margin-left:10px; ">
+			<b id="lbl_officevisits_changeReason" style="white-space:nowrap;float:left;display:inline;"><@s.text name="psx.ftl.admin_health.student_officevisits_panel.change_reason_"/></b>
+			<div id="wwgrp_officevisits_changeReason" class="wwgrp" style="float:right;width:75%;display:block;vertical-align:top;">
+				<div id="wwctrl_officevisits_changeReason" class="wwctrl">
+                       <textarea cols="65" rows="4" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"   id="officevisits_changeReason" name="officevisits_changeReason" maxlength="2048" /></textarea>
+               </div>
+             </div>
+         </div>
+
+	</div>
+
+	<@panelFooter includeHelp=true helpAnchor=hlplnk_incidaction>
+						<div id="add_officevisits_button" class="floatrt"></div>
+						<div id="update_officevisits_button" class="floatrt"></div>
+						<div id="cancel_officevisits_button" class="floatrt"></div>
+						<div class="hide">
+							<input type="text" id="officevisitsUpdateTag" value="" />
+						</div>
+	</@panelFooter>
+</div>

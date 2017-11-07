@@ -1,0 +1,242 @@
+<div id="create_vision_div" class="popPanel">
+	<div class="hd"><div class='tl'></div><span><label class="paneltitle" id="vision_titlebar"><@s.text name="psx.ftl.admin_health.screening_vision_panel.add_vision_screening"/></label></span><div class='tr'></div></div>
+	<div class="bd">
+
+				<div class="box-round">
+	    			<h2><@s.text name="psx.ftl.admin_health.screening_vision_panel.screening_details"/></h2>
+    				<div id="codeCat" class="visible">
+
+
+			<table border="0" cellspacing="0" cellpadding="4" >
+			  <tbody>
+
+                <tr class="<@evenOddRow />">
+<!--
+					<td ><label id="lbl_vision_screenerName" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.screening_provider_name"/></label></td>
+					<td><div id="wwgrp_vision_screenerName" class="wwgrp">
+						<div id="wwctrl_vision_screenerName" class="wwctrl">
+							<input type="text" name="vision_screenerName" id="vision_screenerName" maxlength="25" width="25" />
+						</div></div>
+					</td>
+-->
+					<td><label id="lbl_vision_screenDate" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.screening_date"/></label></td>
+					<td>
+					<div id="wwgrp_vision_screenDate" class="wwgrp">
+					<div id="wwctrl_vision_screenDate" class="wwctrl">
+					<input type="text" name="vision_screenDate" id="vision_screenDate" value="" size="12" class="psDateWidget" />
+					</div></div>
+
+					</td>
+				</tr>
+
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_vision_visionScreenerTypeLUID" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.screening_provider_type"/></label></td>
+						<td>
+						<div id="wwgrp_vision_visionScreenerTypeLUID" class="wwgrp">
+						<div id="wwctrl_vision_visionScreenerTypeLUID" class="wwctrl">
+							<select id="vision_visionScreenerTypeLUID" name="vision_visionScreenerTypeLUID" data_index="5">
+								<option value=""> </option>
+   								<#if visionScreenTypeList?? >
+   									<#list visionScreenTypeList as vst>
+     	  								<option isActive="${vst.isActive!"1"}" value="${vst.screeningLookUpID?c}">${vst.healthCategory!""}
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+
+					<td><label id="lbl_vision_gradeLevelAtScreen" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.grade_level"/></label></td>
+						<td>
+						<div id="wwgrp_vision_gradeLevelAtScreen" class="wwgrp">
+						<div id="wwctrl_vision_gradeLevelAtScreen" class="wwctrl">
+							<select id="vision_gradeLevelAtScreen" name="vision_gradeLevelAtScreen" >
+   								<option value="">
+   								<#list gradeLevelList as gl>
+    	  							<option value="${gl.code}">${gl.displayName}
+    	  						</#list>
+  							</select>
+						</div></div>
+					</td>
+				</tr>
+			<tbody>
+			<tr class="<@evenOddRow />">
+				<td><label id="lbl_vision_referralDate" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.vision_referral_date"/></label></td>
+
+				<td >
+
+				<div id="wwgrp_vision_referralDate" class="wwgrp">
+				<div id="wwctrl_vision_referralDate" class="wwctrl">
+
+				<input type="text" size="12" value="" name="vision_referralDate" id="vision_referralDate" class="psDateWidget">
+				</div></div>
+
+				</td>
+          </table>
+
+	      				</div>
+        		</div>
+<!--
+				<div class="box-round" id="vision-box">
+	    			<h2><@s.text name="psx.ftl.admin_health.screening_vision_panel.vision_and_color"/></h2>
+    				<div id="codeCat" class="visible">
+
+
+			<table border="0" cellspacing="0" cellpadding="4" >
+			  <tbody>
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_vision_referralDate" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.vision_referral_date"/></label></td>
+
+					<td >
+
+					<div id="wwgrp_vision_referralDate" class="wwgrp">
+					<div id="wwctrl_vision_referralDate" class="wwctrl">
+
+					<input type="text" size="12" value="" name="vision_referralDate" id="vision_referralDate" class="psDateWidget">
+					</div></div>
+
+					</td>
+
+<!-- STart Delete
+					<td valign=middle>
+						<label id="lbl_vision_testConductedLate" style="white-space:nowrap;;float:right;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.test_conducted_late"/></label></td >
+						<td >
+						<div id="wwgrp_vision_testConductedLate" class="wwgrp">
+						<div id="wwctrl_vision_testConductedLate" class="wwctrl">
+						<input id="vision_testConductedLate" type="checkbox" name="vision_testConductedLate" value="0" />
+						</div></div>
+					</td>
+
+				</tr>
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_vision_rightEyeTestLUID" style="white-space:nowrap; float:right"><@s.text name="psx.ftl.admin_health.screening_vision_panel.right_eye_vision_test_result"/></label></td>
+					<td >
+						<div id="wwgrp_vision_rightEyeTestLUID" class="wwgrp">
+						<div id="wwctrl_vision_rightEyeTestLUID" class="wwctrl">
+							<select id="vision_rightEyeTestLUID" name="vision_rightEyeTestLUID" data_index=10>
+								<option value=""> </option>
+   								<#if rightEyeTestList?? >
+   									<#list rightEyeTestList as ret>
+     	  								<option isActive="${ret.isActive!"1"}" value="${ret.screeningLookUpID?c}">${ret.healthCategory!""}
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+
+				</tr>
+
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_vision_colorBlindTestLUID" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.color_blind_test_result"/></label></td>
+					<td >
+						<div id="wwgrp_vision_colorBlindTestLUID" class="wwgrp">
+						<div id="wwctrl_vision_colorBlindTestLUID" class="wwctrl">
+							<select id="vision_colorBlindTestLUID" name="vision_colorBlindTestLUID" data_index="11">
+								<option value=""> </option>
+   								<#if colorBlindTestList?? >
+   									<#list colorBlindTestList as cb>
+    	  								<option isActive="${cb.isActive!"1"}" value="${cb.screeningLookUpID?c}">${cb.healthCategory!""}
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+
+					<td colspan="2" width="*"></td>
+				</tr>
+
+				<tr class="<@evenOddRow />">
+					<td align=right valign="top"><label id="lbl_vision_visionAid" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.vision_aid"/></label></td>
+					<td colspan="3" width="*">
+						<div id="wwgrp_vision_visionAid" class="wwgrp">
+						<div id="wwctrl_vision_visionAid" class="wwctrl">
+							<textarea cols="64" rows="4" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"   id="vision_visionAid" name="vision_visionAid" maxlength="256" /></textarea>
+						</div></div>
+					</td>
+				</tr>
+
+				<tbody>
+          </table>
+
+
+	      				</div>
+        		</div>
+-->
+				<div class="box-round">
+	    			<h2><@s.text name="psx.ftl.admin_health.screening_vision_panel.outcome__comment"/></h2>
+    				<div id="codeCat" class="visible">
+
+
+			<table border="0" cellspacing="0" cellpadding="4" >
+			  <tbody>
+					<tr class="<@evenOddRow />">
+						<td>Screening Outcome</td>
+						<td>
+							<div id="wwgrp_vision_leftEyeTestLUID" class="wwgrp">
+							<div id="wwctrl_vision_leftEyeTestLUID" class="wwctrl">
+								<select id="vision_leftEyeTestLUID" name="vision_leftEyeTestLUID" data_index="9">
+									<option value=""> </option>
+										<#if leftEyeTestList?? >
+											<#list leftEyeTestList as let>
+													<option isActive="${let.isActive!"1"}" value="${let.screeningLookUpID?c}">${let.healthCategory!""}
+												</#list>
+											</#if>
+									</select>
+							</div></div>
+						</td>
+					</tr>
+				<tr class="<@evenOddRow />">
+					<td>Process Outcome</td>
+					<td colspan="3" width="*">
+						<div id="wwgrp_vision_visionScreenOutcomeLUID" class="wwgrp">
+						<div id="wwctrl_vision_visionScreenOutcomeLUID" class="wwctrl">
+							<select id="vision_visionScreenOutcomeLUID" name="vision_visionScreenOutcomeLUID" data_index="1">
+								<option value=""> </option>
+   								<#if visionScreenOutcomeList?? >
+   									<#list visionScreenOutcomeList as vso>
+     	  								<option isActive="${vso.isActive!"1"}" value="${vso.screeningLookUpID?c}">${vso.healthCategory!""}
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+				</tr>
+
+
+				<tr class="<@evenOddRow />">
+                    <td valign="top"><label id="lbl_vision_screenComment" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.comment"/></label></td>
+                    <td colspan="3">
+                    	<div id="wwgrp_vision_screenComment" class="wwgrp">
+						<div id="wwctrl_vision_screenComment" class="wwctrl">
+                       		<textarea cols="68" rows="6" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"   id="vision_screenComment" name="vision_screenComment" maxlength="512" /></textarea>
+                       </div></div>
+                    </td>
+                </tr>
+
+                <tbody>
+          </table>
+
+	      				</div>
+        		</div>
+
+
+		<div id="vision_changeReason_updateonly" style="display:none;align:center;width=100%;margin-left:10px; ">
+			<b id="lbl_vision_changeReason" style="white-space:nowrap;float:left;display:inline;"><@s.text name="psx.ftl.admin_health.screening_vision_panel.change_reason_"/></b>
+			<div id="wwgrp_vision_changeReason" class="wwgrp" style="float:right;width:75%;display:block;vertical-align:top;">
+				<div id="wwctrl_vision_changeReason" class="wwctrl">
+                       <textarea cols="68" rows="6" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"   id="vision_changeReason" name="vision_changeReason" maxlength="2048" /></textarea>
+               </div>
+             </div>
+         </div>
+
+	</div>
+
+
+	<@panelFooter includeHelp=true helpAnchor=hlplnk_incidaction>
+						<div id="add_vision_button" class="floatrt"></div>
+						<div id="update_vision_button" class="floatrt"></div>
+						<div id="cancel_vision_button" class="floatrt"></div>
+						<div class="hide">
+							<<input type="text" id="visionUpdateTag" value="" />
+						</div>
+	</@panelFooter>
+</div>

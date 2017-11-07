@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>~[text:psx.html.admin_attendance_record_batch.meetingsingle.attendance_change]</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+      ~[wc:att_JavaScript]
+   </head>
+   <body>
+      <form action="/admin/changesrecorded.white.html" method="POST"  onSubmit="return submitCheck();" name="attendance" id="attendance">
+         ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">~[text:psx.html.admin_attendance_record_batch.meetingsingle.start_page]</a> &gt; <a href="/admin/students/home.html?selectstudent=nosearch" target="_top">~[text:psx.html.admin_attendance_record_batch.meetingsingle.student_selection]</a> &gt;~[text:psx.html.admin_attendance_record_batch.meetingsingle._gt_attendance_change,param:(ATT_SetDefaultScreen)]<!-- breadcrumb end -->~[wc:admin_navigation_frame_css]
+         ~[wc:title_student_begin_css]~[text:psx.html.admin_attendance_record_batch.meetingsingle.attendance_change1]~[wc:title_student_end_css]
+         <!-- start of content and bounding box -->
+         <div class="box-round">
+            <table border="0" cellspacing="0" cellpadding="4">
+               <tr bgcolor="#f6f6f6">
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.option]</td>
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.value]</td>
+               </tr>
+               <tr bgcolor="#edf3fe">
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.change_attendance_for]</td>
+                  <td>~[x:dothisfor]</td>
+               </tr>
+               <tr>
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.from_this_date]</td>
+                  <td><input type="text" class="psDateWidget" name="att_datestart" value="~[date]" size="10" onFocus="attReset();"></td>
+               </tr>
+               <tr bgcolor="#edf3fe">
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.to_this_date]</td>
+                  <td><input type="text" class="psDateWidget" name="att_dateend" value="~[date]" size="10" onFocus="attReset();"></td>
+               </tr>
+               <tr>
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.meetings_to_scan]</td>
+                  <td>~[x:schedulebitmap2Grid;AddButtonEnablingJSAction]<br><a href="javascript:doCheck(1)" id="btnSelectAll" name="btnSelectAll" class="button">~[text:psx.html.admin_attendance_record_batch.meetingsingle.select_all]</a> &nbsp;
+                     <a href="javascript:doCheck(0)" class="button" name="btnClear">~[text:psx.html.admin_attendance_record_batch.meetingsingle.clear]</a>
+                  </td>
+               </tr>
+               <tr bgcolor="#edf3fe">
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.code_to_scan_for,param:(s)]</td>
+                  <td><input type="radio" name="UseAllCodes" value="yes" checked  onClick="attReset();">
+                    All</td>
+               </tr>
+               <tr>
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.attendance_code_to_set]</td>
+                  <td>~[x:att_attcodelist;AddButtonEnablingJSAction]</td>
+               </tr>
+               <tr bgcolor="#edf3fe">
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.if_other_than_a_default_present]</td>
+                  <td><input type="radio" name="att_overwrite" value="yes" checked  onClick="attReset();">~[text:psx.html.admin_attendance_record_batch.meetingsingle.overwrite]<br><input type="radio" name="att_overwrite" value="no" onClick="attReset();">~[text:psx.html.admin_attendance_record_batch.meetingsingle.dont_overwrite]</td>
+               </tr>
+               <tr>
+                  <td class="bold">~[text:psx.html.admin_attendance_record_batch.meetingsingle.comment]</td>
+                  <td><textarea name="att_att_comment" cols="50" rows="4" onFocus="attReset();"></textarea></td>
+               </tr>
+            </table>
+            <br>
+            <div class="button-row"><input type="hidden" name="ATT_Mode_code" value="ATT_ModeMeeting"><input type="hidden" name="ac" value="ATT_RecordBatchPrepMeeting"><input type="hidden" name="skipDontPrintFilter" value="1">~[wc:button_submit_disabled]</div>
+         </div>
+         <br>
+         <!-- end of content of bounding box -->
+         ~[wc:admin_footer_frame_css]
+         <input type="hidden" name="counter" id="counter" value="0">
+      </form>
+   </body>
+</html>
+<!-- end right frame -->

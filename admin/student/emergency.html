@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Medical Information</title>
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+      <!--   td>~[text:psx.html.admin_students.emergency.contact_name_last_first]<br><input type="text" name="[Students.U_Students_Extension]Clinic" value="" size="25"><td/></td> <td><input type="text" name="[Students.U_Students_Extension]Clinic" value="" size="25"><td/> -->
+      <form action="/admin/changesrecorded.white.html" method="POST">
+         ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">~[text:psx.html.admin_students.emergency.start_page]</a> &gt; <a href="home.html?selectstudent=nosearch" target="_top">~[text:psx.html.admin_students.emergency.student_selection]</a> &gt;~[text:psx.html.admin_students.emergency.emergency_contactmedical1]<!-- breadcrumb end -->~[wc:admin_navigation_frame_css]
+         ~[wc:title_student_begin_css]~[text:psx.html.admin_students.emergency.emergency_contactmedical2]~[wc:title_student_end_css]
+         <!-- start of content and bounding box -->
+         <div class="box-round">
+            <table border="0" cellspacing="0" cellpadding="3">
+
+
+                <tr>
+                <!--  Clinic   -->
+                 <td class="bold">Medical Home
+                 <br>
+                 <input type="text" name="[Students.U_Students_Extension]Clinic" value="" size="25">
+                 </td>
+
+
+                 <!--  Clinic Number  -->
+                 <td class="bold">Clinic Phone Number
+                 <br>
+                    <input type="text" name="[Students.U_Students_Extension]clinic_phone_number" value="" size="25">
+                    </td>
+
+
+                <!--  Medical Provider/ Doctor  -->
+                 <td class="bold">Primary Care Provider
+                 <br>
+                 <input type="text" name="[1]Doctor_Name" value="" size="25">
+                 </td>
+
+            </tr>
+
+              <tr bgcolor="#edf3fe">
+                 <td class="bold" colspan="2">~[text:psx.html.admin_students.emergency.medical_alert_text]<br>
+                 <textarea name="[01]Alert_Medical" rows="4" cols="45"></textarea></td>
+
+
+                    <td class="bold">~[text:psx.html.admin_students.emergency.alert_expires,param:(date)]<br>
+                    <input type="text" name="[01]Alert_MedicalExpires" value="" size="10"> ~[text:psx.html.admin_students.emergency._to_never_expire,param:~[i18shortdate:0/0/0]]</td>
+
+              </tr>
+
+
+
+              <tr>
+
+                <!--  Annual Well Child Form  and HIPAA-->
+
+                <td class="bold">Annual Well Child Form Recieved
+                <br>
+                <select name="[Students.U_Students_Extension]well_child_form_recieved">
+                    <option>
+                    <option value="Yes">Yes
+                    <option value="No">No
+                </select>
+                </td>
+
+                <td class="bold">HIPAA signed
+                <br>
+                <select name="[Students.U_Students_Extension]HIPAA_SIGNED">
+                    <option>
+                    <option value="Completed">Completed
+                    <option value="No">No
+                </select>
+                </td>
+
+
+              </tr>
+
+              <tr bgcolor="#edf3fe">
+
+                <!--  DENTAL HOME, VDH, Dental Visit this Year -->
+
+                <td class="bold">Dental Home
+                <br>
+                   <input type="text" name="[Students.U_Students_Extension]DENTAL_HOME" value="" size="25">
+                   </td>
+
+               <td class="bold">Dental Visit This Year?
+               <br>
+               <select name="[Students.U_Students_Extension]dental_visit_this_year">
+                   <option>
+                   <option value="Yes">Yes
+                   <option value="No">No
+               </select>
+
+               <td class="bold">Enrolled in VDH
+               <br>
+               <select name="[Students.U_Students_Extension]vdh_enrolled">
+                   <option>
+                   <option value="Yes">Yes
+                   <option value="No">No
+               </select>
+
+              </tr>
+
+              <tr>
+                <td class="bold">Active Health Problem
+                <br>
+                   <input type="text" name="[Students.U_Students_Extension]active_health_problems" value="" size="25">
+                 </td>
+
+                 <td class="bold">Medications
+                 <br>
+                    <input type="text" name="[Students.U_Students_Extension]medications" value="" size="25">
+                  </td>
+
+
+                 <td class="bold">~[text:psx.html.admin_students.emergency.allergies]<br />
+                 <input type="text" name="[01]allergies" value="" size="25"></td>
+
+              </tr>
+
+                <tr bgcolor="#edf3fe">
+                  <td class="bold">Active Developmental Concerns
+                  <br>
+                     <input type="text" name="[Students.U_Students_Extension]active_developmental_concerns" value="" size="45">
+                   </td>
+
+                   <td class="bold">IEP or IFSP in place
+                     <br>
+                     <select name="[Students.U_Students_Extension]iep_or_isfsp">
+                         <option>
+                         <option value="Y">Yes
+                         <option value="N">No
+                     </select>
+
+                   </td>
+
+                   <td class="bold">Other Developmental Support Services
+                     <br>
+                   <input type="text" name="[Students.U_Students_Extension]DEVELOPMENTAL_SUPPORT_SERVICES" value="" size="45"></td>
+
+                </tr>
+
+
+                <tr>
+
+                  <td class="bold">Names of Other Specialists
+                    <br>
+                  <input type="text" name="[Students.U_Students_Extension]name_of_other_specialists" value="" size="45"></td>
+
+                  <td class="bold">Health Insurance
+                    <br>
+                  <input type="text" name="[Students.U_Students_Extension]HEALTH_INSURANCE" value="" size="45"></td>
+
+                </tr>
+
+
+
+
+               <tr bgcolor="#edf3fe">
+                 <td class="bold" colspan="3">ASQ
+
+                 </td>
+                    </tr>
+                 <tr>
+
+
+                  <td colspan="6" align="center">
+                     <table border="0" cellpadding="4" cellspacing="0" align="center">
+                        <tr align="center">
+                           <td>ASQ - Comm Score</td>
+                           <td>ASQ - Comm Category</td>
+                           <td>ASQ - SE Score </td>
+                           <td>ASQ - SE Category</td>
+                           <td>ASQ - 9 Month </td>
+                           <td>ASQ - 18 Month </td>
+                           <td>ASQ - Other</td>
+                        </tr>
+                        <tr align="center">
+                           <td><input type="text" name="[Students.U_Students_Extension]asq3_comm_score" value="" size="3"></td>
+                           <td><input type="text" name="[Students.U_Students_Extension]asq3_comm_cat" value="" size="15"></td>
+                           <td><input type="text" name="[Students.U_Students_Extension]asq_se_score" value="" size="3"></td>
+                           <td><input type="text" name="[Students.U_Students_Extension]asq3_se_cat" value="" size="15"></td>
+                           <td><input type="text" name="[Students.U_Students_Extension]ASQ_9_Mo" value="" size="3"></td>
+                           <td><input type="text" name="[Students.U_Students_Extension]ASQ_18_Mo" value="" size="3"></td>
+                           <td><input type="text" name="[Students.U_Students_Extension]other_asq" value="" size="3"></td>
+                        </tr>
+                     </table>
+                  </td>
+               </tr>
+
+               <tr bgcolor="#edf3fe">
+                  <td class="bold" colspan="3">Overall Health Development Summary<br>
+                  <textarea name="[Students.U_Students_Extension]HEALTH_AND_DEV_SUMMARY" rows="8" cols="90"></textarea></td>
+               </tr>
+
+               <tr>
+                 <td class="bold" > Speech Screens</td>
+                 <td>Speech Screen Status<br />
+                   <select name="[Students.U_Students_Extension]SPEECH_SCREEN">
+                      <option>
+                      <option value="Passed">Passed
+                      <option value="Not Passed">Not Passed
+                      <option value="Not Yet Tested">Not Yet Tested
+                   </select>
+
+                 </td>
+
+                 <td>Speech Screen Action<br />
+                   <select name="[Students.U_Students_Extension]SPEECH_ACTION">
+                      <option>
+                      <option value="Within Normal Limits">Within Normal Limits
+                      <option value="Referred for Fall Evaluation">Referred for Fall Evaluation
+                      <option value="Refered for TPS Evaluations">Referred for TPS Evaluations
+                      <option value="Problem Unaddressed">Problem Unaddressed
+                   </select>
+
+                 </td>
+
+
+               </tr>
+
+
+
+
+               <!-- Start insert state specific section information -->
+               ~[x:insertfile;state/emergency~[displaypref:districtstate].html]
+               <!-- End insert state specific section information -->
+            </table>
+            <br>
+            <div class="button-row"><input type="hidden" name="ac" value="prim">~[submitbutton]</div>
+         </div>
+         <br>
+         <!-- end of content of bounding box -->
+         ~[wc:admin_footer_frame_css]
+      </form>
+   </body>
+</html>
+<!-- end right frame -->

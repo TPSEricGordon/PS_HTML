@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Edit College Application</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+      <form id="edit_application" action="applications.html?frn=~(frn)" method="POST">
+         ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
+            target="_top">Start Page</a> &gt; <a href="home.html?selectstudent=nosearch"
+            target="_top">Student Selection</a> &gt; Edit College Application<!-- breadcrumb end
+            -->~[wc:admin_navigation_frame_css]
+         ~[wc:title_student_begin_css]Edit College Application~[wc:title_student_end_css]
+         <!-- start of content and bounding box -->
+         <div class="box-round">
+            ~[DirectTable.Select:U_PARENT_DATA;ID:~(gpv.id)]
+            <fieldset id="Parent_Data">
+               <legend>Major Parent Data</legend>
+
+               <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
+               <colgroup><col style="width:20%"><col></colgroup>
+               <tr>
+                   <td class="bold">Parent Name (First, Last)</td>
+                   <td>
+                     <input type="text" name="[U_PARENT_DATA]FIRST_NAME" value="" size="25" maxlength="50" id="firstName">
+                     <input type="text" name="[U_PARENT_DATA]LAST_NAME" value="" size="15" maxlength="30" id="lastName">
+                   </td>
+               </tr>
+               <tr>
+                 <td class="bold" >
+                   Parent ID<br />
+                   Family ID
+                 </td>
+                 <td>
+                  ~([U_PARENT_DATA]PARENT_ID)
+                   <br />
+                   ~([U_PARENT_DATA]FAMILY_ID)
+                 </td>
+               </tr>
+
+               <tr>
+                 <td class="bold">Address</td>
+                 <td>
+                   <input type="text" name="[U_PARENT_DATA]ADDRESS" value="" size="30" maxlength="50" >
+                   <input type="text" name="[U_PARENT_DATA]APARTMENT" value="" size="7" maxlength="10">
+                 </td>
+
+               </tr>
+
+             </table>
+
+            </fieldset>
+            <div class="button-row" id="row1">
+               <input type="hidden" name="ac" value="prim">
+               <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
+            </div>
+      </form>
+      <div class="button-row" id="row2">
+      <form id="delete_button" action="applications.html?frn=~(studentfrn)"
+         method="post">
+      <input type="hidden" name="ac" value="prim" />
+      <input type="hidden" name="DD-U_APPLICATIONS.ID:~(gpv.id)" value="1" />
+      <button class="btnConfirmProxy" id="btnDelete">Delete</button>
+      </form>
+      </div>
+      </div>
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->

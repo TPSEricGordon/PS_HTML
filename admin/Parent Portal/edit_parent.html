@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Edit Parent Information</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+      <form id="edit_parent_info" action="/admin/parent_coaches/edit_parent.html?id=~(id)" method="POST">
+         ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
+            target="_top">Start Page</a> &gt; <a href="/admin/parent_coaches/parent_search.html"
+            target="_top">Parent Search</a> &gt; Edit Parent Information<!-- breadcrumb end
+            -->~[wc:admin_navigation_frame_css]
+         <h1>Edit Parent Information</h1>
+         <!-- start of content and bounding box -->
+        ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
+         <div class="box-round">
+            ~[DirectTable.Select:U_PARENT_DATA;ID:~(gpv.id)]
+            <fieldset id="Parent_Data">
+               <legend>Parent Data</legend>
+
+               <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
+               <colgroup><col style="width:20%"><col></colgroup>
+               <tr>
+                   <td class="bold">Parent Name (First, Last)</td>
+                   <td>
+                     <input type="text" name="[U_PARENT_DATA]FIRST_NAME" value="" size="25" maxlength="50" id="firstName">
+                     <input type="text" name="[U_PARENT_DATA]LAST_NAME" value="" size="15" maxlength="30" id="lastName">
+                   </td>
+               </tr>
+
+               <tr>
+                   <td class="bold">Nickname</td>
+                   <td>
+                     <input type="text" name="[U_PARENT_DATA]NICKNAME" value="" size="25" maxlength="50" >
+                   </td>
+               </tr>
+
+
+               <tr>
+                 <td class="bold" >
+                   Parent ID<br />
+                   Family ID
+                 </td>
+                 <td>
+                  ~([U_PARENT_DATA]PARENT_ID)
+                   <br />
+                   ~([U_PARENT_DATA]FAMILY_ID)
+                 </td>
+               </tr>
+
+
+               <tr>
+                 <td class="bold">Address</td>
+                 <td>
+                   <input type="text" name="[U_PARENT_DATA]ADDRESS" value="" size="30" maxlength="50" >
+                   <input type="text" name="[U_PARENT_DATA]APARTMENT" value="" size="7" maxlength="10">
+                 </td>
+
+               </tr>
+
+
+               <tr>
+                 <td class="bold">City, State, Zip</td>
+
+                 <td>
+                   <input type="text" name="[U_PARENT_DATA]CITY" value="" size="30" maxlength="50" >
+                   <input type="text" name="[U_PARENT_DATA]STATE" value="" size="4" maxlength="2">
+                   <input type="text" name="[U_PARENT_DATA]ZIP" value="" size="7" maxlength="5">
+                 </td>
+               </tr>
+
+               <tr>
+                    <td class="bold">Gender</td>
+                    <td>
+                    <input type="radio" name="[U_PARENT_DATA]GENDER" value="Male">Male<br />
+                                        <input type="radio" name="[U_PARENT_DATA]GENDER" value="Female">Female
+                    </td>
+               </tr>
+               <tr>
+                 <td class="bold">
+                   Preferred Language
+                 </td>
+                 <td>
+                   <select name="[U_PARENT_DATA]PREFERRED_LANGUAGE">
+                     <<option value="English">English</option>
+                     <<option value="Spanish">Spanish</option>
+                     <<option value="Tongan">Tongan</option>
+                     <<option value="Other">Other</option>
+                     <<option value=""></option>
+                   </select>
+                 </td>
+               </tr>
+
+               <tr>
+                 <td class="bold">Birthday</td>
+
+                 <td>
+                   <input type="text" name="[U_PARENT_DATA]BIRTHDATE" value="" size="30" maxlength="50" >
+                  </td>
+               </tr>
+
+               <tr>
+                 <td class="bold">
+                   E-Mails
+                 </td>
+                 <td>
+                   1.<input type="text" name="[U_PARENT_DATA]EMAIL" value="" size="30" maxlength="50"  />
+
+                   <br />
+                   2.<input type="text" name="[U_PARENT_DATA]EMAIL2" value="" size="30" maxlength="50"  />
+                 </td>
+               </tr>
+               <tr>
+                 <td class="bold">
+                   Phone Numbers
+                 </td>
+                 <td>
+                   1. <input type="text" name="[U_PARENT_DATA]PHONE" value="" size="15" maxlength="15"  />
+                   <input type="radio" name="[U_PARENT_DATA]CAN_TEXT" value="Yes">Yes
+                   <input type="radio" name="[U_PARENT_DATA]CAN_TEXT" value="No">No
+
+                   <br />
+                   2. <input type="text" name="[U_PARENT_DATA]PHONE2" value="" size="15" maxlength="15"  />
+                   <input type="radio" name="[U_PARENT_DATA]CAN_TEXT2" value="Yes">Yes
+                   <input type="radio" name="[U_PARENT_DATA]CAN_TEXT2" value="No">No
+                 </td>
+               </tr>
+               <tr>
+                 <td class="bold">
+                   Employment
+                 </td>
+                 <td>
+                   <select id="selectEmployment" name="[U_PARENT_DATA]EMPLOYED_CURRENTLY">
+                     <option value="In school/training full time">In school/training full time</option>
+                       <option value="Working full time, In school/training part time">Working full time, In school/training part time</option>
+                       <option value="Not working, not looking for work">Not working, not looking for work</option>
+                       <option value="In school/training part time">In school/training part time</option>
+                       <option value="Working part time, In school/training part time">Working part time, In school/training part time</option>
+                       <option value="Not working">Not working</option>
+                       <option value="In school/training full time, Working part time">In school/training full time, Working part time</option>
+                       <option value="Working multiple full/part time jobs">Working multiple full/part time jobs</option>
+                       <option value="Not working, looking for work, Not working, will look for work later, once my child starts school">Not working, looking for work, Not working, will look for work later, once my child starts school</option>
+                       <option value="Working full time">Working full time</option>
+                       <option value="Working part time">Working part time</option>
+                       <option value="Not working, looking for work">Not working, looking for work</option>
+                       <option value="Not working, will look for work later, once my child starts school">Not working, will look for work later, once my child starts school</option>
+                       <option value="Working full time, Working part time">Working full time, Working part time</option>
+                       <option value="Working part time, In school/training full time">Working part time, In school/training full time</option>
+                       <option value="">Unknown</option>
+                    </select>
+                 </td>
+               </tr>
+
+               <tr>
+                    <td class="bold">Comfort With English</td>
+                    <td>
+                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I feel comfortable using English in all interactions">I feel comfortable using English in all interactions<br />
+                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I feel comfortable using English for work">I feel comfortable using English for work<br />
+                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I can use English for daily errands">I can use English for daily errands<br />
+                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I don't understand or speak English at all">I don't understand or speak English at all<br />
+                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I understand some English but don't speak it">I understand some English but don't speak it<br />
+                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="">Unknown<br />
+                    </td>
+               </tr>
+               <tr>
+                 <td class="bold">
+                   Ethnicity <br /><br />
+                   Race
+                 </td>
+                 <td>
+                   <select name="[U_PARENT_DATA]ETHNICITY">
+                     <option value="Hispanic/Latino">Hispanic/Latino</option>
+                     <option value="">Not Hispanic/Latino</option>
+                   </select>
+
+                 <br /><br />
+
+                   <select name="[U_PARENT_DATA]RACE">
+                     <<option value="Black/African American">Black/African American</option>
+                     <<option value="Asian">Asian</option>
+                     <<option value="Native Hawaiian/Pacific Islander">Native Hawaiian/Pacific Islander</option>
+                     <<option value="White/Caucasian">White/Caucasian</option>
+                     <<option value="American Indian or Alaskan Native">American Indian or Alaskan Native</option>
+                     <<option value="">Unknown</option>
+                   </select>
+
+                 </td>
+               </tr>
+
+               <tr>
+                 <td class="bold">
+                   Highest Level of Schooling
+                 </td>
+                 <td>
+                   <select>
+                     <<option value="Higher Education, BA or Advanced Degree">Higher Education, BA or Advanced Degree</option>
+                     <<option value="Trade or Technical/Vocational Degree">Trade or Technical/Vocational Degree</option>
+                     <<option value="High School Diploma">High School Diploma</option>
+                     <<option value="Higher Education, AA Degree">Higher Education, AA Degree</option>
+                     <<option value="3rd grade or less">3rd grade or less</option>
+                     <<option value="3rd-8th Grade">3rd-8th Grade</option>
+                     <<option value="Some College">Some College</option>
+                     <<option value="Some High School">Some High School</option>
+                     <<option value=""></option>
+                   </select>
+                 </td>
+               </tr>
+
+               <tr>
+                 <td class="bold">
+                   PGP GOAL
+                 </td>
+                 <td>
+                   <textarea name="[U_PARENT_DATA]PGP_GOAL" cols="50" rows="5"></textarea>
+                 <br />
+                 <button class="button" onClick="window.open('https://docs.google.com/document/d/1sBHx7QbHLPwoE0JgPft5Ym7jfWDwDjwu9_0t9auhob8/edit');">Open PGP</button>
+                 (NOT WORKING YET.... NEED TO WRITE FUNCTION TO GET LINK)
+                </td>
+               </tr>
+               <tr>
+                 <td class="bold">
+                   LINK to PGP
+                 </td>
+                 <td>
+                   <input name="[U_PARENT_DATA]PGP_LINK" size="50" value="" id="link">
+                 </td>
+               </tr>
+
+
+             </table>
+
+
+
+            </fieldset>
+            <div class="button-row" id="row1">
+               <input type="hidden" name="ac" value="prim">
+               <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
+            </div>
+      </form>
+      <div class="button-row" id="row2">
+  <!--
+
+  <form id="delete_button" action="applications.html?frn=~(studentfrn)"
+         method="post">
+   <input type="hidden" name="ac" value="prim" />
+     <input type="hidden" name="DD-U_APPLICATIONS.ID:~(gpv.id)" value="1" />
+      <button class="btnConfirmProxy" id="btnDelete">Delete</button>
+
+       -->
+      </form>
+      </div>
+      </div>
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->

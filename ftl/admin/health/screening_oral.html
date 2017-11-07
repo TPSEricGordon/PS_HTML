@@ -1,0 +1,124 @@
+<div id="create_oral_div" class="popPanel">
+	<div class="hd"><div class='tl'></div><span><label class="paneltitle" id="oral_titlebar"><@s.text name="psx.ftl.admin_health.screening_oral_panel.add_oral_screening"/></label></span><div class='tr'></div></div>
+	<div class="bd">
+
+				<div class="box-round">
+	    			<h2><@s.text name="psx.ftl.admin_health.screening_oral_panel.screening_details"/></h2>
+    				<div id="codeCat" class="visible">
+
+
+			<table border="0" cellspacing="0" cellpadding="4" >
+			  <tbody>
+					<tr class="<@evenOddRow />">
+						<td><label id="lbl_oral_oralScreenerTypeLUID" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.screening_oral_panel.screening_provider_type"/></label></td>
+							<td>
+							<div id="wwgrp_oral_oralScreenerTypeLUID" class="wwgrp">
+							<div id="wwctrl_oral_oralScreenerTypeLUID" class="wwctrl">
+								<select id="oral_oralScreenerTypeLUID" name="oral_oralScreenerTypeLUID" data_index="4">
+									<option value=""> </option>
+										<#if oralScreenTypeList?? >
+											<#list oralScreenTypeList as ost>
+													<option isActive="${ost.isActive!"1"}" value="${ost.screeningLookUpID?c}">${ost.healthCategory!""}
+												</#list>
+											</#if>
+									</select>
+							</div></div>
+						</td>
+						<td><label id="lbl_oral_gradeLevelAtScreen" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.screening_oral_panel.grade_level"/></label></td>
+							<td>
+							<div id="wwgrp_oral_gradeLevelAtScreen" class="wwgrp">
+							<div id="wwctrl_oral_gradeLevelAtScreen" class="wwctrl">
+								<select id="oral_gradeLevelAtScreen" name="oral_gradeLevelAtScreen" >
+									<option value="">
+										<#list gradeLevelList as gl>
+												<option value="${gl.code}">${gl.displayName}
+											</#list>
+									</select>
+							</div></div>
+						</td>
+					</tr>
+                <tr class="<@evenOddRow />">
+
+					<td><label id="lbl_oral_screenDate" style="white-space:nowrap;float:right;"><@s.text name="psx.ftl.admin_health.screening_oral_panel.screening_date"/></label></td>
+					<td>
+					<div id="wwgrp_oral_screenDate" class="wwgrp">
+					<div id="wwctrl_oral_screenDate" class="wwctrl">
+					<input type="text" name="oral_screenDate" id="oral_screenDate" value="" size="12" class="psDateWidget" />
+					</div></div>
+
+					</td>
+				</tr>
+
+
+			<tbody>
+          </table>
+
+	      				<!-- Verify - clearit removed -->
+	      				</div>
+        		</div>
+
+
+
+					<div class="box-round">
+	    			<h2><@s.text name="psx.ftl.admin_health.screening_oral_panel.outcome__comment"/></h2>
+    				<div id="codeCat" class="visible">
+
+
+			<table border="0" cellspacing="0" cellpadding="4" >
+			  <tbody>
+
+				<tr class="<@evenOddRow />">
+					<td><label style="white-space:nowrap;">Process Outcome</label></td>
+					<td colspan="3" width="*">
+						<div id="wwgrp_oral_oralScreenOutcomeLUID" class="wwgrp">
+						<div id="wwctrl_oral_oralScreenOutcomeLUID" class="wwctrl">
+							<select id="oral_oralScreenOutcomeLUID" name="oral_oralScreenOutcomeLUID" data_index="1">
+								<option value=""> </option>
+   								<#if oralScreenOutcomeList?? >
+   									<#list oralScreenOutcomeList as oso>
+    	  								<option isActive="${oso.isActive!"1"}" value="${oso.screeningLookUpID?c}">${oso.healthCategory!""}
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+				</tr>
+
+				<tr class="<@evenOddRow />">
+                    <td valign="top"><label id="lbl_oral_screenComment" style="white-space:nowrap;"><@s.text name="psx.ftl.admin_health.screening_oral_panel.comment"/></label></td>
+                    <td colspan="3">
+                    	<div id="wwgrp_oral_screenComment" class="wwgrp">
+						<div id="wwctrl_oral_screenComment" class="wwctrl">
+                       		<textarea cols="68" rows="6" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"   id="oral_screenComment" name="oral_screenComment" maxlength="512" /></textarea>
+                       </div></div>
+                    </td>
+                </tr>
+
+                <tbody>
+          </table>
+
+
+	      				</div>
+        		</div>
+
+
+
+		<div id="oral_changeReason_updateonly" style="display:none;align:center;width=100%;margin-left:10px; ">
+			<b id="lbl_oral_changeReason" style="white-space:nowrap;float:left;display:inline;"><@s.text name="psx.ftl.admin_health.screening_oral_panel.change_reason_"/></b>
+			<div id="wwgrp_oral_changeReason" class="wwgrp" style="float:right;width:75%;display:block;vertical-align:top;">
+				<div id="wwctrl_oral_changeReason" class="wwctrl">
+                       <textarea cols="68" rows="6" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"   id="oral_changeReason" name="oral_changeReason" maxlength="2048" /></textarea>
+               </div>
+             </div>
+         </div>
+	</div>
+
+	<@panelFooter includeHelp=true helpAnchor=hlplnk_incidaction>
+						<div id="add_oral_button" class="floatrt"></div>
+						<div id="update_oral_button" class="floatrt"></div>
+						<div id="cancel_oral_button" class="floatrt"></div>
+						<div class="hide">
+							<input type="text" id="oralUpdateTag" value="" />
+						</div>
+	</@panelFooter>
+</div>

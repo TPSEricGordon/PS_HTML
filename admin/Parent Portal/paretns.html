@@ -1,0 +1,37 @@
+<!DOCTYPE  html>
+<html>
+<!-- start right frame -->
+<head>
+     <title>Parent Records</title>
+     ~[wc:commonscripts]
+    <script src="/scripts/tlistCustomization.js"></script>
+     <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+     <link href="/images/css/print.css" rel="stylesheet" media="print">
+</head>
+<body>
+  ~[wc:admin_navigation_css]
+<form action="/admin/changesrecorded.white.html" method="POST">
+~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">Start Page</a> > <a href="home.html?selectstudent=nosearch" target="_top">Student Selection</a> > Parent Records<!-- breadcrumb end -->~[wc:admin_navigation_frame_css]
+<h1>Parent Records</h1>
+
+<!-- start of content and bounding box -->
+<div class="box-round">
+     <input type="hidden" name="ac" value="prim">~[submitbutton]
+
+    ~[tlist_standalone:U_INDEPENDENTTABLE_EXTENSION.U_PARENT_DATA;displaycols:parent_id,family_id,first_name,last_name,PHONE,PHONE2,EMAIL,EMAIL2,ADDRESS,APARTMENT, CITY, STATE, ZIP,PGP_GOAL,PGP_LINK;fieldNames:Parent ID,Family Id,First Name,Last Name,Phone, Phone 2,E-mail,E-mail 2,Address, Apartment, City, State,Zip, Goal, Link;type:html]
+    <script>
+    	tlistText2StaticTextAllowNew('parent_id');
+      tlistText2StaticTextAllowNew('family_id');
+    </script>
+     <br>
+     <div class="button-row">
+     <input type="hidden" name="ac" value="prim">~[submitbutton]
+     </div>
+</div>
+<br>
+
+<!-- end of content of bounding box -->
+~[wc:admin_footer_frame_css]
+</form>
+</body>
+</html><!-- end right frame -->

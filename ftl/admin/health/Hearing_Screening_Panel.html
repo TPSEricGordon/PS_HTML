@@ -1,0 +1,191 @@
+<!--
+This File is found in  - FTL Admin - Health - hearing_screening_panel.ftl
+-->
+<div id="create_hearing_div" class="popPanel">
+
+
+
+	<div class="hd"><div class='tl'></div><span><label class="paneltitle" id="hearing_titlebar"><@s.text name="psx.ftl.admin_health.screening_hearing_panel.add_hearing_screening"/></label></span><div class='tr'></div></div>
+	<div class="bd">
+
+
+				<div class="box-round">
+	    			<h2><@s.text name="psx.ftl.admin_health.screening_hearing_panel.screening_details"/></h2>
+    				<div id="codeCat" class="visible">
+
+
+			<table border="0" cellspacing="0" cellpadding="4" >
+			  <tbody>
+
+
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_hearing_hearingScreenerTypeLUID" ><@s.text name="psx.ftl.admin_health.screening_hearing_panel.screening_provider_type"/></label></td>
+						<td>
+						<div id="wwgrp_hearing_hearingScreenerTypeLUID" class="wwgrp">
+						<div id="wwctrl_hearing_hearingScreenerTypeLUID" class="wwctrl">
+							<select id="hearing_hearingScreenerTypeLUID" name="hearing_hearingScreenerTypeLUID" data_index="4">
+								<option value=""> </option>
+   								<#if hearingScreenTypeList?? >
+   									<#list hearingScreenTypeList as hst>
+    	  								<option isActive="${hst.isActive!"1"}" value="${hst.screeningLookUpID?c}">${hst.healthCategory!""}
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+
+					<td><label id="lbl_hearing_gradeLevelAtScreen"><@s.text name="psx.ftl.admin_health.screening_hearing_panel.grade_level"/></label></td>
+						<td>
+						<div id="wwgrp_hearing_gradeLevelAtScreen" class="wwgrp">
+						<div id="wwctrl_hearing_gradeLevelAtScreen" class="wwctrl">
+							<select id="hearing_gradeLevelAtScreen" name="hearing_gradeLevelAtScreen" >
+   								<option value="">
+   								<#list gradeLevelList as gl>
+    	  							<option value="${gl.code}">${gl.displayName}
+    	  						</#list>
+  							</select>
+						</div></div>
+					</td>
+				</tr>
+				<tr class="<@evenOddRow />">
+						<td><label id="lbl_hearing_screenDate" ><@s.text name="psx.ftl.admin_health.screening_hearing_panel.screening_date"/></label></td>
+					<td>
+						<div id="wwgrp_hearing_screenDate" class="wwgrp">
+								<div id="wwctrl_hearing_screenDate" class="wwctrl">
+								<input type="text" name="hearing_screenDate" id="hearing_screenDate" value="" size="12" class="psDateWidget"/>
+							</div>
+						</div>
+
+					</td>
+					<td><label id="lbl_hearing_referalDate"><@s.text name="psx.ftl.admin_health.screening_hearing_panel.hearing_referral_date"/></label></td>
+					<td>
+
+					<div id="wwgrp_hearing_referalDate" class="wwgrp">
+					<div id="wwctrl_hearing_referalDate" class="wwctrl">
+
+					<input type="text" size="12" value="" name="hearing_referalDate" id="hearing_referalDate" class="psDateWidget">
+					</div></div>
+
+					</td>
+			</tr>
+
+
+
+
+			<tbody>
+          </table>
+
+	      				</div>
+        		</div>
+
+
+
+				<div class="box-round" id="hearing-box">
+	    			<h2><@s.text name="psx.ftl.admin_health.screening_hearing_panel.hearing_test"/></h2>
+    				<div id="codeCat" class="visible">
+
+
+			<table border="0" cellspacing="0" cellpadding="4">
+			  <tbody>
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_hearing_rightEarTestLUID"><@s.text name="psx.ftl.admin_health.screening_hearing_panel.right_ear_test_result"/></label></td>
+					<td>
+						<div id="wwgrp_hearing_rightEarTestLUID" class="wwgrp">
+						<div id="wwctrl_hearing_rightEarTestLUID" class="wwctrl">
+							<select id="hearing_rightEarTestLUID" name="hearing_rightEarTestLUID" data_index="7">
+								<option value=""> </option>
+   								<#if rightEarTestList?? >
+   									<#list rightEarTestList as ret>
+    	  								<option isActive="${ret.isActive!"1"}" value="${ret.screeningLookUpID?c}">${ret.healthCategory!""}
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+					<td><label id="lbl_hearing_leftEarTestLUID"><@s.text name="psx.ftl.admin_health.screening_hearing_panel.left_ear_test_result"/></label></td>
+					<td>
+						<div id="wwgrp_hearing_leftEarTestLUID" class="wwgrp">
+						<div id="wwctrl_hearing_leftEarTestLUID" class="wwctrl">
+							<select id="hearing_leftEarTestLUID" name="hearing_leftEarTestLUID" data_index="6">
+								<option value=""> </option>
+   								<#if leftEarTestList?? >
+   									<#list leftEarTestList as let>
+     	  								<option isActive="${let.isActive!"1"}" value="${let.screeningLookUpID?c}">${let.healthCategory!""}
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+				</tr>
+				<tbody>
+          </table>
+
+
+	      				</div>
+        		</div>
+
+
+				<div class="box-round">
+	    			<h2>Process Outcome</h2>
+    				<div id="codeCat" class="visible">
+
+
+			<table border="0" cellspacing="0" cellpadding="4" >
+			  <tbody>
+
+				<tr class="<@evenOddRow />">
+					<td><label id="lbl_hearing_hearingScreenOutcomeLUID"><@s.text name="psx.ftl.admin_health.screening_hearing_panel.screening_outcome"/></label></td>
+					<td colspan="3" width="*">
+						<div id="wwgrp_hearing_hearingScreenOutcomeLUID" class="wwgrp">
+						<div id="wwctrl_hearing_hearingScreenOutcomeLUID" class="wwctrl">
+							<select id="hearing_hearingScreenOutcomeLUID" name="hearing_hearingScreenOutcomeLUID" data_index="1">
+								<option value=""> </option>
+   								<#if hearingScreenOutcomeList?? >
+   									<#list hearingScreenOutcomeList as hso>
+    	  								<option isActive="${hso.isActive!"1"}" value="${hso.screeningLookUpID?c}">${hso.healthCategory!""}
+    	  							</#list>
+    	  						</#if>
+  							</select>
+						</div></div>
+					</td>
+				</tr>
+
+				<tr class="<@evenOddRow />">
+                    <td valign="top"><label id="lbl_hearing_screenComment" ><@s.text name="psx.ftl.admin_health.screening_hearing_panel.comment"/></label></td>
+                    <td colspan="3">
+                    	<div id="wwgrp_hearing_screenComment" class="wwgrp">
+						<div id="wwctrl_hearing_screenComment" class="wwctrl">
+                       		<textarea cols="68" rows="6" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"   id="hearing_screenComment" name="hearing_screenComment" maxlength="512" /></textarea>
+                       </div></div>
+                    </td>
+                </tr>
+
+                <tbody>
+          </table>
+
+
+	      				</div>
+        		</div>
+
+
+
+		<div id="hearing_changeReason_updateonly" style="display:none;align:center;width=100%;margin-left:10px; ">
+			<b id="lbl_hearing_changeReason" style="display:inline;"><@s.text name="psx.ftl.admin_health.screening_hearing_panel.change_reason_"/></b>
+			<div id="wwgrp_hearing_changeReason" class="wwgrp" style="width:75%;display:block;vertical-align:top;">
+				<div id="wwctrl_hearing_changeReason" class="wwctrl">
+                       <textarea cols="68" rows="6" cssStyle="display: none; width: 100%; *width: 95%;resize:none;"   id="hearing_changeReason" name="hearing_changeReason" maxlength="2048" /></textarea>
+               </div>
+             </div>
+         </div>
+
+	</div>
+
+	<@panelFooter includeHelp=true helpAnchor=hlplnk_incidaction>
+						<div id="add_hearing_button" class="floatrt"></div>
+						<div id="update_hearing_button" class="floatrt"></div>
+						<div id="cancel_hearing_button" class="floatrt"></div>
+						<div class="hide">
+							<input type="text" id="hearingUpdateTag" value="" />
+						</div>
+	</@panelFooter>
+</div>
