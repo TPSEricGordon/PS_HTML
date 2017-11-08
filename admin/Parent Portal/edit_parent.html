@@ -9,10 +9,11 @@
       <link href="/images/css/print.css" rel="stylesheet" media="print">
    </head>
    <body>
-      <form id="edit_parent_info" action="/admin/parent_coaches/edit_parent.html?id=~(id)" method="POST">
+      <form id="edit_parent_info" action="/admin/parent_coaches/edit_parent.html?id=~(id)&changesSaved=true" method="POST">
          ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
-            target="_top">Start Page</a> &gt; <a href="/admin/parent_coaches/parent_search.html"
-            target="_top">Parent Search</a> &gt; Edit Parent Information<!-- breadcrumb end
+            target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+            target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_search.html"
+            target="_top"> Parent Search </a> &gt; Edit Parent Information<!-- breadcrumb end
             -->~[wc:admin_navigation_frame_css]
          <h1>Edit Parent Information</h1>
          <!-- start of content and bounding box -->
@@ -116,7 +117,7 @@
                </tr>
                <tr>
                  <td class="bold">
-                   Phone Numbers
+                   Phone Numbers (Can Text)
                  </td>
                  <td>
                    1. <input type="text" name="[U_PARENT_DATA]PHONE" value="" size="15" maxlength="15"  />

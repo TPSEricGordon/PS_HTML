@@ -1,0 +1,66 @@
+<!DOCTYPE  html>
+<html>
+<!-- start right frame -->
+<head>
+     <title>Parent Records</title>
+     ~[wc:commonscripts]
+    <script src="/scripts/tlistCustomization.js"></script>
+     <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+     <link href="/images/css/print.css" rel="stylesheet" media="print">
+</head>
+<body>
+  ~[wc:admin_navigation_css]
+<form action="/admin/changesrecorded.white.html" method="POST">
+~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">Start Page</a> > <a href="home.html?selectstudent=nosearch" target="_top">Student Selection</a> > Parent Records<!-- breadcrumb end -->~[wc:admin_navigation_frame_css]
+<h1>Users</h1>
+
+<!-- start of content and bounding box -->
+<table border="0" cellspacing="0" cellpadding="4" class="tableToGrid">
+  <thead>
+    <th>
+      DCID
+    </th>
+    <th>
+      Teacher Number
+    </th>
+    <th>
+      First Name
+    </th>
+    <th clas="bold" data-sorttype="asc">
+      Last Name
+    </th>
+
+  </thead>
+
+  <tbody>
+
+<tr>
+  ~[tlist_sql; SELECT DCID,TEACHERNUMBER, FIRST_NAME,LAST_NAME FROM USERS]
+  <td>
+    ~(DCID)
+  </td>
+<td>
+  ~(TEACHERNUMBER)
+</td>
+  <td>
+    ~(FIRST_NAME)
+  </td>
+  <td>
+    ~(LAST_NAME)
+  </td>
+</tr>
+    [/tlist_sql]
+
+</tbody>
+     <br>
+     <div class="button-row">
+     <input type="hidden" name="ac" value="prim">~[submitbutton]
+     </div>
+</table>
+
+
+<!-- end of content of bounding box -->
+~[wc:admin_footer_frame_css]
+</form>
+</body>
+</html><!-- end right frame -->

@@ -8,8 +8,7 @@
 										LAST_NAME
                 FROM
                     U_PARENT_DATA
-                WHERE
-                    FIRST_NAME IN ('Verthis','Oliver','Cynthia','Elisa')
+								ORDER BY DBMS_RANDOM.VALUE
 
 	]
 		{"link":"~(link)", "id":"~(id)","family_id":"~(family_id)","first_name":"~(first_name)","last_name":"~(last_name)"},
