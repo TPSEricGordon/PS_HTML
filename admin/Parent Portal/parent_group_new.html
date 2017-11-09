@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Edit Parent Group</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+      <form id="edit_parent_group" action="/admin/parent_coaches/parent_groups_edit.html?id=~(id)&changesSaved=true" method="POST">
+         ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
+            target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+            target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_groups.html"
+            target="_top"> Parent Groups </a> &gt; Edit Parent Group<!-- breadcrumb end
+            -->~[wc:admin_navigation_frame_css]
+         <h1>Edit Parent Group</h1>
+         <!-- start of content and bounding box -->
+        ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
+         <div class="box-round">
+            ~[DirectTable.Select:U_PARENT_GROUPS;ID:-1]
+            <fieldset id="Parent_Group_Data">
+               <legend>Parent Group</legend>
+
+               <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
+
+
+               </table>
+
+
+
+            </fieldset>
+            <div class="button-row" id="row1">
+               <input type="hidden" name="ac" value="prim">
+               <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
+            </div>
+      </form>
+      <div class="button-row" id="row2">
+  <!--
+
+  <form id="delete_button" action="applications.html?frn=~(studentfrn)"
+         method="post">
+   <input type="hidden" name="ac" value="prim" />
+     <input type="hidden" name="DD-U_APPLICATIONS.ID:~(gpv.id)" value="1" />
+      <button class="btnConfirmProxy" id="btnDelete">Delete</button>
+
+       -->
+      </form>
+      </div>
+      </div>
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->
