@@ -73,12 +73,19 @@
                      </select>
                    </td>
                </tr>
-
                <tr>
-                 <td class="bold">YearId</td>
+                   <td class="bold">Location</td>
+                   <td>
+                      <input type="text" name="[U_PARENT_GROUPS]LOCATION" value="" size="20" />
+                   </td>
+               </tr>
+               <tr>
+                 <td class="bold">School Year</td>
                  <td>
-                   ~(curyearid)
-                 </td>
+                 <select name="[U_PARENT_GROUPS]YEARID">
+                   <<option value=27>2017-2018</option>
+                 </select>
+                </td>
                </tr>
 
 
@@ -86,15 +93,14 @@
 
             </fieldset>
             <div class="button-row" id="row1">
-               <input type="hidden" name="ac" value="prim">
+          f     <input type="hidden" name="ac" value="prim">
                <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
             </div>
       </form>
       <div class="button-row" id="row2">
-      <form id="delete_button" action="applications.html?frn=~(studentfrn)"
-         method="post">
+      <form id="delete_button" action="parent_groups.html?deleted=true" method="POST">
       <input type="hidden" name="ac" value="prim" />
-      <input type="hidden" name="DD-U_APPLICATIONS.ID:~(gpv.id)" value="1" />
+      <input type="hidden" name="DD-U_PARENT_GROUPS.ID:~(gpv.id)" value="1" />
       <button class="btnConfirmProxy" id="btnDelete">Delete</button>
       </form>
       </div>

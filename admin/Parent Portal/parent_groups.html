@@ -1,4 +1,15 @@
 <!DOCTYPE  html>
+
+<!--
+
+Parent Groups Viewing and Editing Of these Parent Groups!
+
+NEEDS UPDATING YOU ONLY HAVE THE OPTION OF CREATING SCHOOL GROUPS FOR THIS SCHOOL YEAR!
+
+NEED TO MAKE SURE TO UPDATE THIS GOING FORWARD
+
+-->
+
 <html>
    <!-- start right frame -->
    <head>
@@ -15,7 +26,9 @@
       &gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
       &nbsp; Parent Groups~[wc:admin_navigation_frame_css]
       <h1>Parent Groups</h1>
-      <<!-- start of content and bounding box -->
+      <!-- start of content and bounding box -->
+      ~[if.~(gpv.deleted)=true]<div class="feedback-alert">You Successfully Deleted a Parent Group</div>[/if]
+      ~[if.~(gpv.new)=true]<div class="feedback-confirm">You Created a New Parent Group</div>[/if]
       <div class="box-round">
          <p style="text-align: center">
           <a href="parent_group_new.html" id="btnNew" name="btnNew" class="button">New</a>

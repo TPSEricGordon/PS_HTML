@@ -2,24 +2,24 @@
 <html>
    <!-- start right frame -->
    <head>
-      <title>Edit Parent Information</title>
+      <title>Creating New Parent</title>
       ~[wc:UI_js_includes]
       ~[wc:commonscripts]
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
    </head>
    <body>
-      <form id="edit_parent_info" action="/admin/parent_coaches/edit_parent.html?id=~(id)&changesSaved=true" method="POST">
+      <form id="New_Parent_Form" action="/admin/parent_coaches/parent_search.html?new=true" method="POST">
          ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
             target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
             target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_search.html"
-            target="_top"> Parent Search </a> &gt; Edit Parent Information<!-- breadcrumb end
+            target="_top"> Parent Search </a> &gt; Create New Parent<!-- breadcrumb end
             -->~[wc:admin_navigation_frame_css]
-         <h1>Edit Parent Information</h1>
+         <h1>Creating New Parent</h1>
          <!-- start of content and bounding box -->
         ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
          <div class="box-round">
-            ~[DirectTable.Select:U_PARENT_DATA;ID:~(gpv.id)]
+            ~[DirectTable.Select:U_PARENT_DATA;ID:-1]
             <fieldset id="Parent_Data">
                <legend>Parent Data</legend>
 
@@ -47,9 +47,9 @@
                    Family ID
                  </td>
                  <td>
-                  ~([U_PARENT_DATA]PARENT_ID)
+                  <input type="text" name="[U_PARENT_DATA]PARENT_ID" value="" size="6" maxlength="50" >
                    <br />
-                   ~([U_PARENT_DATA]FAMILY_ID)
+                   <input type="text" name="[U_PARENT_DATA]FAMILY_ID" value="" size="6" maxlength="50" >
                  </td>
                </tr>
 
@@ -219,9 +219,6 @@
                  </td>
                  <td>
                    <textarea name="[U_PARENT_DATA]PGP_GOAL" cols="50" rows="5"></textarea>
-                 <br />
-                 <button class="button" onClick="window.open('https://docs.google.com/document/d/1sBHx7QbHLPwoE0JgPft5Ym7jfWDwDjwu9_0t9auhob8/edit');">Open PGP</button>
-                 (NOT WORKING YET.... NEED TO WRITE FUNCTION TO GET LINK)
                 </td>
                </tr>
                <tr>
