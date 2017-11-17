@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CC Goals</title>
+<!-- required scripts -->
+	~[wc:commonscripts]
+	<script src="/scripts/tlistCustomization.js"></script>
+<!-- Required style sheets: screen.css, and print.css -->
+	<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+	<link href="/images/css/print.css" rel="stylesheet" media="print">
+</head>
+<body>
+	~[wc:admin_header_frame_css]
+	<!-- breadcrumb start -->
+		<a href="/admin/home.html" target="_top">Start Page</a> &gt; <a href="/admin/students/home.html?selectstudent=nosearch" target="_top">Student Selection</a> &gt; Children Circle Goals
+	<!-- breadcrumb end -->
+~[wc:admin_navigation_frame_css]
+<!-- start of main menu and content -->
+~[wc:title_student_begin_css]Children Circle Goals~[wc:title_student_end_css]
+<form action="/~[self.page]?frn=~(studentfrn)&changesSaved=true" method="POST">
+<!-- start of content area -->
+~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
+	<div class="box-round">
+		<!--
+		THIS ROW'S SEMI COLONS DO NOT TRANSFER PROPERLY TO THE API. NEED TO MAKE SURE TO REPLACE THE THE ; IN THE TEXT EDITOR
+		-->
+		~[tlist_child:STUDENTS.U_STUDENTS_EXTENSION.U_CC_GOALS;displaycols:TERM,ACADEMIC,SOUL,HEALTH;fieldNames:Children Cirlce Round, Academic Goal,Soul Goal, Health Goal;type:html]
+			<script>
+	        var InstValues = {};
+	        InstValues['Summer 2017 ']='Summer 2017';
+	        InstValues['Fall 2017']='Fall 2017';
+	        InstValues['Winter 2018']='Winter 2018';
+	        InstValues['Spring 2018']='Spring 2018';
+	        InstValues['Summer 2018']='Summer 2018';
+	        InstValues['Fall 2018']='Fall 2018';
+	        tlistText2DropDown('TERM',InstValues);
+	    </script>
+				<div class="button-row"><input type="hidden" name="ac" value="prim">~[submitbutton]</div>
+	</div>
+</form>
+<!-- end of content area -->
+	~[wc:admin_footer_frame_css]
+</body>
+</html>

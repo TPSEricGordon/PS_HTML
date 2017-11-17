@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Parent Enrollments</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+      <form id="parent_enrollments" action="/admin/parent_coaches/parent_enrollments.html?id=~(id)&changesSaved=true" method="POST">
+         ~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html"
+            target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+            target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_search.html"
+            target="_top"> Parent Search </a> &gt; Parent Enrollments<!-- breadcrumb end
+            -->
+          ~[wc:admin_navigation_css]
+         <h1>Parent Enrollments</h1>
+         <!-- start of content and bounding box -->
+        ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
+        <p style="text-align: center">
+         <a href="parent_enrollment_new.html?id=~(gpv.id)" id="btnNew" name="btnNew" class="button">Enroll in New Group</a>
+        </p>
+        <table class="grid" id="groups">
+           <thead>
+              <tr style="border:1px solid grey;">
+                 <th class="bold" style="width:20px;text-align: center">Edit</th>
+                 <th class="bold" style="width:20px">Group ID</th>
+                 <th class="bold" style="width:65px">Enroll Status</th>
+                 <th class="bold" style="width:75px">Parent ID </th>
+                 <th class="bold" style="width:50px">Reason Left</th>
+              </tr>
+           </thead>
+           <tbody>
+              ~[tlist_sql;
+              SELECT GROUP_ID,ENROLL_STATUS,PARENT_ID,REASON_LEFT FROM U_PARENT_ENROLLMENTS
+              WHERE U_PARENT_DATAID=~(gpv.id)
+              ]
+              <tr>
+                 <td>~(GROUP_ID)</td>
+                 <td>~(ENROLL_STATUS)</td>
+                 <td>~(PARENT_ID)</td>
+                 <td>~(REASON_LEFT)</td>
+               </tr>
+              [/tlist_sql]
+           </tbody>
+        </table>
+</form>
+<!-- end of content area -->
+	~[wc:admin_footer_frame_css]
+</body>
+</html>
