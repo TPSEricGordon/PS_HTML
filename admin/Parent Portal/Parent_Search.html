@@ -32,16 +32,18 @@
     		<table class="grid">
     		<thead>
     			<tr>
-						<th>Link</th>
-						<th data-pss-sort-fields="id">ID</th>
-    				<th data-pss-sort-fields="family_id">Family ID</th>
-    				<th data-pss-sort-fields="first_name">First Name</th>
-    				<th data-pss-sort-fields="last_name">Last Name</th>
+						<th class="bold" style="width:20px">Link</th>
+						<th class="bold" style="width:20px">Current Enrollment</th>
+						<th data-pss-sort-fields="id" class="bold">ID</th>
+    				<th data-pss-sort-fields="family_id" class="bold" >Family ID</th>
+    				<th data-pss-sort-fields="first_name" >First Name</th>
+    				<th data-pss-sort-fields="last_name" >Last Name</th>
     			</tr>
     		</thead>
     		<tbody>
     			<tr data-ng-repeat="item in myDataFiltered" >
 						<td><a ng-href="{{ item.link }}">Edit Parent</a></td>
+						<td><a ng-href="{{ item.enroll_link }}">{{ item.current_group }}</a></td>
 						<td>{{ item.id }}</td>
     				<td>{{ item.family_id }}</td>
     				<td>{{ item.first_name }}</td>

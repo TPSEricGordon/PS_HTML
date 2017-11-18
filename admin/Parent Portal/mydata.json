@@ -1,16 +1,37 @@
 [
 	~[tlist_sql;
 		SELECT
-                  CONCAT('/admin/parent_coaches/edit_parent.html?id=',ID) LINK,
-									  ID,
-										FAMILY_ID,
-										FIRST_NAME,
-										LAST_NAME
-                FROM
-                    U_PARENT_DATA
-								ORDER BY DBMS_RANDOM.VALUE
+	CONCAT('/admin/parent_coaches/edit_parent.html?id=',P.ID) LINK,
+	G.CODE AS CURRENT_GROUP,
+	'/admin/parent_coaches/parent_enrollments.html?id='||P.ID||'&enroll_id='||PE.ID AS ENROLL_LINK,
+	P.ID,
+	P.FAMILY_ID,
+	FIRST_NAME,
+	LAST_NAME
+FROM
+	PS.U_PARENT_DATA P
+JOIN (
+	SELECT ID,
+		ROW_NUMBER() OVER (PARTITION BY U_PARENT_DATAID ORDER BY WHENCREATED DESC) RECENCY,
+		U_PARENT_DATAID, PARENT_ID, GROUP_ID, ENROLL_STATUS, WHENCREATED
+	 FROM PS.U_PARENT_ENROLLMENTS
+	 )PE
+	ON P.ID = PE.U_PARENT_DATAID
+JOIN PS.U_PARENT_GROUPS G
+	ON PE.GROUP_ID = G.ID
+
+WHERE PE.RECENCY=1
+ORDER BY DBMS_RANDOM.VALUE
+
 
 	]
-		{"link":"~(link)", "id":"~(id)","family_id":"~(family_id)","first_name":"~(first_name)","last_name":"~(last_name)"},
+		{"link":"~(link)",
+			"current_group":"~(current_group)",
+			"enroll_link":"~(enroll_link)",
+			"id":"~(id)",
+			"family_id":"~(family_id)",
+			"first_name":"~(first_name)",
+			"last_name":"~(last_name)"
+		},
 	[/tlist_sql]
 {}]

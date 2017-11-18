@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Edit Parent Information</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+      <form action="/admin/parent_coaches/parent_enrollment_new.html?id=~(id)&changesSaved=true" method="POST">
+         ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
+            target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+            target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_search.html"
+            target="_top"> Parent Search </a> &gt; Edit Parent Information<!-- breadcrumb end
+            -->~[wc:admin_navigation_frame_css]
+         <h1>New Parent Group!</h1>
+         <!-- start of content and bounding box -->
+        ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
+
+         <div class="box-round">
+            ~[DirectTable.Select:U_PARENT_ENROLLMENTS;ID:~(gpv.enroll_id)]
+            <fieldset>
+               <legend>Unenroll from Current Parent Group</legend>
+               <table class="grid" id="groups">
+                  <thead>
+                        <th class="bold" style="width:20px;text-align: center">ID</th>
+                        <th class="bold" style="width:20px">FIRST NAME</th>
+                        <th class="bold" style="width:65px">Last NAME</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     ~[tlist_sql;
+                     SELECT ID, FIRST_NAME, LAST_NAME
+                     FROM PS.U_PARENT_DATA P
+                     WHERE ID=~(gpv.id;sqlText) ]
+                     <tr>
+                        <td>~(ID)</td>
+                        <td>~(FIRST_NAME)</td>
+                        <td>~(LAST_NAME)</td>
+                     </tr>
+                     [/tlist_sql]
+                  </tbody>
+               </table>
+
+               <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
+
+                 <colgroup><col style="width:20%"><col></colgroup>
+                 <tr>
+                   <tr>
+                     <td class="bold" >
+                       Parent ID<br />
+                       Family ID
+                     </td>
+                   </tr>
+                     <td class="bold">Date Leaving</td>
+                     <td>
+                       <input type="text" name="[U_PARENT_ENROLLMENTS]DATE_LEFT" value="" size="25" maxlength="50" id="Date Left">
+                     </td>
+                 </tr>
+
+                 <tr>
+                     <td class="bold">Reason for Leaving</td>
+                     <td>
+                       <input type="text" name="[U_PARENT_ENROLLMENTS]REASON_LEFT" value="" size="25" maxlength="50" id="Date Left">
+                     </td>
+                 </tr>
+
+
+             </table>
+
+
+
+            </fieldset>
+            <div class="button-row" id="row1">
+               <input type="hidden" name="ac" value="prim">
+               <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
+            </div>
+      </form>
+      <div class="button-row" id="row2">
+      </form>
+      </div>
+      </div>
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->
