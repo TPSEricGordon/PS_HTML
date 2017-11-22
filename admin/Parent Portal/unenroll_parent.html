@@ -2,29 +2,30 @@
 <html>
    <!-- start right frame -->
    <head>
-      <title>Edit Parent Information</title>
+      <title>Unenroll Parent</title>
       ~[wc:UI_js_includes]
       ~[wc:commonscripts]
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
    </head>
    <body>
-      <form action="/admin/parent_coaches/parent_enrollment_new.html?id=~(id)&changesSaved=true" method="POST">
+      <form action="/admin/parent_coaches/parent_enrollment_new.html?id=~(gpv.id)" method="POST">
          ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
             target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
             target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_search.html"
             target="_top"> Parent Search </a> &gt; Edit Parent Information<!-- breadcrumb end
             -->~[wc:admin_navigation_frame_css]
-         <h1>New Parent Group!</h1>
+         <h1>Unenroll Parent</h1>
          <!-- start of content and bounding box -->
-        ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
+        <div class="feedback-alert">By Pressing Submit You Are Unenrolling This Parent From His/Her Current Group.</div>
 
          <div class="box-round">
-            ~[DirectTable.Select:U_PARENT_ENROLLMENTS;ID:~(gpv.enroll_id)]
             <fieldset>
-               <legend>Unenroll from Current Parent Group</legend>
+               <legend>Enrollment to End</legend>
                <table class="grid" id="groups">
                   <thead>
+
+                    <!-- NEED TO FIX THE FOLLOWING SQL -->
                         <th class="bold" style="width:20px;text-align: center">ID</th>
                         <th class="bold" style="width:20px">FIRST NAME</th>
                         <th class="bold" style="width:65px">Last NAME</th>
@@ -43,17 +44,18 @@
                      [/tlist_sql]
                   </tbody>
                </table>
+             </fieldset>
+          </div>
 
+
+      <div class="box-round">
+        ~[DirectTable.Select:U_PARENT_ENROLLMENTS;ID:~(gpv.enroll_id)]
+        <fieldset>
+         <legend>Please Provide the Following Info</legend>
                <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
 
                  <colgroup><col style="width:20%"><col></colgroup>
                  <tr>
-                   <tr>
-                     <td class="bold" >
-                       Parent ID<br />
-                       Family ID
-                     </td>
-                   </tr>
                      <td class="bold">Date Leaving</td>
                      <td>
                        <input type="text" name="[U_PARENT_ENROLLMENTS]DATE_LEFT" value="" size="25" maxlength="50" id="Date Left">
@@ -63,16 +65,16 @@
                  <tr>
                      <td class="bold">Reason for Leaving</td>
                      <td>
-                       <input type="text" name="[U_PARENT_ENROLLMENTS]REASON_LEFT" value="" size="25" maxlength="50" id="Date Left">
+                       <textarea type="text" name="[U_PARENT_ENROLLMENTS]REASON_LEFT" value="" cols="50" rows="5" id="Reason Left">
                      </td>
                  </tr>
 
+              <input type="hidden" name="[U_PARENT_ENROLLMENTS]ENROLL_STATUS" value="" id="enroll_Status"/>
+
 
              </table>
-
-
-
             </fieldset>
+
             <div class="button-row" id="row1">
                <input type="hidden" name="ac" value="prim">
                <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
@@ -84,5 +86,15 @@
       </div>
       ~[wc:admin_footer_frame_css]
    </body>
+   <script>
+
+    document.getElementById("btnSubmit").onclick = function() {
+    document.getElementById("enroll_Status").value = 0;
+    };
+
+   </script>
+
+
+
 </html>
 <!-- end right frame -->

@@ -19,13 +19,31 @@
          <h1>Parent Enrollments</h1>
          <!-- start of content and bounding box -->
         ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
+
+        <h3> ~[tlist_sql;
+        SELECT FIRST_NAME, LAST_NAME
+        FROM PS.U_PARENT_DATA P
+        WHERE ID=~(gpv.id;sqlText) ]
+        <tr>
+           <td>~(FIRST_NAME)</td>
+           <td>~(LAST_NAME)</td>
+        </tr>
+        [/tlist_sql]</h3>
+
+        <div class="box-round">
+          <fieldset>
+
+
+          <legend>Enrollment History</legend>
         <p style="text-align: center">
          <a href="unenroll_parent.html?id=~(gpv.id)&enroll_id=~(gpv.enroll_id)";" id="btnNew" name="btnNew" class="button">Enroll in New Group</a>
         </p>
+        <br />
+
         <table class="grid" id="groups">
            <thead>
               <tr style="border:1px solid grey;">
-                 <th class="bold" style="width:20px;text-align: center">Edit</th>
+                 <th class="bold" style="width:10px;text-align: center">Edit</th>
                  <th class="bold" style="width:20px">Group ID</th>
                  <th class="bold" style="width:65px">Enroll Status</th>
                  <th class="bold" style="width:75px">Parent ID </th>
@@ -34,18 +52,22 @@
            </thead>
            <tbody>
               ~[tlist_sql;
-              SELECT GROUP_ID,ENROLL_STATUS,PARENT_ID,REASON_LEFT FROM U_PARENT_ENROLLMENTS
+              SELECT 'Edit',GROUP_ID,ENROLL_STATUS,PARENT_ID,REASON_LEFT FROM U_PARENT_ENROLLMENTS
               WHERE U_PARENT_DATAID=~(gpv.id)
+              ORDER BY ENROLL_STATUS, WHENCREATED
               ]
               <tr>
+                <td> ~(EDIT)</td>
                  <td>~(GROUP_ID)</td>
                  <td>~(ENROLL_STATUS)</td>
                  <td>~(PARENT_ID)</td>
                  <td>~(REASON_LEFT)</td>
                </tr>
               [/tlist_sql]
+              </fieldset>
            </tbody>
         </table>
+      </div>
 </form>
 <!-- end of content area -->
 	~[wc:admin_footer_frame_css]

@@ -26,6 +26,7 @@
 	<p>Type in either an ID, Family ID, First Name, or Last Name to Serach for an individual Parent
 	</p>
 ~[if.~(gpv.new)=true]<div class="feedback-confirm">You Created a New Parent</div>[/if]
+~[if.~(gpv.new_enrollment)=true]<div class="feedback-confirm">You Successfully Enrolled the Parent Into a New Group</div>[/if]
     <!-- start of content area -->
     <div class="box-round" data-ng-controller="myController" data-ng-cloak>
     	<div id="myGrid" data-pss-grid-widget data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
