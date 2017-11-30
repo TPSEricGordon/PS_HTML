@@ -13,16 +13,18 @@
 
       </script>
    </head>
-   <body onload="addList()">
+   <body onload="addList('group_ID_dropDown', terms)">
      <form id="new_enrollment" action="/admin/parent_coaches/parent_search.html?new_enrollment=true" method="POST">
        ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
           target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
-          target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_groups.html"
-          target="_top"> Parent Groups </a> &gt; New Parent Group<!-- breadcrumb end
+          target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_search.html"
+          target="_top"> Parent Search </a> &gt; New Parent Group<!-- breadcrumb end
           -->~[wc:admin_navigation_frame_css]
 
        <h1>New Enrollment</h1>
         <!-- start of content and bounding box -->
+        <div class="feedback-alert">Make Sure You Enroll this Parent in a New Group and Hit the Submit Button!
+          </div>
         <div class="box-round">
            ~[DirectTable.Select:U_PARENT_ENROLLMENTS;ID:-1]
            <fieldset id="parent_group">
@@ -53,9 +55,9 @@
                              terms['~(ID)']='~(CODE) - ~(Day)\'s at ~(MEETING_TIME)' ;
                          [/tlist_sql]
 
-                         function addList(){
-                             var select = document.getElementById("group_ID_dropDown");
-                             for(var i in terms) {
+                         function addList(select_id, data){
+                             var select = document.getElementById(select_id);
+                             for(var i in data) {
                              var option = document.createElement('option');
                              option.text = terms[i];
                              option.value = i;
