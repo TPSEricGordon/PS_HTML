@@ -80,14 +80,14 @@
               <tr>
                 <td class="bold">School Year</td>
                 <td>
-                <select name="[U_PARENT_GROUPS]YEARID">
-                  <<option value=27>2017-2018</option>
-                </select>
+                
                </td>
               </tr>
 
+                <input type="hidden" name="[U_PARENT_GROUPS]YEARID" value="" id="YEARID"/>
 
             </table>
+
 
            <div class="button-row" id="row1">
               <input type="hidden" name="ac" value="prim">
@@ -98,5 +98,12 @@
       </div>
       ~[wc:admin_footer_frame_css]
    </body>
+   <script>
+
+    document.getElementById("btnSubmit").onclick = function() {
+    document.getElementById("YEARID").value = ~(curyearid);
+    };
+
+   </script>
 </html>
 <!-- end right frame -->

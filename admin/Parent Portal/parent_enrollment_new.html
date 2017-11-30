@@ -7,8 +7,13 @@
       ~[wc:commonscripts]
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
+      <script>
+
+
+
+      </script>
    </head>
-   <body>
+   <body onload="addList()">
      <form id="new_enrollment" action="/admin/parent_coaches/parent_search.html?new_enrollment=true" method="POST">
        ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
           target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
@@ -32,20 +37,39 @@
 
 
                 <tr>
-                    <td class="bold">GROUP_ID</td>
+                    <td class="bold">New Group</td>
                     <td>
-                      <input type="text" name="[U_PARENT_ENROLLMENTS]GROUP_ID" value="" size="5" maxlength="40">
-                    </td>
+                      <select id="group_ID_dropDown" name="[U_PARENT_ENROLLMENTS]GROUP_ID">
+                      </select>
+                        </td>
                 </tr>
+                <script type="text/javascript">
+                         var terms={};
+                         ~[tlist_sql;
+                           SELECT PG.ID, PG.CODE, PG.DAY_OF_WEEK, PG.MEETING_TIME
+                           FROM PS.U_PARENT_GROUPS PG
+                           WHERE YEARID = ~(curyearid)
+                         ;]
+                             terms['~(ID)']='~(CODE) - ~(Day)\'s at ~(MEETING_TIME)' ;
+                         [/tlist_sql]
 
+                         function addList(){
+                             var select = document.getElementById("group_ID_dropDown");
+                             for(var i in terms) {
+                             var option = document.createElement('option');
+                             option.text = terms[i];
+                             option.value = i;
+                             select.add(option);
+                               }
+                             };
+
+               </script>
                 <tr>
                     <td class="bold">REASON_LEFT</td>
                     <td>
                       <input type="text" name="[U_PARENT_ENROLLMENTS]REASON_LEFT" value="" size="5" maxlength="40">
                     </td>
                 </tr>
-
-
 
 
             </table>
@@ -65,6 +89,9 @@
     document.getElementById("hiddenParentID").value = ~(gpv.id);
     document.getElementById("hiddenEnrollID").value = 1;
     };
+
+
+
 
    </script>
 </html>

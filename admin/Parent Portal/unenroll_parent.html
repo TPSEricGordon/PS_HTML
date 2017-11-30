@@ -26,20 +26,28 @@
                   <thead>
 
                     <!-- NEED TO FIX THE FOLLOWING SQL -->
-                        <th class="bold" style="width:20px;text-align: center">ID</th>
                         <th class="bold" style="width:20px">FIRST NAME</th>
                         <th class="bold" style="width:65px">Last NAME</th>
+                        <th class="bold" style="width:20px">Code</th>
+                        <th class="bold" style="width:65px">Day of Week</th>
+                        <th class="bold" style="width:65px">Meeting Time</th>
                      </tr>
                   </thead>
                   <tbody>
                      ~[tlist_sql;
-                     SELECT ID, FIRST_NAME, LAST_NAME
+                     SELECT P.FIRST_NAME, P.LAST_NAME, G.CODE, G.DAY_OF_WEEK, G.MEETING_TIME
                      FROM PS.U_PARENT_DATA P
-                     WHERE ID=~(gpv.id;sqlText) ]
+                     JOIN PS.U_PARENT_ENROLLMENTS PE
+                     ON P.ID = PE.U_PARENT_DATAID
+                     JOIN PS.U_PARENT_GROUPS G
+                     ON PE.GROUP_ID = G.ID
+                     WHERE PE.ID=~(gpv.enroll_id);sqlText)]
                      <tr>
-                        <td>~(ID)</td>
                         <td>~(FIRST_NAME)</td>
                         <td>~(LAST_NAME)</td>
+                        <td>~(CODE)</td>
+                        <td>~(DAY_OF_WEEK)</td>
+                        <td>~(MEETING_TIME)</td>
                      </tr>
                      [/tlist_sql]
                   </tbody>
