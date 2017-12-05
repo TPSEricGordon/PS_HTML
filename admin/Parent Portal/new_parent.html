@@ -8,7 +8,7 @@
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
    </head>
-   <body>
+   <body onload="new_parent_id()">
       <form id="New_Parent_Form" action="/admin/parent_coaches/parent_search.html?new=true" method="POST">
          ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
             target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
@@ -29,6 +29,8 @@
                    <td class="bold">Parent Name (First, Last)</td>
                    <td>
                      <input type="text" name="[U_PARENT_DATA]FIRST_NAME" value="" size="25" maxlength="50" id="firstName">
+
+
                      <input type="text" name="[U_PARENT_DATA]LAST_NAME" value="" size="15" maxlength="30" id="lastName">
                    </td>
                </tr>
@@ -47,11 +49,28 @@
                    Family ID
                  </td>
                  <td>
-                  <input type="text" name="[U_PARENT_DATA]PARENT_ID" value="" size="6" maxlength="50" >
+                  <input type="text" name="[U_PARENT_DATA]PARENT_ID" value="" id="parent_id"size="6" maxlength="50" >
+
                    <br />
                    <input type="text" name="[U_PARENT_DATA]FAMILY_ID" value="" size="6" maxlength="50" >
                  </td>
                </tr>
+
+               <script>
+
+               var max_id={};
+               ~[tlist_sql;
+                 SELECT MAX(PARENTID) + 1 AS new_id
+                 FROM PS.U_PARENT_DATA P
+               ;]
+                   max_id['ID']= ~(new_id) ;
+               [/tlist_sql]
+
+               function new_parent_id(){
+                   document.getElementById("parent_id").value = max_id['ID'];
+                  }
+
+               </script>
 
 
                <tr>
