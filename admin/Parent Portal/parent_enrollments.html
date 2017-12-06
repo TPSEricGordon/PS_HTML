@@ -24,10 +24,9 @@
         SELECT FIRST_NAME, LAST_NAME
         FROM PS.U_PARENT_DATA P
         WHERE ID=~(gpv.id;sqlText) ]
-        <tr>
            <td>~(FIRST_NAME)</td>
            <td>~(LAST_NAME)</td>
-        </tr>
+
         [/tlist_sql]</h3>
 
         <div class="box-round">
@@ -35,26 +34,27 @@
 
 
           <legend>Enrollment History</legend>
-        <p style="text-align: center">
-         <a href="unenroll_parent.html?id=~(gpv.id)&enroll_id=~(gpv.enroll_id)";" id="btnNew" name="btnNew" class="button">Enroll in New Group</a>
-        </p>
-        <br />
-
         <table class="grid" id="groups">
            <thead>
               <tr style="border:1px solid grey;">
-                 <th class="bold" style="width:10px;text-align: center">Edit</th>
-                 <th class="bold" style="width:20px">Group ID</th>
-                 <th class="bold" style="width:65px">Enroll Status</th>
-                 <th class="bold" style="width:75px">Parent ID </th>
+                 <th class="bold" style="width:10px;text-align: center">Code</th>
+                 <th class="bold" style="width:20px">Meeting Day</th>
+                 <th class="bold" style="width:65px">Meeting Time</th>
+                 <th class="bold" style="width:75px">Enrollment Status</th>
                  <th class="bold" style="width:50px">Reason Left</th>
               </tr>
            </thead>
            <tbody>
               ~[tlist_sql;
-              SELECT 'Edit',GROUP_ID,ENROLL_STATUS,PARENT_ID,REASON_LEFT FROM U_PARENT_ENROLLMENTS
-              WHERE U_PARENT_DATAID=~(gpv.id)
-              ORDER BY ENROLL_STATUS, WHENCREATED
+              SELECT PG.CODE, PG.DAY_OF_WEEK, PG.MEETING_TIME,
+            	CASE WHEN ENROLL_STATUS=0 THEN 'Previous Enrollment'
+            		WHEN ENROLL_STATUS =1 THEN 'Current Enrollment'
+            	END AS ENROLL_STATUS, REASON_LEFT
+              FROM U_PARENT_ENROLLMENTS PE
+              	JOIN PS.U_PARENT_GROUPS PG
+              		ON PE.GROUP_ID = PG.ID
+                 WHERE PE.U_PARENT_DATAID=~(gpv.id)
+              ORDER BY PE.ENROLL_STATUS, PE.WHENCREATED
               ]
               <tr>
                 <td> ~(EDIT)</td>
@@ -67,6 +67,14 @@
               </fieldset>
            </tbody>
         </table>
+          <br />
+        <p style="text-align: center">
+         <a href="unenroll_parent.html?id=~(gpv.id)&enroll_id=~(gpv.enroll_id)";" id="btnNew" name="btnNew" class="button">Enroll in New Group</a>
+        </p>
+          <br />
+
+
+
       </div>
 </form>
 <!-- end of content area -->
