@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Temp Parent Search</title>
+
+    <!-- required scripts -->
+	~[wc:commonscripts]
+    <!-- Required style sheets: screen.css, and print.css -->
+	<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+	<link href="/images/css/print.css" rel="stylesheet" media="print">
+</head>
+<body>
+	~[wc:admin_header_css]
+
+    <!-- breadcrumb start -->
+    <a href="/admin/home.html" target="_top">~[text:psx.html.admin_district.misc-district.start_page]</a>
+		&gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
+	&nbsp; Parent Search
+    <!-- breadcrumb end -->
+
+    <!-- start of main menu and content -->
+	~[wc:admin_navigation_css]
+
+    <!-- Start of Page -->
+	<h1>Parent Search</h1>
+	<p>Type in either an ID, Family ID, First Name, or Last Name to Serach for an individual Parent
+	</p>
+
+
+    <!-- start of content area -->
+		<div class="box-round" data-ng-controller="myController" data-ng-cloak>
+			<div id="myGrid" data-pss-grid-widget data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
+				<table class="grid">
+    		<thead>
+    			<tr>
+						<th class="bold" style="width:20px">Family ID</th>
+
+						<th data-pss-sort-fields="enroll_link" class="bold">Parents</th>
+						<th data-pss-sort-fields="id" class="bold">Students</th>
+    				<th data-pss-sort-fields="family_id" class="bold" >Parent 1 Group ID</th>
+    				<th data-pss-sort-fields="first_name" >Parent 2 Group ID</th>
+
+    			</tr>
+    		</thead>
+    		<tbody>
+    			<tr data-ng-repeat="item in myDataFiltered" >
+						<td>{{ item.family_id }}</td>
+
+						<td>{{ item.parents }}</td>
+    				<td>{{ item.students }}</td>
+    				<td>{{ item.parent_1_group }}</td>
+            <td>{{ item.parent_2_group }}</td>
+
+    			</tr>
+    		</tbody>
+    	</table>
+    	</div>
+			<div class="button-row" id="row1">
+				 <a href="new_parent.html" id="btnNew" name="btnNew" class="button">Create New Parent</a>
+			</div>
+
+
+    </div>
+<!-- end of content area -->
+
+	~[wc:admin_footer_css]
+	<script>
+        require(['angular', 'myscript'], function (angular) {
+           angular.bootstrap(document, ['myModule']);
+        });
+    </script>
+</body>
+</html>

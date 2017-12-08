@@ -1,0 +1,66 @@
+[
+	~[tlist_sql;
+
+/*
+
+THIS IS WHERE THE ISSUE IS!!!! FIX THIS SQL TO MAKE IT FIX THE TABLE!
+
+*/
+
+		SELECT
+			PARENTS.FAMILY_ID,
+			PARENTS.parent_names,
+			STUDENTS.student_names,
+			PE1.PARENT_1_GROUP,
+			PE2.PARENT_2_GROUP
+		FROM (
+			SELECT
+				FAMILY_ID,
+				LISTAGG( Parent_Name, ' ' ) WITHIN GROUP (ORDER BY Parent_Name) AS parent_names,
+				LISTAGG( ID, ' ' ) WITHIN GROUP (ORDER BY ID) AS P_IDS
+			FROM (
+				SELECT FAMILY_ID, FIRST_NAME || ' ' || LAST_NAME AS Parent_Name,  Parent_Id, ID
+				FROM PS.U_PARENT_DATA
+				)
+			GROUP BY FAMILY_ID
+			) PARENTS
+		JOIN (
+			SELECT
+				FAMILY_IDENT,
+				LISTAGG( Student_Name, ' ' ) WITHIN GROUP (ORDER BY Student_Name) AS student_names,
+				LISTAGG( STUDENT_NUMBER, ' ' ) WITHIN GROUP (ORDER BY STUDENT_NUMBER) AS S_IDS
+			FROM (
+				SELECT S.FAMILY_IDENT, S.FIRST_NAME || ' ' || S.LAST_NAME AS Student_Name, S.STUDENT_NUMBER
+				FROM PS.STUDENTS S
+				WHERE S.ENROLL_STATUS = 0
+				)
+			GROUP BY FAMILY_IDENT
+			) STUDENTS
+
+			ON PARENTS.FAMILY_ID = STUDENTS.FAMILY_IDENT
+
+		LEFT JOIN
+			(
+			SELECT U_PARENT_DATAID, GROUP_ID AS PARENT_1_GROUP
+			FROM PS.U_PARENT_ENROLLMENTS
+			WHERE ENROLL_STATUS=1
+			) PE1
+			ON PE1.U_PARENT_DATAID = REGEXP_SUBSTR ( PARENTS.P_IDS , '[^,]+', 1, 1)
+
+		LEFT JOIN (
+			SELECT U_PARENT_DATAID, GROUP_ID AS PARENT_2_GROUP
+			FROM PS.U_PARENT_ENROLLMENTS
+			WHERE ENROLL_STATUS=1
+			) PE2
+			ON PE2.U_PARENT_DATAID = REGEXP_SUBSTR ( PARENTS.P_IDS , '[^,]+', 1, 2)
+
+
+	]
+		{"family_id":"~(FAMILY_ID)",
+			"parents":"~(parent_names)",
+			"students":"~(student_names)",
+			"parent_1_group":"~(PARENT_1_GROUP)",
+			"parent_2_group":"~(PARENT_2_GROUP)"
+		},
+	[/tlist_sql]
+{}]

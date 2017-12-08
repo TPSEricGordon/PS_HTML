@@ -1,0 +1,63 @@
+<!DOCTYPE  html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Parent Groups</title>
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+      ~[wc:admin_navigation_css]
+      <form action="/admin/changesrecorded.white.html" method="POST">
+      ~[wc:admin_header_frame_css]<a href="/admin/home.html" target="_top">~[text:psx.html.admin_district.misc-district.start_page]</a>
+      &gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
+      &nbsp; Parent Groups~[wc:admin_navigation_frame_css]
+      <h1>Parent Groups</h1>
+      <!-- start of content and bounding box -->
+      <div class="box-round">
+         <p style="text-align: center">
+          <a href="parent_group_new.html" id="btnNew" name="btnNew" class="button">New</a>
+         </p>
+         <table class="grid" id="groups">
+            <thead>
+               <tr style="border:1px solid grey;">
+                  <th class="bold" style="width:20px;text-align: center">Meeting</th>
+                  <th class="bold" style="width:20px">Facilitators</th>
+                  <th class="bold" style="width:65px">Rosters</th>
+                  <th class="bold" style="width:65px">Attendance</th>
+               </tr>
+            </thead>
+            <tbody>
+               ~[tlist_sql;
+                SELECT CODE || ' - '|| DAY_OF_WEEK || '''s, ' || MEETING_TIME AS Meeting,
+                	FACILITATOR || ' & '||FACILITATOR2 AS Facilitators,
+                	ID AS "ROSTER_ID",
+                	ID AS "Take Attendance"
+                FROM PS.U_PARENT_GROUPS PG
+                WHERE YEARID=~(curyearid)
+                ORDER BY CODE]
+               <tr>
+                  <td>~(Meeting)</td>
+                  <td>~(Facilitators)</td>
+                  <td align="center">
+                     <a href="group_roster.html?id=~(ROSTER_ID)">
+                     View Roster
+                     </a>
+                  </td>
+                  <td align="center">
+                     <a href="group_attendance_home.html?id=~(View Roster)">
+                     Take Attendance
+                     </a>
+                  </td>
+               </tr>
+               [/tlist_sql]
+            </tbody>
+         </table>
+      </div>
+      <br>
+      <!-- end of content of bounding box -->
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->
