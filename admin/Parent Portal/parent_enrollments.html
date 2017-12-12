@@ -53,7 +53,7 @@
               FROM U_PARENT_ENROLLMENTS PE
               	JOIN PS.U_PARENT_GROUPS PG
               		ON PE.GROUP_ID = PG.ID
-                 WHERE PE.U_PARENT_DATAID=~(gpv.id)
+                 WHERE PE.U_PARENT_DATAID=  ~(gpv.id)
               ORDER BY PE.ENROLL_STATUS, PE.WHENCREATED
               ]
               <tr>

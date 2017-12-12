@@ -23,51 +23,93 @@
 
     <!-- Start of Page -->
 	<h1>Parent Search</h1>
-	<p>Type in either an ID, Family ID, First Name, or Last Name to Serach for an individual Parent
-	</p>
 
+	<div class="box-round">
+		<fieldset>
+			<table class="grid" id="groups">
+				 <thead>
+						<tr style="border:1px solid grey;">
+							 <th class="bold" style="width:10px;text-align: center">Family ID</th>
+							 <th class="bold" style="width:20px">Parents</th>
+							 <th class="bold" style="width:65px">Students</th>
+							 <th class="bold" style="width:20px">GROUP_ID</th>
+							 <th class="bold" style="width:20px">GROUP_ID2</th>
+							 <th class="bold" style="width:75px">Parent Groups</th>
+						</tr>
+				 </thead>
+				 <tbody>
+						~[tlist_sql;
+						SELECT
+							PARENTS.FAMILY_ID,
+							PARENTS.parent_names,
+							STUDENTS.student_names,
+							PE1.GROUP_ID AS Group_ID1,
+							PE2.GROUP_ID AS Group_ID2,
+							CASE WHEN PE1.PARENT_1_GROUP IS NULL AND PE2.PARENT_2_GROUP IS NULL THEN 'No Enrollments'
+								 WHEN PE1.PARENT_1_GROUP IS NULL AND PE2.PARENT_2_GROUP IS NOT NULL THEN PE2.PARENT_2_GROUP
+								WHEN PE1.PARENT_1_GROUP IS NOT NULL AND PE2.PARENT_2_GROUP IS NULL THEN PE1.PARENT_1_GROUP
+								WHEN PE1.PARENT_1_GROUP IS NOT NULL AND PE2.PARENT_2_GROUP IS NOT NULL THEN
+								PE1.PARENT_1_GROUP ||' & ' || PE2.PARENT_2_GROUP END AS parent_groups
+						FROM (
+							SELECT
+								FAMILY_ID,
+								LISTAGG( Parent_Name, ' and ' ) WITHIN GROUP (ORDER BY Parent_Name) AS parent_names,
+								LISTAGG( ID, ',' ) WITHIN GROUP (ORDER BY ID) AS P_IDS
+							FROM (
+								SELECT FAMILY_ID, FIRST_NAME || ' ' || LAST_NAME AS Parent_Name,  Parent_Id, ID
+								FROM PS.U_PARENT_DATA
+								)
+							GROUP BY FAMILY_ID
+							) PARENTS
+						JOIN (
+							SELECT
+								FAMILY_IDENT,
+								LISTAGG( Student_Name, ' and ' ) WITHIN GROUP (ORDER BY Student_Name) AS student_names,
+								LISTAGG( STUDENT_NUMBER, ',' ) WITHIN GROUP (ORDER BY STUDENT_NUMBER) AS S_IDS
+							FROM (
+								SELECT S.FAMILY_IDENT, S.FIRST_NAME || ' ' || S.LAST_NAME AS Student_Name, S.STUDENT_NUMBER
+								FROM PS.STUDENTS S
+								WHERE S.ENROLL_STATUS = 0
+								)
+							GROUP BY FAMILY_IDENT
+							) STUDENTS
 
-    <!-- start of content area -->
-		<div class="box-round" data-ng-controller="myController" data-ng-cloak>
-			<div id="myGrid" data-pss-grid-widget data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
-				<table class="grid">
-    		<thead>
-    			<tr>
-						<th class="bold" style="width:20px">Family ID</th>
+							ON PARENTS.FAMILY_ID = STUDENTS.FAMILY_IDENT
 
-						<th data-pss-sort-fields="enroll_link" class="bold">Parents</th>
-						<th data-pss-sort-fields="id" class="bold">Students</th>
-    				<th data-pss-sort-fields="family_id" class="bold" >Parent 1 Group ID</th>
-    				<th data-pss-sort-fields="first_name" >Parent 2 Group ID</th>
+						LEFT JOIN
+							(
+							SELECT U_PARENT_DATAID, PG.CODE AS PARENT_1_GROUP, PE.GROUP_ID
+							FROM PS.U_PARENT_ENROLLMENTS PE
+								JOIN PS.U_PARENT_GROUPS PG
+									ON PE.GROUP_ID = PG.ID
+							WHERE ENROLL_STATUS=1
+							) PE1
+							ON PE1.U_PARENT_DATAID = REGEXP_SUBSTR ( PARENTS.P_IDS , chr(91)||'^,'||chr(93)||'+', 1, 1)
 
-    			</tr>
-    		</thead>
-    		<tbody>
-    			<tr data-ng-repeat="item in myDataFiltered" >
-						<td>{{ item.family_id }}</td>
+						LEFT JOIN (
+							SELECT U_PARENT_DATAID, CODE AS PARENT_2_GROUP, PE.GROUP_ID
+							FROM PS.U_PARENT_ENROLLMENTS PE
+								JOIN PS.U_PARENT_GROUPS PG
+									ON PE.GROUP_ID = PG.ID
+							WHERE ENROLL_STATUS=1
+							) PE2
+							ON PE2.U_PARENT_DATAID = REGEXP_SUBSTR ( PARENTS.P_IDS , chr(91)||'^,'||chr(93)||'+', 1, 2)
 
-						<td>{{ item.parents }}</td>
-    				<td>{{ item.students }}</td>
-    				<td>{{ item.parent_1_group }}</td>
-            <td>{{ item.parent_2_group }}</td>
+						]
+						<tr>
+							<td> ~(FAMILY_ID)</td>
+							 <td>~(parent_names)</td>
+							 <td>~(student_names)</td>
+							 <td>~(Group_ID1)</td>
+							 <td>~(Group_ID2)</td>
+							 <td>~(parent_groups)</td>
+						 </tr>
+						[/tlist_sql]
+						</fieldset>
+				 </tbody>
+			</table>
 
-    			</tr>
-    		</tbody>
-    	</table>
-    	</div>
-			<div class="button-row" id="row1">
-				 <a href="new_parent.html" id="btnNew" name="btnNew" class="button">Create New Parent</a>
-			</div>
-
-
-    </div>
-<!-- end of content area -->
-
-	~[wc:admin_footer_css]
-	<script>
-        require(['angular', 'myscript'], function (angular) {
-           angular.bootstrap(document, ['myModule']);
-        });
-    </script>
+	  </fieldset>
+	</div>
 </body>
 </html>

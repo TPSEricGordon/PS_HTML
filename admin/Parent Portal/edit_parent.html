@@ -291,7 +291,15 @@
                <input type="hidden" name="ac" value="prim">
                <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
             </div>
-      </form>
+          </form>
+            <div align="center">
+              <form id="delete_button" action="parent_search.html?deleted=true" method="POST">
+              <input type="hidden" name="ac" value="prim" />
+              <input type="hidden" name="DD-U_PARENT_DATA.ID:~(gpv.id)" value="1" />
+              <button class="btnConfirmProxy" id="btnDelete">Delete</button>
+              </form>
+            </div>
+
       <div class="button-row" id="row2">
       </form>
       </div>
