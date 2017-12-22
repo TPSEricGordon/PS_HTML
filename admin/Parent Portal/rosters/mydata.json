@@ -1,7 +1,6 @@
 [
 	~[tlist_sql;
 
-
 	SELECT
 		PARENTS.FAMILY_ID,
 		PARENTS.parent_names,
@@ -48,10 +47,8 @@
 		WHERE ENROLL_STATUS=1
 		) PE2
 		ON PE2.U_PARENT_DATAID = REGEXP_SUBSTR ( PARENTS.P_IDS , chr(91)||'^,'||chr(93)||'+', 1, 2)
-
-
-
 	]
+
 		{"family_id":"~(FAMILY_ID)",
 			"parents":"~(parent_names)",
 			"students":"~(student_names)",

@@ -54,6 +54,52 @@
                    </td>
 
               </tr>
+              <tr>
+                <td class="bold">
+                 Current Parent Group Enrollments
+                </td>
+                <td>
+                <table class="grid" id="groups">
+                   <thead>
+
+                     <!-- NEED TO FIX THE FOLLOWING SQL -->
+                         <th style="width:20px">Group</th>
+                         <th style="width:65px">Day of the week</th>
+                         <th style="width:20px">Code</th>
+                         <th style="width:65px">Day of Week</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      ~[tlist_sql;
+                      SELECT G.CODE, G.DAY_OF_WEEK, G.MEETING_TIME ,G.FACILITATOR
+                      FROM PS.U_PARENT_DATA D
+                      JOIN PS.U_PARENT_ENROLLMENTS E
+                      ON D.ID =E.U_PARENT_DATAID
+                      JOIN PS.U_PARENT_GROUPS G
+                       ON G.ID = E.GROUP_ID
+                      WHERE ENROLL_STATUS=1
+                      AND D.ID=~(gpv.id)]
+                      <tr>
+                         <td>~(CODE)</td>
+                         <td>~(DAY_OF_WEEK)</td>
+                         <td>~(MEETING_TIME)</td>
+                         <td>~(FACILITATOR)</td>
+                      </tr>
+                      [/tlist_sql]
+                   </tbody>
+                </table>
+
+                
+<!--  NEED TO LOOK THIS UP AND POTENTIALLY FIX!
+
+
+                <br />
+                <a href="parent_enrollments.html?id=~(gpv.id)&enroll_id=()">View Enrollment History</a>
+-->
+
+               </td>
+
+              </tr>
 
                <tr>
                  <td class="bold" >
@@ -61,11 +107,12 @@
                    Family ID
                  </td>
                  <td>
-                  ~([U_PARENT_DATA]PARENT_ID)
+                  ~([U_PARENT_DATA]PARENTID)
                    <br />
                    ~([U_PARENT_DATA]FAMILY_ID)
                  </td>
                </tr>
+
 
 
                <tr>
@@ -287,6 +334,7 @@
 
 
             </fieldset>
+          </table>
             <div class="button-row" id="row1">
                <input type="hidden" name="ac" value="prim">
                <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>

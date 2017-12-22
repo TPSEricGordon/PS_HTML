@@ -67,9 +67,16 @@
               </fieldset>
            </tbody>
         </table>
+
+        <a href="/admin/parent_coaches/edit_parent.html?id=~(gpv.id)" name="btn" class="button">View Parent Info</a>
           <br />
         <p style="text-align: center">
-         <a href="unenroll_parent.html?id=~(gpv.id)&enroll_id=~(gpv.enroll_id)";" id="btnNew" name="btnNew" class="button">Enroll in New Group</a>
+  ~[if.~(gpv.enroll_id)=""]
+         <a href="parent_enrollment_new.html?id=~(gpv.id)";" id="btnNew" name="btnNew" class="button">Enroll in a Group</a>
+
+    [else]
+      <a href="unenroll_parent.html?id=~(gpv.id)&enroll_id=~(gpv.enroll_id)";" id="btnNew" name="btnNew" class="button">Change Group</a>
+  [/if]
         </p>
           <br />
 

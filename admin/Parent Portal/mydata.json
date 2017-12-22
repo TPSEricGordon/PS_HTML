@@ -2,7 +2,7 @@
 	~[tlist_sql;
 		SELECT
 		CONCAT('/admin/parent_coaches/edit_parent.html?id=',P.ID) LINK,
-		G.CODE AS CURRENT_GROUP,
+		CASE WHEN G.CODE IS NULL THEN 'None' ELSE G.CODE END AS CURRENT_GROUP,
 		'/admin/parent_coaches/parent_enrollments.html?id='||P.ID||'&enroll_id='||PE.ID AS ENROLL_LINK,
 		P.ID,
 		P.FAMILY_ID,
@@ -23,7 +23,8 @@
 		ON PE.GROUP_ID = G.ID
 
 	-- WHERE G.CODE IS NOT NULL
-	ORDER BY DBMS_RANDOM.VALUE
+ORDER BY DBMS_RANDOM.VALUE
+
 
 
 
