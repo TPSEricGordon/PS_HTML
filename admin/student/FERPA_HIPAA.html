@@ -21,12 +21,19 @@
 <!-- start of content area -->
 ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
 	<div class="box-round">
-		~[tlist_child:STUDENTS.U_STUDENTS_EXTENSION.U_RELEASE_DOCUMENTS;displaycols:HIPAA_FERPA,ORGANIZATION,DATE_EXPIRED;fieldNames:Form Type,Organization, Experation Date;type:html]
+		~[tlist_child:STUDENTS.U_STUDENTS_EXTENSION.U_RELEASE_DOCUMENTS;displaycols:HIPAA_FERPA,ORGANIZATION,DATE_SIGNED,DATE_EXPIRED;fieldNames:Form Type,Organization, Date Signed ,Experation Date;type:html]
 <script>
   var InstValues = [];
    InstValues.push(['RFHC','Ravenswood']);
-   InstValues.push(['Kaiser','Kaiser']);
+   InstValues.push(['Kaiser RWC','Kaiser RWC']);
+	 InstValues.push(['Kaiser SJ','Kaiser SJ']);
+	 InstValues.push(['Gardner','Gardner']);
    InstValues.push(['Other','Other']);
+	 InstValues.push(['Fair Oaks','Fair Oaks']);
+	 InstValues.push(['PAMF','PAMF']);
+	 InstValues.push(['Stanford Family','Stanford Family']);
+	 InstValues.push(['Mayview','Mayview']);
+	 InstValues.push(['Dr. Buckner','Dr. Buckner']);
    InstValues.push(['','None']);
    tlistText2DropDownValNamePair('ORGANIZATION',InstValues);
 var InstValues = {};
