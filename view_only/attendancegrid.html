@@ -1,0 +1,113 @@
+/teachers/attendance-grid.action?sectionId=52&amp;frn=00352&amp;attPeriod=1&amp;attendanceDate=12/06/2017&amp;meetingMode=ATT_ModeMeeting&amp;meetingType=meeting&amp;ATT_Source_Code=Teacher&amp;periodId=1
+
+
+<div id="{{attendanceCtrlData.vuid}}-grid" class="posRel"
+     data-persist-rows-per-page="true" data-pss-message-prefixes="psx.jswidgets.pssattendancegrid"
+     data-pss-grid-widget data-data="attendanceCtrlData.attendanceData"
+     data-filtered-data="attendanceCtrlData.filteredAttendanceData"
+     data-pagination-controls="attendanceCtrlData.pgController"
+     data-client-side-pagination="true" data-item-type-text="{{'psx.jswidgets.pssattendancegrid.students' | translate}}"
+     data-custom-filter-messages="attendanceCtrlData.customFilterMessages"
+     data-ng-if="!attendanceCtrlData.initPending">
+    <label data-pss-filter-field="inCurrentSelection|multiselect"
+           data-ng-if="attendanceCtrlData.inSelectionMap"
+           data-filter-info="attendanceCtrlData.inSelectionMap"
+           data-default-filter="fixed">
+        {{attendanceCtrlData.labelUseCurrentSelection}}
+    </label>
+    <label data-ng-repeat="description in attendanceCtrlData.columnDescriptions"
+           data-pss-filter-field="{{description.fieldKey}}"
+           data-apply-trim-to-search="{{description.trimCompare}}" >
+        {{description.title}}
+    </label>
+    <table id="table-{{attendanceCtrlData.vuid}}" class="grid ng-cloak">
+        <thead>
+            <tr>
+                <th id="id-hdr-selectAll">
+                    <input type="checkbox" data-ng-model="attendanceCtrlData.pgController.checkAll"
+                            ng-disabled="attendanceCtrlData.filteredAttendanceData.length == 0"
+                            ng-checked="(attendanceCtrlData.filteredAttendanceData.length == 0) && 0"
+                           id="selectionAll" data-ng-change="attendanceCtrlData.selectionChange()"
+						   aria-label="{{'psx.jswidgets.pssattendancegrid.select_all_students' | translate}}">
+                </th>
+                <th data-ng-repeat="description in attendanceCtrlData.columnDescriptions"
+                    data-pss-sort-fields="{{description.fieldKey}}"
+                    data-filter-info="description.filterInfo"
+                    data-ng-if="description.fieldKey == 'lastfirst'"
+                    id="hdr-{{description.fieldKey}}">
+                    <span tabindex="0">{{description.title}}</span>
+                </th>
+                <th data-ng-repeat="description in attendanceCtrlData.columnDescriptions"
+                    data-pss-sort-fields="{{description.fieldKey}},lastfirst"
+                    data-fixed-sorts="{lastfirst: 'ascending'}"
+                    data-filter-info="description.filterInfo"
+                    data-ng-if="description.fieldKey != 'lastfirst'"
+                    id="hdr-{{description.fieldKey}}">
+                    <span tabindex="0">{{description.title}}</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="row in attendanceCtrlData.filteredAttendanceData" data-metadata-id="{{row._id}}">
+                <td headers="id-hdr-selectAll" id="id-selchk-{{row.dcid}}" align="center">
+                        <input type="checkbox" data-ng-model="row.inSelection"
+                               data-ng-change="attendanceCtrlData.selectionChange(row)"
+                               id="id-selection-{{row.dcid}}"
+							   aria-label="{{'psx.jswidgets.pssattendancegrid.select_this_student' | translate}}">
+                    </td>
+                <td data-ng-repeat="description in attendanceCtrlData.columnDescriptions"
+                        ng-class="{center: description.key !== 'lastfirst'}"
+                        data-ng-switch="description.filterName" id="id-{{description.fieldKey}}-{{row._id}}"
+                        headers="hdr-{{description.fieldKey}}">
+                    <span id="id-span-{{description.fieldKey}}-{{row._id}}" ng-if="attendanceCtrlData.attendanceMode === 0 && description.key === 'lastfirst'">
+                        <a href="/admin/students/home.html?frn=001{{row.dcid}}&lsp=/admin/attendance/view/daily.html">
+                        {{row[description.key]}}
+                        </a>
+                    </span>
+                    <span id="id-span-{{description.fieldKey}}-{{row._id}}" ng-if="attendanceCtrlData.attendanceMode === 1 && description.key === 'lastfirst'">
+                        <a href="/admin/students/home.html?frn=001{{row.dcid}}&lsp=/admin/attendance/view/meeting.html">
+                        {{row[description.key]}}
+                        </a>
+                    </span>
+                    <span id="id-span-{{description.fieldKey}}-{{row._id}}" ng-if="description.key !== 'lastfirst'">
+                        {{row[description.key]}}
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="no-results-message-id" data-ng-show="!attendanceCtrlData.initPending && !attendanceCtrlData.gridLoading && (attendanceCtrlData.attendanceData !== null && !attendanceCtrlData.attendanceData.length || attendanceCtrlData.filteredAttendanceData != null && !attendanceCtrlData.filteredAttendanceData.length)"
+         class="feedback-info ng-cloak">
+        <span>{{attendanceCtrlData.noDataFound}}</span>
+    </div>
+
+    <div data-ng-if="attendanceCtrlData.gridLoading" class="centeringContainer">
+        <div data-pss-wait-spinner></div>
+    </div>
+</div>
+
+<div class="button-row">
+    <button id="ng-set-current-selection-button" type="button"
+            data-ng-click="clickSetStudentSelectionButton()"
+            ng-disabled="attendanceCtrlData.totalSelected == 0">
+        {{attendanceCtrlData.labelSetCurrentSelection}}
+    </button>
+    <pss-export-vidget data-pss-vidget data-pss-attendance-grid-export-adapter>
+        <pss-export-vidget-option
+                data-export-vidget-option-name="csv">
+            <pss-export-vidget-config
+                    data-config-source="<<grididhere>>"
+                    data-config-method="powerquery|transform|client"
+                    data-config-type="csv"
+                    data-config-delimeter=""
+                    data-config-field-separator=","
+                    data-config-filename="attendance.csv"
+                    data-config-charset-override="UTF-8"
+                    data-config-column-include-keys="id,dcid,student_number"
+                    data-config-column-headers="ID,DCID,STUDENT_NUMBER"
+                    data-config-media-type="text/csv"
+                    />
+        </pss-export-vidget-option>
+    </pss-export-vidget>
+</div>

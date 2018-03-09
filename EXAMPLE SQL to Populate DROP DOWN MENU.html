@@ -1,0 +1,30 @@
+
+<tr>
+    <td class="bold">Parent Coach</td>
+    <td>
+      <select id="Parent_Coach_Select" name="[Students.U_Students_Extension]PARENT_COACH_ID">
+        <option>
+      </select>
+        </td>
+</tr>
+<script type="text/javascript">
+         var coaches={};
+         ~[tlist_sql;
+           SELECT DCID, FIRST_NAME, U.EMAIL_ADDR
+           FROM PS.USERS U
+           WHERE U.GROUPVALUE = 11
+         ;]
+             coaches['~(DCID)'] = '~(FIRST_NAME)';
+         [/tlist_sql]
+
+         function addList(select_id, data){
+             var select = document.getElementById(select_id);
+             for(var i in data) {
+             var option = document.createElement('option');
+             option.text = coaches[i];
+             option.value = i;
+             select.add(option);
+               }
+             };
+
+</script>
