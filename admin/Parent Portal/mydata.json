@@ -24,10 +24,6 @@
 
 	-- WHERE G.CODE IS NOT NULL
 ORDER BY DBMS_RANDOM.VALUE
-
-
-
-
 	]
 		{"link":"~(link)",
 			"current_group":"~(current_group)",
