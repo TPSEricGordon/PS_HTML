@@ -5,7 +5,7 @@ myApp.controller('myController', function($scope, $http) {
 // $scope is a built­in Angular object. It contains everything that is bound // to the HTML elements. This line initializes an array within the $scope // object called “myData”
 $scope.myData = [];
 //$httpisabuilt­inAngularobject. Itcontainsallthemethodsfor // accessing web resources... such as this one: $http.get
-$http.get('mydata.json')
+$http.get('parentData.json')
 // .then is executed after $http.get returns data ... it  gets the web page // (mydata.json)  then runs a function with the data from the web page placed // into the myJSON object
 .then(function(myJSON) {
 // .pop removes the last item in the array, which should be empty (see your // t_listsql)
