@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Parent Groups</title>
+	<title>Group Roster</title>
 
     <!-- required scripts -->
 	~[wc:commonscripts]
@@ -15,7 +15,7 @@
 			}); */
 
 			require(['angular', 'components/shared/index'], function (angular) {
-				var myApp = angular.module('myModule', ['powerSchoolModule']);
+				var myApp = angular.module('myModule', []);
 
 
 				myApp.controller('groupRosterController', function($scope, $http) {
@@ -37,7 +37,8 @@
     <!-- breadcrumb start -->
     <a href="/admin/home.html" target="_top">~[text:psx.html.admin_district.misc-district.start_page]</a>
 		&gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
-	&nbsp; Parent Groups
+		<a href="/admin/parent_coaches/rosters/group_rosters_landing.html" target="_top"> Parent Groups </a>&gt;
+	&nbsp; Group Roster
     <!-- breadcrumb end -->
 
     <!-- start of main menu and content -->
@@ -45,28 +46,66 @@
 
     <!-- Start of Page -->
 	<h1>Parent Groups</h1>
+
+	<div class="box-round">
+		 <fieldset>
+				<legend>Current Group</legend>
+				<table class="grid" id="groups">
+					 <thead>
+
+						 <!-- NEED TO FIX THE FOLLOWING SQL -->
+								 <th class="bold" style="width:20px">Code</th>
+								 <th class="bold" style="width:65px">Meeting Day</th>
+								 <th class="bold" style="width:20px">Meeting Time</th>
+								 <th class="bold" style="width:65px">Facilitator</th>
+								 <th class="bold" style="width:65px">Language</th>
+							</tr>
+					 </thead>
+					 <tbody>
+							~[tlist_sql;
+							SELECT PG.CODE, PG.DAY_OF_WEEK, PG.MEETING_TIME,PG.FACILITATOR, PG.GROUP_LANGUAGE
+							FROM PS.U_PARENT_GROUPS PG
+							WHERE ID = ~(gpv.group_id);sqlText)]
+							<tr>
+								 <td>~(CODE)</td>
+								 <td>~(DAY_OF_WEEK)</td>
+								 <td>~(MEETING_TIME)</td>
+								 <td>~(FACILITATOR)</td>
+								 <td>~(GROUP_LANGUAGE)</td>
+							</tr>
+							[/tlist_sql]
+					 </tbody>
+				</table>
+			</fieldset>
+	 </div>
+
+
 	<div class="box-round" data-ng-controller="groupRosterController" data-ng-cloak>
-		<div id="myGrid" data-pss-grid-widget data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
+		<div id="myGrid" data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
+			<fieldset>
+			<legend>Roster</legend>
 			<table class="grid">
 			<thead>
 				<tr>
-					<th class="bold">Family ID</th>
-					<th data-pss-sort-fields="enroll_link" class="bold">Parent Names</th>
-					<th data-pss-sort-fields="id" class="bold">Student Names</th>
-					<th data-pss-sort-fields="family_id" class="bold" >Parent 1 Group</th>
-					<th data-pss-sort-fields="first_name" >Parent 2 Group</th>
+
+					<th class="bold">Change Group Enrollment</th>
+					<th class="bold">Coach</th>
+					<th class="bold" >Family ID</th>
+					<th class="bold">Parent Name</th>
+					<th class="bold">Students</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr data-ng-repeat="item in myDataFiltered" >
-					<td>{{ item.family_id }}</td>
-					<td>{{ item.parents }}</td>
-					<td>{{ item.students }}</td>
-					<td>{{ item.parent_1_group }}</td>
-					<td>{{ item.parent_2_group }}</td>
+				<tr data-ng-repeat="item in myData" >
+					<td><a ng-href="{{ item.ENROLL_LINK}}">{{ item.CODE }}</a></td>
+					<td>{{ item.COACH }}</td>
+					<td>{{ item.FAMILY_ID }}</td>
+					<td><a ng-href="{{ item.LINK}}">{{ item.PARENT_NAME }}</a></td>
+					<td>{{ item.STUDENTS }}</td>
 				</tr>
 			</tbody>
 		</table>
+	</fieldset>
 		</div>
 
 	</div>
