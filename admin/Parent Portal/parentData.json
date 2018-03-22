@@ -3,7 +3,7 @@
 		SELECT
 		CONCAT('/admin/parent_coaches/edit_parent.html?id=',P.ID) LINK,
 		CASE WHEN G.CODE IS NULL THEN 'None' ELSE G.CODE END AS CURRENT_GROUP,
-		'/admin/parent_coaches/parent_enrollments.html?id='||P.ID||'&enroll_id='||PE.ID AS ENROLL_LINK,
+		'/admin/parent_coaches/enrollment/parent_enrollments.html?id='||P.ID||'&enroll_id='||PE.ID AS ENROLL_LINK,
 		P.ID,
 		P.FAMILY_ID,
 		FIRST_NAME,
