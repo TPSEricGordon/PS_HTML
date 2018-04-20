@@ -1,0 +1,63 @@
+[
+	~[tlist_sql;
+		SELECT
+			parents.FAMILY_ID,
+			parents.NAME,
+			parents.LINK,
+			parents.PHONE,
+			parents.CURRENT_GROUP,
+			parents.ENROLL_LINK,
+			S.STUDENT,
+			S.COHORT,
+			use.FIRST_NAME AS COACH_NAME,
+			use.DCID
+		FROM (
+			SELECT P.ID, P.FAMILY_ID, P.FIRST_NAME || ' ' || P.LAST_NAME Name,
+				CONCAT('/admin/parent_coaches/edit_parent.html?id=',P.ID) LINK,
+				P.PHONE	,
+				CASE WHEN PE.CODE IS NULL THEN 'None' ELSE PE.CODE END AS CURRENT_GROUP,
+				'/admin/parent_coaches/enrollment/parent_enrollments.html?id='||P.ID||'&enroll_id='||PE.ENROLL_ID AS ENROLL_LINK, PE.CODE
+			FROM PS.U_PARENT_DATA P
+				LEFT JOIN (
+							SELECT U_PARENT_ENROLLMENTS.ID ENROLL_ID, U_PARENT_ENROLLMENTS.U_PARENT_DATAID, PG.CODE
+							FROM PS.U_PARENT_ENROLLMENTS
+							JOIN PS.U_PARENT_GROUPS PG
+								ON U_PARENT_ENROLLMENTS.GROUP_ID = PG.ID
+							WHERE ENROLL_STATUS = 1
+						) PE
+				 ON PE.U_PARENT_DATAID = P.ID
+
+			) parents
+		LEFT JOIN (
+				SELECT S.FAMILY_IDENT, LISTAGG(S.FIRST_NAME, ' and ') WITHIN GROUP (ORDER BY S.FIRST_NAME) AS student,
+					LISTAGG(SE.COHORT, ' and ') WITHIN GROUP (ORDER BY S.FIRST_NAME) AS cohort,
+					SE.PARENT_COACH_EMAIL
+				FROM PS.STUDENTS S
+					JOIN PS.U_DEF_EXT_STUDENTS SE
+						ON DCID = SE.STUDENTSDCID
+				WHERE S.ENROLL_STATUS = 0
+				GROUP BY S.FAMILY_IDENT, SE.PARENT_COACH_EMAIL
+				ORDER BY FAMILY_IDENT
+
+			) S
+
+			ON S.FAMILY_IDENT = parents.FAMILY_ID
+
+		JOIN PS.USERS use
+					ON S.PARENT_COACH_EMAIL = use.EMAIL_ADDR
+					
+WHERE use.DCID=~(gpv.coach_id)
+	]
+
+		{"FAMILY_ID":"~(FAMILY_ID)",
+			"NAME":"~(NAME)",
+			"LINK":"~(LINK)",
+			"PHONE":"~(PHONE)",
+			"CURRENT_GROUP":"~(CURRENT_GROUP)",
+			"ENROLL_LINK":"~(ENROLL_LINK)",
+			"STUDENT":"~(STUDENT)",
+			"COHORT":"~(COHORT)",
+			"COACH_NAME":"~(COACH_NAME)"
+		},
+	[/tlist_sql]
+{}]

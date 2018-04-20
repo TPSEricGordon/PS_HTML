@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Caseload</title>
+
+    <!-- required scripts -->
+	~[wc:commonscripts]
+    <!-- Required style sheets: screen.css, and print.css -->
+	<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+	<link href="/images/css/print.css" rel="stylesheet" media="print">
+	<script>
+			var coach_id = { ID: ~(gpv.coach_id)};
+
+			require(['angular', 'components/shared/index'], function (angular) {
+				var myApp = angular.module('myModule', []);
+
+
+				myApp.controller('caseloadController', function($scope, $http) {
+
+						$scope.myData = [];
+						$http.get('caseloadData.json?coach_id=' + coach_id.ID)
+						.then(function(myJSON) {
+								myJSON.data.pop();
+								$scope.myData = myJSON.data; });
+					});
+					angular.bootstrap(document, ['myModule']);
+
+				});
+	</script>
+</head>
+<body>
+	~[wc:admin_header_css]
+
+    <!-- breadcrumb start -->
+    <a href="/admin/home.html" target="_top">~[text:psx.html.admin_district.misc-district.start_page]</a>
+		&gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
+		<a href="/admin/parent_coaches/rosters/caseloads_landing.html" target="_top"> All Caseloads </a>&gt;
+	&nbsp; ~[tlist_sql;
+		SELECT FIRST_NAME FROM PS.USERS WHERE DCID = ~(gpv.coach_id)]
+		~(FIRST_NAME)
+		[/tlist_sql]
+    <!-- breadcrumb end -->
+
+    <!-- start of main menu and content -->
+	~[wc:admin_navigation_css]
+
+    <!-- Start of Page -->
+	<h1>	~[tlist_sql;
+		SELECT FIRST_NAME || '''s' FROM PS.USERS WHERE DCID = ~(gpv.coach_id)]
+		~(FIRST_NAME)
+		[/tlist_sql] Caseload</h1>
+	<div class="box-round" data-ng-controller="caseloadController" data-ng-cloak>
+		<div id="myGrid" data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
+			<fieldset>
+			<table class="grid">
+			<thead>
+				<tr>
+					<th class="bold">Family ID</th>
+					<th class="bold">Parent Name</th>
+					<th class="bold" >Phone Number</th>
+					<th class="bold">Current Group</th>
+					<th class="bold">Student(s)</th>
+					<th class="bold">Cohort(s)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="item in myData" >
+					<td>{{ item.FAMILY_ID }}</td>
+					<td><a ng-href="{{ item.LINK}}">{{ item.NAME }}</a></td>
+					<td>{{ item.PHONE }}</td>
+					<td><a ng-href="{{ item.ENROLL_LINK}}">{{ item.CURRENT_GROUP }}</a></td>
+					<td>{{ item.STUDENT }}</td>
+					<td>{{ item.COHORT }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</fieldset>
+		</div>
+
+	</div>
+	<!-- end of content area -->
+
+	~[wc:admin_footer_css]
+
+
+
+
+</body>
+</html>

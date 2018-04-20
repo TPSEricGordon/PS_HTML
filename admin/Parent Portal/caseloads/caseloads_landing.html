@@ -1,0 +1,50 @@
+<!DOCTYPE  html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Parent Coach Caseloads</title>
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+      ~[wc:admin_navigation_css]
+      <form action="/admin/changesrecorded.white.html" method="POST">
+      ~[wc:admin_header_frame_css]<a href="/admin/home.html" target="_top">~[text:psx.html.admin_district.misc-district.start_page]</a>
+      &gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
+      &nbsp; Coach Caseloads ~[wc:admin_navigation_frame_css]
+      <h1>Caseload Breakdown</h1>
+      <!-- start of content and bounding box -->
+      <div class="box-round">
+         <table class="grid" id="groups">
+            <thead>
+               <tr style="border:1px solid grey;">
+                  <th class="bold" style="width:20px;text-align: center">Coach Name</th>
+                  <th class="bold" style="width:20px;text-align: center">View Caseload</th>
+               </tr>
+            </thead>
+            <tbody>
+               ~[tlist_sql;
+               SELECT
+                FIRST_NAME || LAST_NAME AS NAME, DCID, u.GROUPVALUE
+                FROM PS.USERS u
+                WHERE GROUPVALUE = 11
+                ]
+               <tr>
+                  <td>~(NAME)</td>
+                  <td align="center">
+                     <a href="coach_caseload.html?coach_id=~(DCID)">
+                     View Roster
+                     </a>
+                  </td>
+               </tr>
+               [/tlist_sql]
+            </tbody>
+         </table>
+      </div>
+      <br>
+      <!-- end of content of bounding box -->
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->

@@ -1,0 +1,41 @@
+[
+	~[tlist_sql;
+
+	SELECT parents.*, S.students, use.FIRST_NAME
+				FROM (
+				SELECT CONCAT('/admin/parent_coaches/edit_parent.html?id=',P.ID) LINK,
+					PE.GROUP_ID, PG.CODE, PG.FACILITATOR, P.FAMILY_ID, P.FIRST_NAME || ' ' || P.LAST_NAME AS PARENT_NAME,
+					'/admin/parent_coaches/enrollment/parent_enrollments.html?id='||P.ID||'&enroll_id='||PE.ID AS ENROLL_LINK
+					FROM PS.U_PARENT_ENROLLMENTS PE
+					JOIN PS.U_PARENT_DATA P
+						ON P.ID = PE.U_PARENT_DATAID
+					JOIN PS.U_PARENT_GROUPS PG
+						ON PE.GROUP_ID = PG.ID
+					WHERE PE.ENROLL_STATUS=1
+				) parents
+				JOIN (
+					SELECT S.FAMILY_IDENT, LISTAGG(S.FIRST_NAME, ' and ') WITHIN GROUP (ORDER BY S.FIRST_NAME) AS students, SE.PARENT_COACH_EMAIL
+					FROM PS.STUDENTS S
+						JOIN PS.U_DEF_EXT_STUDENTS SE
+							ON DCID = SE.STUDENTSDCID
+					GROUP BY S.FAMILY_IDENT, SE.PARENT_COACH_EMAIL) S
+					ON S.FAMILY_IDENT = parents.FAMILY_ID
+				JOIN PS.USERS use
+					ON S.PARENT_COACH_EMAIL = use.EMAIL_ADDR
+
+				WHERE GROUP_ID = ~(gpv.group_id)
+
+	]
+
+		{"LINK":"~(LINK)",
+			"GROUP_ID":"~(GROUP_ID)",
+			"CODE":"~(CODE)",
+			"FACILITATOR":"~(FACILITATOR)",
+			"FAMILY_ID":"~(FAMILY_ID)",
+			"PARENT_NAME":"~(PARENT_NAME)",
+			"ENROLL_LINK":"~(ENROLL_LINK)",
+			"STUDENTS":"~(STUDENTS)",
+			"COACH":"~(FIRST_NAME)"
+		},
+	[/tlist_sql]
+{}]
