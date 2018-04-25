@@ -36,8 +36,9 @@
       ~[wc:admin_navigation_frame_css]
 
       <h1>Scheduled Parent Sessions </h1>
-      <!-- start of content and bounding box -->
-
+<!-- start of content and bounding box -->
+      ~[if.~(gpv.new)=true]<div class="feedback-confirm">You Created a New Session</div>[/if]
+      ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
       <div class="box-round" data-ng-controller="sessionController" data-ng-cloak>
     		<div id="myGrid" data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
     			<fieldset>
@@ -45,7 +46,6 @@
     			<table class="grid">
     			<thead>
     				<tr>
-
     					<th class="bold" style="width:20px">Edit</th>
     					<th class="bold" data-pss-sort-fields="date">Date </th>
     					<th class="bold" data-pss-sort-fields="name">Name</th>
@@ -69,7 +69,7 @@
     		</div>
 
         <div class="button-row" id="row1">
-           <a href="new_session.html" id="btnNew" name="btnNew" class="button">Create New Upcoming Session</a>
+           <a href="new_session.html" id="btnNew" name="btnNew" class="button">Create New Session</a>
         </div>
 
     	</div>

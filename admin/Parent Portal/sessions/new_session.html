@@ -9,7 +9,7 @@
       <link href="/images/css/print.css" rel="stylesheet" media="print">
    </head>
    <body onload="addLists()">
-      <form id="New_Parent_Form" action="/admin/parent_coaches/parent_search.html?new=true" method="POST">
+      <form id="New_Parent_Form" action="/admin/parent_coaches/sessions/home.html?new=true" method="POST">
          ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
             target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
             target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/sessions/home.html"
@@ -19,7 +19,7 @@
          <!-- start of content and bounding box -->
          <div class="box-round">
             ~[DirectTable.Select:U_PARENT_SESSIONS;ID:-1]
-            <fieldset id="Parent_Data">
+            <fieldset>
                <legend>Create a New Session</legend>
 
                <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
@@ -104,7 +104,7 @@
 
                 <tr>
                    <td class="bold">Session Description</td>
-                  <td><textarea name="[U_PARENT_SESSION_TYPES]DESCRIPTION" cols="50" rows="5" maxlength="80">
+                  <td><textarea name="[U_PARENT_SESSIONS]DESCRIPTION" cols="50" rows="5" maxlength="80">
                   </textarea></td>
                 </tr>
 

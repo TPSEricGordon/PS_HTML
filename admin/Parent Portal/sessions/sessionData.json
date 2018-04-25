@@ -1,13 +1,13 @@
 [
 	~[tlist_sql;
 
-
-		SELECT ID, DATE_OF_SESSION, NAME, TYPE_ID, SUBTYPE_ID, COHORT
-		FROM PS.U_PARENT_SESSIONS
+		SELECT
+		CONCAT('/admin/parent_coaches/sessions/edit_session.html?id=',ID) LINK,
+		ID, DATE_OF_SESSION, NAME, TYPE_ID, SUBTYPE_ID, COHORT
+	FROM PS.U_PARENT_SESSIONS
 
 	]
-
-		{"SESSION_LINK":"~(ID)",
+		{"SESSION_LINK":"~(LINK)",
 			"DATE":"~(DATE_OF_SESSION)",
 			"NAME":"~(NAME)",
 			"TYPE":"~(TYPE_ID)",
