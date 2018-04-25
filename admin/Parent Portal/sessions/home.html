@@ -1,0 +1,82 @@
+<!DOCTYPE  html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Sessions</title>
+      ~[wc:commonscripts]
+      <script src="/scripts/tlistCustomization.js"></script>
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+      <script>
+          require(['angular', 'components/shared/index'], function (angular) {
+            var myApp = angular.module('myModule', []);
+
+
+            myApp.controller('sessionController', function($scope, $http) {
+
+                $scope.myData = [];
+                $http.get('sessionData.json')
+                .then(function(myJSON) {
+                    myJSON.data.pop();
+                    $scope.myData = myJSON.data; });
+              });
+              angular.bootstrap(document, ['myModule']);
+
+            });
+      </script>
+
+   </head>
+   <body>
+
+      ~[wc:admin_navigation_css]
+      <form action="/admin/changesrecorded.white.html" method="POST">
+      ~[wc:admin_header_frame_css]<a href="/admin/home.html" target="_top">~[text:psx.html.admin_district.misc-district.start_page]</a>
+      &gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
+      &nbsp; Sessions
+      ~[wc:admin_navigation_frame_css]
+
+      <h1>Scheduled Parent Sessions </h1>
+      <!-- start of content and bounding box -->
+
+      <div class="box-round" data-ng-controller="sessionController" data-ng-cloak>
+    		<div id="myGrid" data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
+    			<fieldset>
+    			<legend>Sessions</legend>
+    			<table class="grid">
+    			<thead>
+    				<tr>
+
+    					<th class="bold" style="width:20px">Edit</th>
+    					<th class="bold" data-pss-sort-fields="date">Date </th>
+    					<th class="bold" data-pss-sort-fields="name">Name</th>
+    					<th class="bold" data-pss-sort-fields="type">Type</th>
+    					<th class="bold" data-pss-sort-fields="subtype">Subtype</th>
+              <th class="bold" data-pss-sort-fields="cohort">Cohort</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+    				<tr data-ng-repeat="item in myData" >
+    					<td><a ng-href="{{ item.SESSION_LINK }}"><img src="/images/btn_edit.gif" width="16" height="16" border="0"></a></td>
+    					<td>{{ item.DATE }}</td>
+    					<td>{{ item.NAME }}</td>
+    					<td>{{ item.TYPE }}</td>
+    					<td>{{ item.SUBTYPE }}</td>
+              <td>{{ item.COHORT }}</td>
+    				</tr>
+    			</tbody>
+    		</table>
+    	</fieldset>
+    		</div>
+
+        <div class="button-row" id="row1">
+           <a href="new_session.html" id="btnNew" name="btnNew" class="button">Create New Upcoming Session</a>
+        </div>
+
+    	</div>
+
+
+      <!-- end of content of bounding box -->
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->

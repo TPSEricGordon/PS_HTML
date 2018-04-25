@@ -10,7 +10,7 @@
    </head>
    <body>
 
-      <form id="edit_parent_group" action="/admin/parent_coaches/parent_groups_edit.html?id=~(id)&changesSaved=true" method="POST">
+      <form id="edit_parent_group" action="/admin/parent_coaches/parent_groups.html?changesSaved=true" method="POST">
         ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
            target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
            target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_groups.html"
@@ -18,7 +18,6 @@
            -->~[wc:admin_navigation_frame_css]
 
         <h1>Edit Parent Group</h1>
-        ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
          <!-- start of content and bounding box -->
          <div class="box-round">
             ~[DirectTable.Select:U_PARENT_GROUPS;ID:~(gpv.id)]
@@ -93,7 +92,7 @@
 
             </fieldset>
             <div class="button-row" id="row1">
-          f     <input type="hidden" name="ac" value="prim">
+              <input type="hidden" name="ac" value="prim">
                <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
             </div>
       </form>

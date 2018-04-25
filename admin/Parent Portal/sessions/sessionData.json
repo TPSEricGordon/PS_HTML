@@ -1,0 +1,18 @@
+[
+	~[tlist_sql;
+
+
+		SELECT ID, DATE_OF_SESSION, NAME, TYPE_ID, SUBTYPE_ID, COHORT
+		FROM PS.U_PARENT_SESSIONS
+
+	]
+
+		{"SESSION_LINK":"~(ID)",
+			"DATE":"~(DATE_OF_SESSION)",
+			"NAME":"~(NAME)",
+			"TYPE":"~(TYPE_ID)",
+			"SUBTYPE":"~(SUBTYPE_ID)",
+			"COHORT":"~(COHORT)"
+		},
+	[/tlist_sql]
+{}]
