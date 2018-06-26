@@ -1,5 +1,7 @@
 
-define(['angular', 'components/shared/index'], function (angular) { var myApp = angular.module('myModule', ['powerSchoolModule']);
+define(['angular', 'components/shared/index'], function (angular) {
+
+	var myApp = angular.module('myModule', ['powerSchoolModule']);
 
 	myApp.controller('parentSearchController', function($scope, $http) {
 			$scope.myData = [];
@@ -8,7 +10,6 @@ define(['angular', 'components/shared/index'], function (angular) { var myApp = 
 					myJSON.data.pop();
 					$scope.myData = myJSON.data; });
 		});
-
 
 
 	myApp.controller('groupRosterController', function($scope, $http) {
