@@ -28,20 +28,20 @@
         <div class="feedback-alert">Make Sure You Enroll this Parent in a New Group and Hit the Submit Button!
           </div>
         <div class="box-round">
-           ~[DirectTable.Select:U_PARENT_ENROLLMENTS;ID:-1]
-           <fieldset id="parent_group">
+           ~[DirectTable.Select:U_PARENT_CIRCLE_ENROLLMENTS;ID:-1]
+           <fieldset id="parent_enrollment">
               <legend>New Group</legend>
               <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
 
-                <input type="hidden" name="[U_PARENT_ENROLLMENTS]U_PARENT_DATAID" value="" id="hiddenParentID"/>
+                <input type="hidden" name="PERSON.ID" value="" id="hiddenParentID"/>
 
                 <!-- Populates on Submit Button Press! -->
 
-                <input type="hidden" name="[U_PARENT_ENROLLMENTS]ENROLL_STATUS" value="" id="hiddenEnrollID">
+                <input type="hidden" name="[U_PARENT_CIRCLE_ENROLLMENTS]ENROLL_STATUS" value="" id="hiddenEnrollID">
                 <tr>
                     <td class="bold">New Group</td>
                     <td>
-                      <select id="group_ID_dropDown" name="[U_PARENT_ENROLLMENTS]GROUP_ID">
+                      <select id="group_ID_dropDown" name="[U_PARENT_CIRCLE_ENROLLMENTS]GROUP_ID">
                       </select>
                         </td>
                 </tr>
@@ -64,7 +64,7 @@
                                }
                              };
                </script>
-
+             </fieldset>
             </table>
 
            <div class="button-row" id="row1">

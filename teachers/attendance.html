@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>~[text]psx.html.teachers_studentpages.logentry.submit_log_entry[/text]</title>
+~[wc:UI_js_includes]
+~[wc:commonscripts]
+<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+<link href="/images/css/print.css" rel="stylesheet" media="print">
+<SCRIPT LANGUAGE="JavaScript">
+<!-- Begin
+function formHandler(form){
+var URL = document.navigation.page.options[document.navigation.page.selectedIndex].value;
+window.location.href = URL;
+}
+// End -->
+</SCRIPT>
+</head>
+
+<body class="psteacher">
+
+~[wc:teachers_header_fr_css]
+
+ <form name="navigation"><span class="account-photo">~[studenttitlephoto]</span><h1>~[text]psx.html.teachers_studentpages.logentry.submit_log_entry1[/text]<span class="nav-teacher"><select name="page" size=1 onChange="javascript:formHandler()"><option value="">~[text]psx.html.teachers_studentpages.logentry.select_screens[/text]<option value="">--------------------~[x:teacherpages]</select></span>~[studentalert]</h1>
+<p>~(studentname) &nbsp; ~(grade_level) &nbsp; ~(student_number) &nbsp; &nbsp; ~(track) &nbsp; &nbsp; ~(studschoolabbr) &nbsp; &nbsp; ~[enrollmentstatus]</p></form>
+
+<!-- Start of shaded content table -->
+<div class="box-round">
+
+<form method="POST" action="white.html">
+<table border="0" cellpadding="2" cellspacing="0" width="100%" background="/images/transparent.gif" class="fourDTable">
+<tr>
+<td>~[text]psx.html.teachers_studentpages.logentry.date[/text]</td>
+<td>~[short.date]</td>
+</tr>
+<tr>
+<td>~[text]psx.html.teachers_studentpages.logentry.subject[/text]</td>
+<td><input type="text" name="subject" size="40" value=""></td>
+</tr>
+<tr>
+<td valign="top">~[text]psx.html.teachers_studentpages.logentry.log_entry[/text]</td>
+<td><textarea name="logtext" rows="6" cols="50"></textarea></td>
+</tr>
+</table>
+<div class="button-row">
+<input type="hidden" name="ac" value="submitlogentry"><input type="hidden" name="studentid" value="~(id)">~[submitbutton]
+</div><!-- End of shaded content table -->
+</form>
+~[wc:teachers_footer_fr_css]
+</div>
+</body>
+</html>
