@@ -21,7 +21,8 @@
         ~[if.~(gpv.new_enrollment)=true]<div class="feedback-confirm">You Successfully Enrolled the Parent Into a New Group</div>[/if]
 
         <h3> ~[tlist_sql;
-        SELECT FIRSTNAME, LASTNAME
+        SELECT
+           FIRSTNAME, LASTNAME
         FROM PS.PERSON P
         WHERE ID=~(gpv.id;sqlText) ]
            <td>~(FIRST_NAME)</td>
@@ -31,8 +32,6 @@
 
         <div class="box-round">
           <fieldset>
-
-
           <legend>Enrollment History</legend>
         <table class="grid" id="groups">
            <thead>
@@ -46,15 +45,20 @@
            </thead>
            <tbody>
               ~[tlist_sql;
-              SELECT PG.CODE, PG.DAY_OF_WEEK, PG.MEETING_TIME,
-            	CASE WHEN PE.ENROLL_STATUS=0 THEN 'Previous Enrollment'
-            		WHEN PE.ENROLL_STATUS =1 THEN 'Current Enrollment'
-            	END AS ENROLL_STATUS, PE.REASON_LEFT,
-            	PE.PERSONID
+              SELECT
+              	PG.CODE, PG.DAY_OF_WEEK, PG.MEETING_TIME,
+              	CASE WHEN PE.ENROLL_STATUS=0 THEN 'Previous Enrollment'
+              		WHEN PE.ENROLL_STATUS =1 THEN 'Current Enrollment'
+              		END AS ENROLL_STATUS, PE.REASON_LEFT,
+
+              	PE.PERSONID
+
               FROM PS.U_PARENT_CIRCLE_ENROLLMENTS PE
               	JOIN PS.U_PARENT_GROUPS PG
               		ON PE.GROUP_ID = PG.ID
+
               WHERE PE.PERSONID = ~(gpv.id)
+
               ORDER BY PE.ENROLL_STATUS, PE.WHENCREATED
               ]
               <tr>
