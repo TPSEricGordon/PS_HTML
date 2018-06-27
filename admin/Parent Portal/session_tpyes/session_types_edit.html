@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Edit Group Sessions</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body onload="addList()">
+
+      <form id="edit_parent_group" action="/admin/parent_coaches/session_types/session_types.html?changesSaved=true" method="POST">
+        ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
+           target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+           target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_groups.html"
+           target="_top"> Parent Group Sessions </a> &gt; Edit Session Info<!-- breadcrumb end
+           -->~[wc:admin_navigation_frame_css]
+
+        <h1>Edit Session Info</h1>
+         <!-- start of content and bounding box -->
+         <div class="box-round">
+            ~[DirectTable.Select:U_PARENT_SESSION_TYPES;ID:~(gpv.id)]
+
+            <fieldset>
+               <legend>Session Type Details</legend>
+               <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
+
+                 <tr>
+                     <td class="bold">Name</td>
+                     <td>
+                       <input type="text" name="[U_PARENT_SESSION_TYPES]NAME" value="" size="40" maxlength="60">
+                     </td>
+                 </tr>
+
+               <tr>
+                   <td class="bold">Session Type Categorey (Major/Secondary Category)</td>
+                   <td>
+                   <input type="radio" name="[U_PARENT_SESSION_TYPES]SESSION_TYPE" value="1">Major<br />
+                   <input type="radio" name="[U_PARENT_SESSION_TYPES]SESSION_TYPE" value="2">Secondary<br />
+                   </td>
+                   </tr>
+
+               </tr>
+
+               <tr>
+                   <td class="bold">Session Type Description</td>
+                   <td>
+                     <textarea name="[U_PARENT_SESSION_TYPES]DESCRIPTION" cols="50" rows="5" maxlength="400">
+                     </textarea>
+                   </td>
+               </tr>
+
+
+               <tr>
+                   <td class="bold">Major Category Type (Only Complete if Cayegory Type is Secondary)</td>
+                   <td>
+                   <select id="LINK_ID_SELECTOR" name="[U_PARENT_SESSION_TYPES]LINK_ID">
+                     <option>
+                   </select>
+                   </td>
+               </tr>
+               <script type="text/javascript">
+                        var link_ids={};
+                        ~[tlist_sql;
+                          SELECT ID, NAME
+                          FROM PS.U_PARENT_SESSION_TYPES ST
+                          WHERE ST.SESSION_TYPE = 1
+                        ;]
+                            link_ids['~(ID)'] = '~(NAME)';
+                        [/tlist_sql]
+
+                        function addList(){
+                            var select = document.getElementById("LINK_ID_SELECTOR");
+                            for(var i in link_ids) {
+                            var option = document.createElement('option');
+                            option.text = link_ids[i];
+                            option.value = i;
+                            select.add(option);
+                              }
+                            };
+               </script>
+
+
+             </table>
+
+            </fieldset>
+            <div class="button-row" id="row1">
+              <input type="hidden" name="ac" value="prim">
+               <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
+            </div>
+      </form>
+      <div class="button-row" id="row2">
+      <form id="delete_button" action="session_types.html?deleted=true" method="POST">
+      <input type="hidden" name="ac" value="prim" />
+      <input type="hidden" name="DD-U_PARENT_SESSION_TYPES.ID:~(gpv.id)" value="1"/>
+      <button class="btnConfirmProxy" id="btnDelete">Delete</button>
+      </form>
+      </div>
+      </div>
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->

@@ -1,0 +1,69 @@
+<!DOCTYPE  html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Parent Groups</title>
+      ~[wc:commonscripts]
+      <script src="/scripts/tlistCustomization.js"></script>
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+      ~[wc:admin_navigation_css]
+      <form action="/admin/changesrecorded.white.html" method="POST">
+      ~[wc:admin_header_frame_css]<a href="/admin/home.html" target="_top">~[text:psx.html.admin_district.misc-district.start_page]</a>
+      &gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
+      &nbsp; Parent Groups~[wc:admin_navigation_frame_css]
+      <h1>Parent Groups</h1>
+      <!-- start of content and bounding box -->
+      ~[if.~(gpv.deleted)=true]<div class="feedback-alert">You Successfully Deleted a Parent Group</div>[/if]
+      ~[if.~(gpv.new)=true]<div class="feedback-confirm">You Created a New Parent Group</div>[/if]
+        ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
+      <div class="box-round">
+         <p style="text-align: center">
+          <a href="parent_group_new.html" id="btnNew" name="btnNew" class="button">New</a>
+         </p>
+         <table class="grid" id="groups">
+            <thead>
+               <tr style="border:1px solid grey;">
+                  <th class="bold" style="width:20px;text-align: center">Edit</th>
+                  <th class="bold" style="width:20px">Code</th>
+                  <th class="bold" style="width:65px">Day of Week</th>
+                  <th class="bold" style="width:75px">Meeting Time</th>
+                  <th class="bold" style="width:50px">Facilitator</th>
+                  <th class="bold" style="width:65px">Asst. Facilitator</th>
+                  <th class="bold" style="width:75px">Language</th>
+                  <th class="bold" style="width:200px">location</th>
+               </tr>
+            </thead>
+            <tbody>
+               ~[tlist_sql;
+               SELECT
+               ID, CODE, DAY_OF_WEEK, MEETING_TIME ,FACILITATOR, FACILITATOR2, GROUP_LANGUAGE, LOCATION
+               FROM PS.U_PARENT_GROUPS PG
+               WHERE YEARID=~(curyearid)
+               ORDER BY CODE]
+               <tr>
+                  <td align="center">
+                     <a href="parent_groups/parent_groups_edit.html?id=~(id)">
+                     <img src="/images/btn_edit.gif" width="16" height="16" border="0">
+                     </a>
+                  </td>
+                  <td>~(code)</td>
+                  <td>~(day_of_week)</td>
+                  <td>~(meeting_time)</td>
+                  <td>~(facilitator)</td>
+                  <td>~(facilitator2)</td>
+                  <td>~(group_language)</td>
+                  <td>~(location)</td>
+               </tr>
+               [/tlist_sql]
+            </tbody>
+         </table>
+      </div>
+      <br>
+      <!-- end of content of bounding box -->
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->

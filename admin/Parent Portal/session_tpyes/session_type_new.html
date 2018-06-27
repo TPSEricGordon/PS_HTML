@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>New Session Type</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body onload="addList()">
+     <form id="edit_parent_group" action="session_types.html?new=true" method="POST">
+       ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
+          target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+          target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/session_types.html"
+          target="_top"> Session Types </a> &gt; New Session Type<!-- breadcrumb end
+          -->~[wc:admin_navigation_frame_css]
+
+       <h1>New Parent Session Type</h1>
+        <!-- start of content and bounding box -->
+        <div class="box-round">
+           ~[DirectTable.Select:U_PARENT_SESSION_TYPES;ID:-1]
+           <fieldset id="parent_group">
+              <legend>Session Type Descrion</legend>
+              <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
+
+                <tr>
+                    <td class="bold">Name</td>
+                    <td>
+                      <input type="text" name="[U_PARENT_SESSION_TYPES]NAME" value="" size="40" maxlength="60">
+                    </td>
+                </tr>
+
+              <tr>
+                  <td class="bold">Session Type Categorey (Major/Secondary Category)</td>
+                  <td>
+                  <input type="radio" name="[U_PARENT_SESSION_TYPES]SESSION_TYPE" value="1">Major<br />
+                  <input type="radio" name="[U_PARENT_SESSION_TYPES]SESSION_TYPE" value="2">Secondary<br />
+                  </td>
+                  </tr>
+
+              </tr>
+
+              <tr>
+                  <td class="bold">Session Type Description</td>
+                  <td>
+                    <textarea name="[U_PARENT_SESSION_TYPES]DESCRIPTION" cols="50" rows="5" maxlength="400">
+                    </textarea>
+                  </td>
+              </tr>
+
+
+              <tr>
+                  <td class="bold">Major Category Type (Only Complete if Cayegory Type is Secondary)</td>
+                  <td>
+                  <select id="LINK_ID_SELECTOR" name="[U_PARENT_SESSION_TYPES]LINK_ID">
+                    <option>
+                  </select>
+                  </td>
+              </tr>
+              <script type="text/javascript">
+                       var link_ids={};
+                       ~[tlist_sql;
+                         SELECT ID, NAME
+                         FROM PS.U_PARENT_SESSION_TYPES ST
+                         WHERE ST.SESSION_TYPE = 1
+                       ;]
+                           link_ids['~(ID)'] = '~(NAME)';
+                       [/tlist_sql]
+
+                       function addList(){
+                           var select = document.getElementById("LINK_ID_SELECTOR");
+                           for(var i in link_ids) {
+                           var option = document.createElement('option');
+                           option.text = link_ids[i];
+                           option.value = i;
+                           select.add(option);
+                             }
+                           };
+              </script>
+
+
+
+            </table>
+
+
+           <div class="button-row" id="row1">
+              <input type="hidden" name="ac" value="prim">
+              <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
+           </div>
+
+      </form>
+      </div>
+      ~[wc:admin_footer_frame_css]
+   </body>
+
+
+</html>
+<!-- end right frame -->

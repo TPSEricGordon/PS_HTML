@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Edit Parent Groups</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body>
+
+      <form id="edit_parent_group" action="/admin/parent_coaches/parent_groups/parent_groups.html?changesSaved=true&enroll_id=~(gpv.id)" method="POST">
+        ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
+           target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+           target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_groups.html"
+           target="_top"> Parent Groups </a> &gt; Edit Parent Information<!-- breadcrumb end
+           -->~[wc:admin_navigation_frame_css]
+
+        <h1>Edit Parent Group</h1>
+         <!-- start of content and bounding box -->
+         <div class="box-round">
+            ~[DirectTable.Select:U_PARENT_GROUPS;ID:~(gpv.id)]
+            <fieldset id="application">
+               <legend>Group Details</legend>
+               <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
+                 <tr>
+                     <td class="bold">Code</td>
+                     <td>
+                       <input type="text" name="[U_PARENT_GROUPS]CODE" value="" size="5" maxlength="4" id="Group Code">
+                     </td>
+                 </tr>
+
+               <tr>
+                   <td class="bold">Day of the Week</td>
+                   <td>
+                     <select name="[U_PARENT_GROUPS]DAY_OF_WEEK">
+                       <<option value="Monday">Mondays</option>
+                       <<option value="Tuesday">Tuesdays</option>
+                       <<option value="Wednesday">Wednesdays</option>
+                       <<option value="Thursday">Thursdays</option>
+                       <<option value="Friday">Fridays</option>
+                       <<option value="Saturday">Saturdays</option>
+                     </select>
+                   </td>
+               </tr>
+
+               <tr>
+                 <td class="bold">Weekly Meeting Time</td>
+                 <td>
+                   <input type="text" name="[U_PARENT_GROUPS]MEETING_TIME" value="" size="20" class="timeEntry" />
+                 </td>
+
+               </tr>
+
+               <tr>
+                 <td class="bold">
+                   Facilitators (Primary, Secondary)
+                 </td>
+                 <td>
+                   <input type="text" name="[U_PARENT_GROUPS]FACILITATOR" value="" size="20" />,
+                   <input type="text" name="[U_PARENT_GROUPS]FACILITATOR2" value="" size="20" />
+                 </td>
+               </tr>
+
+               <tr>
+                   <td class="bold">Language</td>
+                   <td>
+                     <select name="[U_PARENT_GROUPS]GROUP_LANGUAGE">
+                       <<option value="English">English</option>
+                       <<option value="Spanish">Spanish</option>
+                     </select>
+                   </td>
+               </tr>
+               <tr>
+                   <td class="bold">Location</td>
+                   <td>
+                      <input type="text" name="[U_PARENT_GROUPS]LOCATION" value="" size="20" />
+                   </td>
+               </tr>
+               <tr>
+                 <td class="bold">School Year</td>
+                 <td>
+                 <select name="[U_PARENT_GROUPS]YEARID">
+                   <<option value=27>2017-2018</option>
+                 </select>
+                </td>
+               </tr>
+
+
+             </table>
+
+            </fieldset>
+            <div class="button-row" id="row1">
+              <input type="hidden" name="ac" value="prim">
+               <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
+            </div>
+      </form>
+      <div class="button-row" id="row2">
+      <form id="delete_button" action="parent_groups.html?deleted=true" method="POST">
+      <input type="hidden" name="ac" value="prim" />
+      <input type="hidden" name="DD-U_PARENT_GROUPS.ID:~(gpv.id)" value="1" />
+      <button class="btnConfirmProxy" id="btnDelete">Delete</button>
+      </form>
+      </div>
+      </div>
+      ~[wc:admin_footer_frame_css]
+   </body>
+</html>
+<!-- end right frame -->
