@@ -28,6 +28,48 @@
 					});
 					angular.bootstrap(document, ['myModule']);
 				});
+			function session_function(input) {
+
+						$j(".parent_session").val(input);
+
+					}
+
+			function main_session_type(input) {
+
+				$j('#sub_type_selector').empty();
+
+				$j.ajax({
+					type: 'post', //post = 'save' the data to dB
+					url: 'session_ajax_helper.html?session_type_id=' + input,
+					success: function (data) {
+							console.log("success");
+							$j('#sub_type_selector').append(data);
+						}
+						});
+			}
+
+			function sub_type_selector_function(input){
+
+				$j('#session_selector').empty();
+
+				$j.ajax({
+					type: 'post', //post = 'save' the data to dB
+					url: 'final_session_selector.html?sub_type_id=' + input +'&main_type_id=' + $j("#session_type_selector option:selected").val(),
+					success: function (data) {
+							console.log("success");
+							$j('#session_selector').append(data);
+						}
+						});
+			}
+
+
+
+
+
+
+
+
+
 	</script>
 </head>
 <body onload="addList(session_selector,sessions)">
@@ -82,22 +124,31 @@
  		 <fieldset>
  				<legend>Attendance Set</legend>
 		 <tr>
+
 		     <td class="bold">Session Type</td>
 		     <td>
-		       <select id="session_type_selector">
-		         <option>
+		       <select id="session_type_selector" onchange="main_session_type(this.value)">
+						 <option></option>
+ 							~[tlist_sql;
+							SELECT  PST.ID, PST.NAME
+	 						FROM PS.U_PARENT_SESSION_TYPES PST
+							WHERE PST.SESSION_TYPE = 1 ]
+ 						<option value=~(ID)>~(NAME)</option>
+ 						[/tlist_sql]
 		       </select>
+
          </td>
 
 				 <td class="bold">Sub-Type</td>
 		     <td>
-		       <select id="sub_type_selector">
-		         <option>
+		       <select id="sub_type_selector" onchange="sub_type_selector_function(this.value)">
+						 <option></option>
 		       </select>
          </td>
+
 				 <td class="bold">Session</td>
 				 <td>
-		       <select id="session_selector" name="[U_PARENT_ATTENDANCE]SESSION_ID">
+		       <select id="session_selector" name="[U_PARENT_ATTENDANCE]SESSION_ID" onchange="session_function(this.value)">
 		         <option></option>
 							 ~[tlist_sql;
 							 SELECT  PS.ID, PS.NAME
@@ -127,47 +178,55 @@
 					<th class="bold">Comments</th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr data-ng-repeat="item in myData" >
-				<form action="group_rosters_landing.html?saved=true" method="POST" id="form{{ item.ID }}">
-					~[DirectTable.Select:U_PARENT_ATTENDANCE;ID:-1]
-					<td>{{ item.PARENT_NAME }}</td>
-					<td>{{ item.STUDENTS }}</td>
-					<td><input type="text" name="[U_PARENT_ATTENDANCE]PARENT_ID" value="{{ item.ID }}" size="5" maxlength="40"></td>
+			</table>
+
+
+
+	<div  data-ng-repeat="item in myData">
+	<form action="group_rosters_landing.html?saved=true" method="POST" id="form{{ item.ID }}">
+
+	<table>
+		<tbody>
+				<tr>
+					<td width="12%">{{ item.PARENT_NAME }}</td>
+					<td width="12%">{{ item.STUDENTS }}</td>
+					<td><input type="text" name="[U_PARENT_ATTENDANCE]PARENT_ID" value="{{ item.ID }}" size="5" maxlength="40" readonly></td>
 					<td>
-						<select name="[U_PARENT_ATTENDANCE]ATTENDANCE_STRING" value="">
-							<option>
-							<option value=1>Present
-							<option value=0>Absent
- 		       </select>
+						<input id="parent_session{{ item.ID }}" class="parent_session" type="hidden" name="[U_PARENT_ATTENDANCE]SESSION_ID" value="">
 					</td>
 					<td>
+
+						<select name="[U_PARENT_ATTENDANCE]ATTENDANCE_STRING" value="">
+							<option>
+							<option value="Present">Present
+							<option value="Absent">Absent
+ 		       </select>
+					</td>
+
+					<td>
+
 						<select name="[U_PARENT_ATTENDANCE]REASON_STRING" value="">
 							<option>
-							<option value=0>Unknown
-							<option value=1>Forgot
-						 	<option value=2>Advanced Notice
-							<option value=3>Health Issue
-							<option value=4>Logistical Difficulty
-							<option value=5>Family Emergency
-							<option value=6>Other
+							<option value="0">Unknown
+							<option value="1">Forgot
+						 	<option value="2">Advanced Notice
+							<option value="3">Health Issue
+							<option value="4">Logistical Difficulty
+							<option value="5">Family Emergency
+							<option value="6">Other
 					</td>
 					<td>
 						<textarea name="[U_PARENT_ATTENDANCE]OTHER_NOTES" rows="3" cols="40" maxlength="100" value=""></textarea>
+	 <input type="hidden" name="ac" value="prim">
 					</td>
-					<td>
-
-
-						 <div class="button-row" id="row1">
-						 <input type="hidden" name="ac" value="prim">
-						 <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
-					</div>
-					</td>
-				</form>
-
 			</tr>
+
 		</tbody>
 		</table>
+		</form>
+		</div>
+
+
 	</fieldset>
 		</div>
 
@@ -176,26 +235,32 @@
 	<button onclick="save_attendance()">Submit Attendance
 	</button>
 
+
 	<!-- end of content area -->
 	~[wc:admin_footer_css]
 </body>
 
 <script>
+
+
 function save_attendance(){
 
-	$j('#form60050').submit();
+		$j( ".validatedForm" ).each(function( index ) {
+				$j.ajax({
+					type: 'post', //post = 'save' the data to dB
 
-	/*
-$j.ajax({
-        			type    : 'POST',
-        			url     : 'pasi_helper.html?grade_level='+grade_level+'&flag='+flag+'&dothisfor='+dothisfor,
-        			async: true,
-        			success: function(data, x, xhrobj) {
-						$j('#pasi-content').append(data);
-                     }
-             });
-						 */
+					data: $j(this).serialize(), //gather all values from form into 'data'
+					success: function () {
+					    console.log("success");
+                                            //add in any code to execute after success
+					}
+				  });
+		});
+
+    document.location.href = "group_rosters_landing.html?saved=true";
+         alert("Records Saved");
 }
+
 </script>
 
 
