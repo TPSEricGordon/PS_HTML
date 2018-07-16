@@ -129,7 +129,7 @@
 			</thead>
 			<tbody>
 				<tr data-ng-repeat="item in myData" >
-				<form action="group_attendance.html?id=~(gpv.ID)&saved=True" method="POST" id="form{{ item.ID }}">
+				<form action="group_rosters_landing.html?saved=true" method="POST" id="form{{ item.ID }}">
 					~[DirectTable.Select:U_PARENT_ATTENDANCE;ID:-1]
 					<td>{{ item.PARENT_NAME }}</td>
 					<td>{{ item.STUDENTS }}</td>
