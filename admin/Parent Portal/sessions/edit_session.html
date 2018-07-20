@@ -109,7 +109,8 @@
                   <td><textarea name="[U_PARENT_SESSIONS]DESCRIPTION" cols="50" rows="5" maxlength="80">
                   </textarea></td>
                 </tr>
-
+                <input type="hidden" name="[U_PARENT_SESSIONS]SCHOOLID" value="" id="hiddenSchoolID"/>
+                <input type="hidden" name="[U_PARENT_SESSIONS]YEAR_ID" value="" id="hiddenYearID"/>
               </table>
 
             </fieldset>
@@ -131,5 +132,12 @@
       </div>
       ~[wc:admin_footer_frame_css]
    </body>
+   <script>
+       document.getElementById("btnSubmit").onclick = function() {
+       document.getElementById("hiddenSchoolID").value = ~(curschoolid);
+       document.getElementById("hiddenYearID").value = ~(curyearid);
+       };
+
+   </script>
 </html>
 <!-- end right frame -->

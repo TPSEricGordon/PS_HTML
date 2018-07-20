@@ -35,7 +35,9 @@
             <tbody>
                ~[tlist_sql;
                SELECT ID, NAME, DESCRIPTION, SESSION_TYPE
-               FROM PS.U_PARENT_SESSION_TYPES]
+               FROM PS.U_PARENT_SESSION_TYPES
+               WHERE (SCHOOLID=0 OR SCHOOLID=  ~(curschoolid))
+               ]
                <tr>
                   <td align="center">
                      <a href="session_types_edit.html?id=~(id)">

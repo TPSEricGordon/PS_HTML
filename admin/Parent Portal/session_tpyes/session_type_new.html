@@ -78,6 +78,7 @@
                              }
                            };
               </script>
+              <input type="hidden" name="[U_PARENT_SESSION_TYPES]SCHOOLID" value="" id="hiddenSchoolID"/>
 
 
 
@@ -93,6 +94,12 @@
       </div>
       ~[wc:admin_footer_frame_css]
    </body>
+   <script>
+       document.getElementById("btnSubmit").onclick = function() {
+       document.getElementById("hiddenSchoolID").value = ~(curschoolid);
+       };
+
+   </script>
 
 
 </html>

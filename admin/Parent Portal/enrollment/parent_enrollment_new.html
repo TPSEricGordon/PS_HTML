@@ -50,7 +50,7 @@
                          ~[tlist_sql;
                            SELECT PG.ID, PG.CODE, PG.DAY_OF_WEEK, PG.MEETING_TIME
                            FROM PS.U_PARENT_GROUPS PG
-                           WHERE YEARID = ~(curyearid)
+                           -- WHERE YEARID = ~(curyearid)
                          ;]
                              terms['~(ID)']='~(CODE) - ~(Day)\'s at ~(MEETING_TIME)' ;
                          [/tlist_sql]
@@ -64,6 +64,8 @@
                                }
                              };
                </script>
+               <input type="hidden" name="[U_PARENT_CIRCLE_ENROLLMENTS]SCHOOLID" value="" id="hiddenSchoolID"/>
+               <input type="hidden" name="[U_PARENT_CIRCLE_ENROLLMENTS]YEAR_ID" value="" id="hiddenYearID"/>
              </fieldset>
             </table>
 
@@ -81,6 +83,8 @@
     document.getElementById("btnSubmit").onclick = function() {
     document.getElementById("hiddenParentID").value = ~(gpv.id);
     document.getElementById("hiddenEnrollID").value = 1;
+    document.getElementById("hiddenSchoolID").value = ~(curschoolid);
+    document.getElementById("hiddenYearID").value = ~(curyearid);
     };
 
    </script>

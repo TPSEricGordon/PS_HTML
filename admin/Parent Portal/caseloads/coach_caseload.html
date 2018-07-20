@@ -12,7 +12,7 @@
 			var coach_id = { ID: ~(gpv.coach_id)};
 
 			require(['angular', 'components/shared/index'], function (angular) {
-				var myApp = angular.module('myModule', []);
+				var myApp = angular.module('myModule', ['powerSchoolModule']);
 
 
 				myApp.controller('caseloadController', function($scope, $http) {
@@ -51,20 +51,20 @@
 		[/tlist_sql] Caseload</h1>
 	<div class="box-round" data-ng-controller="caseloadController" data-ng-cloak>
 		<div id="myGrid" data-pss-grid-widget data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
-			<fieldset>
+
 			<table class="grid">
 			<thead>
 				<tr>
-					<th class="bold">Family ID</th>
+					<th data-pss-sort-fields="FAMILY_ID" class="bold" style="width:20px">Family ID</th>
 					<th data-pss-sort-fields="NAME" class="bold">Parent Name</th>
-					<th class="bold" >Phone Number</th>
-					<th data-pss-sort-fields="CURRENT_GROUP" class="bold">Current Group</th>
+					<th class="bold" style="width:60px">Phone Number</th>
+					<th data-pss-sort-fields="CURRENT_GROUP" class="bold" style="width:20px">Current Group</th>
 					<th class="bold">Student(s)</th>
-					<th class="bold">Cohort(s)</th>
+					<th  data-pss-sort-fields="COHORT" class="bold">Cohort(s)</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr data-ng-repeat="item in myData" >
+				<tr data-ng-repeat="item in myDataFiltered" >
 					<td>{{ item.FAMILY_ID }}</td>
 					<td><a ng-href="{{ item.LINK}}">{{ item.NAME }}</a></td>
 					<td>{{ item.PHONE }}</td>
@@ -74,7 +74,7 @@
 				</tr>
 			</tbody>
 		</table>
-	</fieldset>
+
 		</div>
 
 	</div>
