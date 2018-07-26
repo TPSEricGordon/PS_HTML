@@ -8,23 +8,22 @@
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
       <script>
-          require(['angular', 'components/shared/index'], function (angular) {
-            var myApp = angular.module('myModule', []);
+    			require(['angular', 'components/shared/index'], function (angular) {
+    				var myApp = angular.module('myModule', ['powerSchoolModule']);
 
 
-            myApp.controller('sessionController', function($scope, $http) {
+    				myApp.controller('sessionController', function($scope, $http) {
 
-                $scope.myData = [];
-                $http.get('sessionData.json')
-                .then(function(myJSON) {
-                    myJSON.data.pop();
-                    $scope.myData = myJSON.data; });
-              });
-              angular.bootstrap(document, ['myModule']);
+    						$scope.myData = [];
+    						$http.get('sessionData.json')
+    						.then(function(myJSON) {
+    								myJSON.data.pop();
+    								$scope.myData = myJSON.data; });
+    					});
+    					angular.bootstrap(document, ['myModule']);
 
-            });
-      </script>
-
+    				});
+    	</script>
    </head>
    <body>
 
@@ -40,22 +39,21 @@
       ~[if.~(gpv.new)=true]<div class="feedback-confirm">You Created a New Session</div>[/if]
       ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
       <div class="box-round" data-ng-controller="sessionController" data-ng-cloak>
-    		<div id="myGrid" data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
-    			<fieldset>
-    			<legend>Sessions</legend>
+    		<div id="myGrid" data-pss-grid-widget data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
     			<table class="grid">
+            <legend>Sessions</legend>
     			<thead>
     				<tr>
     					<th class="bold" style="width:20px">Edit</th>
-    					<th class="bold" data-pss-sort-fields="date">Date </th>
-    					<th class="bold" data-pss-sort-fields="name">Name</th>
-    					<th class="bold" data-pss-sort-fields="type">Type</th>
-    					<th class="bold" data-pss-sort-fields="subtype">Subtype</th>
-              <th class="bold" data-pss-sort-fields="cohort">Cohort</th>
+    					<th class="bold" >Date </th>
+    					<th class="bold" >Name</th>
+    					<th class="bold" >Type</th>
+    					<th class="bold" >Subtype</th>
+              <th class="bold" >Cohort</th>
     				</tr>
     			</thead>
     			<tbody>
-    				<tr data-ng-repeat="item in myData" >
+    				<tr data-ng-repeat="item in myDataFiltered" >
     					<td><a ng-href="{{ item.SESSION_LINK }}"><img src="/images/btn_edit.gif" width="16" height="16" border="0"></a></td>
     					<td>{{ item.DATE }}</td>
     					<td>{{ item.NAME }}</td>

@@ -41,11 +41,11 @@
                SELECT
                ID, CODE, DAY_OF_WEEK, MEETING_TIME ,FACILITATOR, FACILITATOR2, GROUP_LANGUAGE, LOCATION
                FROM PS.U_PARENT_GROUPS PG
-               --WHERE YEARID=~(curyearid)
+
                ORDER BY CODE]
                <tr>
                   <td align="center">
-                     <a href="parent_groups_edit.html?id=~(id)">
+                     <a href="/admin/parent_coaches/parent_groups/parent_groups_edit.html?id=~(id)">
                      <img src="/images/btn_edit.gif" width="16" height="16" border="0">
                      </a>
                   </td>

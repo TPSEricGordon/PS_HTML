@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html>
 <!-- start right frame -->
+
 <head>
     <title>~[text:psx.html.admin_students.generaldemographics.general_demographics]</title>
-    ~[wc:UI_js_includes]
-    ~[wc:commonscripts]
+    ~[wc:UI_js_includes] ~[wc:commonscripts]
     <link href="/images/css/screen.css" rel="stylesheet" media="screen">
 <link href="/images/css/print.css" rel="stylesheet" media="print">
     <link rel="stylesheet" type="text/css" href="/images/boxing.css">
 
     <script language="JavaScript" src="/admin/javascript/student_copyAddress.js"></script>
 		<style>
-			.clickable { cursor:pointer; }
+        .clickable {
+            cursor: pointer;
+        }
 		</style>
 
 <script type="text/javascript">
     var selectedAdapter = "~[displaypref:mappingadapter.selected]";
     var mapKey = "~[x:selectedvalidationmappingadapterkey]";
+        var validateSucceeded = false;
 
     function load(){
 		prepPage();
@@ -26,27 +29,38 @@
 			defaultEthnicity.value = "-1";
 		}
     }
-</script>
-
-~[x:renderboundaryobject]
-
-~[get_js_texts:psx.js.admin_validation.validationCommon.]
+        // Only let jQuery call validateInput once if it succeeds
+        // Multiple calls that return success(true) result in the unit number field being appended to the street address multiple times
+        function validateInputOnceOnly(){
+            if(!validateSucceeded){
+                validateSucceeded = validateInput();
+            }
+            return validateSucceeded;
+        }
+    </script> ~[x:renderboundaryobject] ~[get_js_texts:psx.js.admin_validation.validationCommon.]
 <script language="JavaScript" src="/admin/validation/validationCommon.js"></script>
+    <script language="JavaScript" src="/scripts/contact.js"></script>
 </head>
-<body>
 
-<form action="/admin/changesrecorded.white.html" method="POST" onSubmit="return validateInput()">
-~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">~[text:psx.html.admin_students.generaldemographics.start_page]</a> &gt; <a
-        href="home.html?selectstudent=nosearch" target="_top">~[text:psx.html.admin_students.generaldemographics.student_selection]</a> &gt;~[text:psx.html.admin_students.generaldemographics.general_demographics1]<!-- breadcrumb end -->~[wc:admin_navigation_frame_css]
+<body onload="load()">
 
-~[wc:title_student_begin_css]~[text:psx.html.admin_students.generaldemographics.general_demographics2]~[wc:title_student_end_css]
+    <form action="/admin/changesrecorded.white.html" method="POST" onSubmit="return validateInputOnceOnly()">
+        ~[wc:admin_header_frame_css]
+        <!-- breadcrumb start -->
+        <a href="/admin/home.html" target="_top">~[text:psx.html.admin_students.generaldemographics.start_page]</a> &gt;
+        <a href="home.html?selectstudent=nosearch"
+            target="_top">~[text:psx.html.admin_students.generaldemographics.student_selection]</a> &gt;~[text:psx.html.admin_students.generaldemographics.general_demographics1]
+        <!-- breadcrumb end -->~[wc:admin_navigation_frame_css] ~[wc:title_student_begin_css]~[text:psx.html.admin_students.generaldemographics.general_demographics2]~[wc:title_student_end_css]
 
 
 <!-- Start of shaded content table and bounding box -->
 <div class="box-round">
 
 <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
-<colgroup><col style="width:20%"><col></colgroup>
+                <colgroup>
+                    <col style="width:20%">
+                    <col>
+                </colgroup>
 
 <tr>
     <td class="bold">~[text:psx.html.admin_students.generaldemographics.name]&nbsp;~[text:psx.html.admin_students.generaldemographics.last_first_mi]</td>
@@ -55,279 +69,6 @@
         <input type="text" name="[01]first_name" value="" size="25" maxlength="50" id="firstName">
         <input type="text" name="[01]middle_name" value="" size="15" maxlength="30" id="middleName">
     </td>
-</tr>
-<tr>
-  <td class="bold">Nickname
-
-  </td>
-<td>
-  <input type="text" name="[Students.U_Students_Extension]Nickname" value="" size="25" >
-</td>
-
-</tr>
-<tr>
-    <td class="bold">~[text:psx.html.admin_students.generaldemographics.student_number]</td>
-    <td>~(student_number)</td>
-</tr>
-
-
-<tr>
-    <td class="bold">~[text:psx.html.admin_students.generaldemographics.age]</td>
-    <td id="studentAge">~(age)</td>
-</tr>
-<tr>
-    <td class="bold">~[text:psx.html.admin_students.generaldemographics.dob]</td>
-    <td><input type="text" id="fieldDOB" name="[01]dob" value="" size="11"></td>
-</tr>
-
-    <td class="bold">~[text:psx.html.admin_students.generaldemographics.gender]</td>
-    <td><select id="selectGender" name="[01]gender">
-        <option value="">
-        <option value="M">~[text:psx.html.admin_students.generaldemographics.male]
-        <option value="F">~[text:psx.html.admin_students.generaldemographics.female]</select>
-    </td>
-</tr>
-
-<tr>
-    <td class="bold">~[text:psx.html.admin_students.generaldemographics.grade_level]</td>
-    <td>~(grade_level)</td>
-</tr>
-
-
-<tr>
-  <td class="bold">Family ID</td>
-  <td><input type="text" id="fieldStuNum" name="[01]Family_Ident" value="" size="13"></td>
-</tr>
-<tr>
-<td class="bold">Parent Coach</td>
-<td>
-<select name="[Students.U_Students_Extension]PARENT_COACH_EMAIL">
-  <<option value=""></option>
-  <<option value="shawneece@theprimaryschool.org">Shawneece</option>
-  <<option value="valentina@theprimaryschool.org">Valentina</option>
-  <<option value="cristina@theprimaryschool.org">Cristina</option>
-  <<option value="stephanie@theprimaryschool.org">Stephanie</option>
-  <<option value="marla@theprimaryschool.org">Marla</option>
-  <<option value="yadira@theprimaryschool.org">Yadira</option>
-  <<option value="jessica@theprimaryschool.org">Jessica</option>
-  <<option value="joyce.latufahamokioa@theprimaryschool.org">Joyce</option>
-  <<option value="veronica.sierra@theprimaryschool.org">Veronica</option>
-</select>
-</td>
-</tr>
-
-<tr>
-  <td class="bold">CC Teacher Email</td>
-  <td><input type="text" id="fieldStuNum" name="[Students.U_Students_Extension]CC_TEACHER_EMAIL" value="" size="33"></td>
-</tr>
-
-
-
-
-<tr class="headerrow">
-    <td colspan="2" class="bold">Emergency Contacts</td>
-</tr>
-
-<tr colspan="2">
-   <td class="bold" >~[text:psx.html.admin_students.emergency.contact_]</td>
-   <td>Contact Name<br>
-        <input type="text" name="[01]Emerg_Contact_1" value="" size="25"><br />
-        ~[text:psx.html.admin_students.emergency.relationship]<br>
-        <select name="[01]Emerg_1_Rel">
-           <option>
-           <option value="Aunt">~[text:psx.html.admin_students.emergency.aunt]
-           <option value="Brother">~[text:psx.html.admin_students.emergency.brother]
-           <option value="Father">~[text:psx.html.admin_students.emergency.father]
-           <option value="Friend">~[text:psx.html.admin_students.emergency.friend]
-           <option value="Grandfather">~[text:psx.html.admin_students.emergency.grandfather]
-           <option value="Grandmother">~[text:psx.html.admin_students.emergency.grandmother]
-           <option value="Mother">~[text:psx.html.admin_students.emergency.mother]
-           <option value="Neighbor">~[text:psx.html.admin_students.emergency.neighbor]
-           <option value="Other">~[text:psx.html.admin_students.emergency.other]
-           <option value="Family Friend">Family Friend
-           <option value="Sister">~[text:psx.html.admin_students.emergency.sister]
-           <option value="Uncle">~[text:psx.html.admin_students.emergency.uncle]
-        </select>
-   <br />~[text:psx.html.admin_students.emergency.phone]<br>
-     <input type="text" name="[01]Emerg_Phone_1" value="" size="15"><br />
-   </td>
-</tr>
-
-
-<tr colspan="2">
-   <td class="bold" >~[text:psx.html.admin_students.emergency.contact_1]</td>
-   <td>Contact Name<br>
-     <input type="text" name="[01]Emerg_Contact_2" value="" size="25"><br />
-     ~[text:psx.html.admin_students.emergency.relationship1]<br>
-      <select name="[01]Emerg_2_Rel">
-         <option>
-         <option value="Aunt">~[text:psx.html.admin_students.emergency.aunt1]
-         <option value="Brother">~[text:psx.html.admin_students.emergency.brother1]
-         <option value="Father">~[text:psx.html.admin_students.emergency.father1]
-         <option value="Friend">~[text:psx.html.admin_students.emergency.friend1]
-         <option value="Grandfather">~[text:psx.html.admin_students.emergency.grandfather1]
-         <option value="Grandmother">~[text:psx.html.admin_students.emergency.grandmother1]
-         <option value="Mother">~[text:psx.html.admin_students.emergency.mother1]
-         <option value="Neighbor">~[text:psx.html.admin_students.emergency.neighbor1]
-         <option value="Other">~[text:psx.html.admin_students.emergency.other1]
-         <option value="Family Friend">Family Friend
-         <option value="Sister">~[text:psx.html.admin_students.emergency.sister1]
-         <option value="Uncle">~[text:psx.html.admin_students.emergency.uncle1]
-      </select><br />
-   ~[text:psx.html.admin_students.emergency.phone1]<br>
-     <input type="text" name="[01]Emerg_Phone_2" value="" size="15"><br />
-   </td>
-</tr>
-
-<tr colspan="2">
-   <td class="bold" >~[text:psx.html.admin_students.emergency.contact_2]</td>
-   <td>Contact Name<br>
-     <input type="text" name="[01]emerg_contact_3" value="" size="25"><br />
-     ~[text:psx.html.admin_students.emergency.relationship2]<br>
-      <select name="[01]emerg_3_rel">
-         <option>
-         <option value="Aunt">~[text:psx.html.admin_students.emergency.aunt2]
-         <option value="Brother">~[text:psx.html.admin_students.emergency.brother2]
-         <option value="Father">~[text:psx.html.admin_students.emergency.father2]
-         <option value="Friend">~[text:psx.html.admin_students.emergency.friend2]
-         <option value="Grandfather">~[text:psx.html.admin_students.emergency.grandfather2]
-         <option value="Grandmother">~[text:psx.html.admin_students.emergency.grandmother2]
-         <option value="Mother">~[text:psx.html.admin_students.emergency.mother2]
-         <option value="Neighbor">~[text:psx.html.admin_students.emergency.neighbor2]
-         <option value="Other">~[text:psx.html.admin_students.emergency.other2]
-         <option value="Family Friend">Family Friend
-         <option value="Sister">~[text:psx.html.admin_students.emergency.sister2]
-         <option value="Uncle">~[text:psx.html.admin_students.emergency.uncle2]
-      </select>
-   <br />~[text:psx.html.admin_students.emergency.phone2]<br>
-     <input type="text" name="[01]emerg_3_phone" value="" size="15"><br />
-   </td>
-</tr>
-
-<tr class="headerrow">
-    <td colspan="2" class="bold">More Info</td>
-</tr>
-<!-- Ethnicity Radio Buttons -->
-<tr>
-     <td class="bold">Ethnicity</td>
-     <td>
-     <input type="radio" name="[Students.U_Students_Extension]tps_ethnicity" value="Hispanic/Latino">Hispanic/Latino
-     <input type="radio" name="[Students.U_Students_Extension]tps_ethnicity" value="">Not Hispanic/Latino
-     </td>
-</tr>
-
-<tr>
-  <td class="bold">Race</td>
-  <td><input type="text" id="fieldStuNum" name="[Students.U_Students_Extension]tps_race" value="" size="13"></td>
-</tr>
-
-<tr>
-  <td class="bold">CC Teacher</td>
-  <td><input type="text" id="fieldStuNum" name="[Students.U_Students_Extension]CC_TEACHER" value="" size="13"></td>
-</tr>
-
-
-
-<tr>
-     <td class="bold">Parental Status</td>
-     <td>
-     <input type="radio" name="[Students.U_Students_Extension]PARENTAL_STATUS" value="Two Parents living together">Two Parents living together<br />
-     <input type="radio" name="[Students.U_Students_Extension]PARENTAL_STATUS" value="Joint Custody, parent not living together">Joint Custody, parent not living together<br />
-     <input type="radio" name="[Students.U_Students_Extension]PARENTAL_STATUS" value="Single Parent">Single Parent<br />
-     <input type="radio" name="[Students.U_Students_Extension]PARENTAL_STATUS" value="Foster Parent">Foster Parent<br />
-     <input type="radio" name="[Students.U_Students_Extension]PARENTAL_STATUS" value="Primary Caregiver is not parent">Primary Caregiver is not parent<br />
-     <input type="radio" name="[Students.U_Students_Extension]PARENTAL_STATUS" value="Other">Other<br />
-     <input type="radio" name="[Students.U_Students_Extension]PARENTAL_STATUS" value="">Unknown
-     </td>
-</tr>
-
-<tr>
-  <td class="bold">Source of Refferal
-  <td><input type="text" id="fieldStuNum" name="[Students.U_Students_Extension]REFERRAL_SOURCE" value="" size="13"></td>
-</tr>
-
-<tr>
-<td class="bold">How Can TPS Support You and Your Child?  </td>
-<td>
-<textarea name="[Students.U_Students_Extension]TPS_SUPPORT" cols="50" rows="5">
-</textarea>
-</td>
-</tr>
-
-<tr>
-  <td class="bold">Welcome Ambassador
-  <td><input type="text" id="fieldStuNum" name="[Students.U_Students_Extension]WELCOME_AMBASSADOR" value="" size="13"></td>
-</tr>
-
-<tr>
-  <td class="bold">Who is Responsible for Parenting of Child?
-  <td><input type="text" id="fieldStuNum" name="[Students.U_Students_Extension]PARENTINGRESPONSIBILITY" value="" size="33"></td>
-</tr>
-
-<tr>
-<td class="bold">Ambassador Summary</td>
-<td>
-<textarea name="[Students.U_Students_Extension]AMBASSADOR_SUMMARY" cols="50" rows="5">
-</textarea>
-</td>
-</tr>
-
-<tr>
-     <td class="bold">Previous Childcare Status</td>
-     <td>
-     <input type="radio" name="[Students.U_Students_Extension]PREVIOUSCHILDCARESTATUS" value="My child is attending a Preschool Program">My child is attending a Preschool Program<br />
-     <input type="radio" name="[Students.U_Students_Extension]PREVIOUSCHILDCARESTATUS" value="My child is taken care of by licensed child care provider">My child is taken care of by licensed child care provider<br />
-     <input type="radio" name="[Students.U_Students_Extension]PREVIOUSCHILDCARESTATUS" value="My child is taken care of by a parent">My child is taken care of by a parent<br />
-     <input type="radio" name="[Students.U_Students_Extension]PREVIOUSCHILDCARESTATUS" value="My child is taken care of by a friend or family member">My child is taken care of by a friend or family member<br />
-     </td>
-</tr>
-
-<tr>
-     <td class="bold">Cohort</td>
-     <td>
-     <input type="radio" name="[Students.U_Students_Extension]COHORT" value="A">A
-     <input type="radio" name="[Students.U_Students_Extension]COHORT" value="B">B
-     <input type="radio" name="[Students.U_Students_Extension]COHORT" value="C">C
-     <input type="radio" name="[Students.U_Students_Extension]COHORT" value="D">D
-     <input type="radio" name="[Students.U_Students_Extension]COHORT" value="E">E
-     </td>
-</tr>
-
-<tr>
-  <td class="bold">Previous Pre-School
-  <td><input type="text" id="fieldStuNum" name="[Students.U_Students_Extension]PREVIOUSPRESCHOOL" value="" size="15"></td>
-</tr>
-
-<tr>
-     <td class="bold">Previous Pre-School, Full Time or Part Time</td>
-     <td>
-     <input type="radio" name="[Students.U_Students_Extension]PREVIOUSPRESCHOOL_FULL_PART" value="Part Time">Part Time<br />
-     <input type="radio" name="[Students.U_Students_Extension]PREVIOUSPRESCHOOL_FULL_PART" value="Full Time">Full Time<br />
-     <input type="radio" name="[Students.U_Students_Extension]PREVIOUSPRESCHOOL_FULL_PART" value="">N/A
-     </td>
-</tr>
-
-<tr>
-  <td class="bold">Other Programs Utilized
-  <td><input type="text" id="fieldStuNum" name="[Students.U_Students_Extension]OTHER_PROGRAMS" value="" size="75"></td>
-</tr>
-
-
-<!-- SE.PRE3, SE.NURSE_FAMILY_PARTNERSHIP, SE.ECUMENICAL_HUNGER_PROJECT, SE.BLACK_INFANT_HEALTH, SE.BABY_BASICS, SE.GGRC   -->
-
-
-
-<!-- NEED TO LABEL BETTER AND FIGURE OUT IF THIS IS THE BEST WAY -->
-<tr>
-     <td class="bold">Programs Utilized
-       <td>
-     <input type="checkbox" name="[Students.U_Students_Extension]PRE3" value="Yes">Pre-3<br />
-     <input type="checkbox" name="[Students.U_Students_Extension]NURSE_FAMILY_PARTNERSHIP" value="Yes">Nurse Family Partnership<br />
-     <input type="checkbox" name="[Students.U_Students_Extension]ECUMENICAL_HUNGER_PROJECT" value="Yes">Ecumenical Hunger Project<br />
-     <input type="checkbox" name="[Students.U_Students_Extension]BLACK_INFANT_HEALTH" value="Yes">Black Infant Health<br />
-     <input type="checkbox" name="[Students.U_Students_Extension]BABY_BASICS" value="Yes">Baby Basics<br />
-     <input type="checkbox" name="[Students.U_Students_Extension]GGRC" value="Yes">Golden Gate Regional Center
-     </td>
 </tr>
 
 <tr class="headerrow">
@@ -344,7 +85,7 @@
     <td class="subhead">~[text:psx.html.admin_students.generaldemographics.city_state_zip]</td>
     <td>
         <input type="text" name="[01]city" value="" size="30" id="pcity">
-        <input type="text" name="[01]state" value="" size="2" id="pstate">
+                        <select name="[01]state" id="pstate">~[x:codesetoptions;codetype=State;includeblank;value=~([01]state)]</select>
         <input type="text" name="[01]zip" value="" size="10" id="pzip">
 
         <input type="hidden" name="orig_street" value="~([01]street)" id="orig_pstreet">
@@ -355,45 +96,273 @@
 
 </tr>
 
+<tr>
+    <td class="subhead">~[text:psx.html.admin_students.generaldemographics.geocode]</td>
+    <td>
+        <input type="hidden" name="[01]geocode" value="" id="pgeocode" size="50"/>
+                        <div id="pgeocodehtml"></div>
+                        <div id="boundaryIconDiv"></div>
+    </td>
+</tr>
+                ~[if.~[displaypref:mappingadapter.selected]=""] [else] ~[if#geocodeif1.security.canModifyField=students.geocode]
+<tr>
+    <td> </td>
+    <td>
+        <input type="button" id="validatePrimaryAddress" value="~[text:psx.html.admin_students.generaldemographics.validate]" onclick="validatePrimaryAddress()">
+    </td>
+</tr>
+                [/if#geocodeif1] [/if]
+
 <tr class="headerrow">
-    <td colspan="2" class="bold">TEMP Parent Connector</td>
+                    <td colspan="2" class="bold">~[text:psx.html.admin_students.generaldemographics.mailing_address_]
+                        <a href="javascript:void(copyAddress())"
+                            onClick="copyAddress(); displayGeocode('m');">~[text:psx.html.admin_students.generaldemographics.copy_from_home_address]</a>
+                    </td>
 </tr>
 
 <tr>
-  <td class="bold">Parent ID 1
-
-  </td>
-<td>
-  <input type="text" name="[Students.U_Students_Extension]TEMP_PARENT1_ID" value="" size="25" >
-</td>
+    <td class="subhead">~[text:psx.html.admin_students.generaldemographics.street_aptsuite1]</td>
+    <td>
+        <input type="text" name="[01]mailing_street" value="" size="45" id="mstreet">
+        <input type="text" name="" value="" size="10" id="mapt">
+    </td>
 </tr>
 <tr>
+    <td class="subhead">~[text:psx.html.admin_students.generaldemographics.city_state_zip1]</td>
+    <td>
+        <input type="text" name="[01]mailing_city" value="" size="30" id="mcity">
+                        <select name="[01]mailing_state" id="mstate">~[x:codesetoptions;codetype=State;includeblank;value=~([01]mailing_state)]</select>
+        <input type="text" name="[01]mailing_zip" value="" size="10" id="mzip">
 
-  <td class="bold">Parent ID 2
-
-  </td>
-  <td>
-    <input type="text" name="[Students.U_Students_Extension]TEMP_PARENT2_ID" value="" size="25" >
-</td>
-
-
+        <input type="hidden" name="orig_mailingstreet" value="~([01]mailing_street)" id="orig_mstreet">
+        <input type="hidden" name="orig_mailingcity" value="~([01]mailing_city)" id="orig_mcity">
+        <input type="hidden" name="orig_mailingstate" value="~([01]mailing_state)" id="orig_mstate">
+        <input type="hidden" name="orig_mailingzip" value="~([01]mailing_zip)" id="orig_mzip">
+    </td>
 </tr>
 
+<tr>
+    <td class="subhead">~[text:psx.html.admin_students.generaldemographics.geocode1]</td>
+    <td>
+        <input type="hidden" name="[01]mailing_geocode" value="" id="mgeocode" size="50"/>
+        <div id="mgeocodehtml"></div>
+    </td>
+</tr>
+                ~[if.~[displaypref:mappingadapter.selected]=""] [else] ~[if#geocodeif2.security.canModifyField=students.mailing_geocode]
+<tr>
+    <td></td>
+    <td>
+        <input type="button" id="validateMailingAddress" value="~[text:psx.html.admin_students.generaldemographics.validate1]" onclick="validateMailingAddress()">
+    </td>
+</tr>
+                [/if#geocodeif2] [/if]
+
+
+
+
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.home_phone]</td>
+                    <td>
+                        <input type="text" id="fieldHomePhone" name="[01]home_phone" value="" size="17">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.age]</td>
+    <td id="studentAge">~(age)</td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.aggregate_days_of_membership,param:(YTD)]</td>
+    <td>~(aggmemdaysytd)</td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.areaneighborhood]</td>
+                    <td>
+                        <input type="text" id="fieldArea" name="[01]area" value="" size="27">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.dob]</td>
+                    <td>
+                        <input type="text" id="fieldDOB" name="[01]dob" value="" size="11" data-auto-calculate-min-max=80>
+                    </td>
+</tr>
+<tr class="headerrow">
+    <td colspan="2" class="bold">~[text:psx.html.admin_students.generaldemographics.federal_ethnicity_and_race]</td>
+</tr>
+<tr>
+	<td class="subhead">~[text:psx.html.admin_students.generaldemographics.ethnicity]</td>
+	<td>
+		<div>
+			<label>~[text:psx.html.admin_students.generaldemographics.is_the_student_hispanic_or_latino]</label>
+                            <input id="defaultEthnicity" type="hidden" name="[01]FedEthnicity" value="-1">~[Comment:Note that the onload javascript will revert this back to -1 after it's been changed
+                            to whatever is currently in the DB.]
+                            <div class="choicefloat">
+                                <input type="radio" id="radioFedEthYes" name="[01]FedEthnicity" value="1">~[text:psx.html.admin_students.generaldemographics.yes]</div>
+                            <div class="choicefloat">
+                                <input type="radio" id="radioFedEthNo" name="[01]FedEthnicity" value="0">~[text:psx.html.admin_students.generaldemographics.no]</div>
+                            ~[if.pref.FRE_AllowDeclineEthnicity=1]
+                            <div class="choicefloat">
+                                <span class="declined">
+                                    <input type="radio" id="radioFedEthDecline" name="[01]FedEthnicity" value="2">~[pref:FRE_DeclineEthnicityText]</span>
+                            </div>[/if]
+                            <div class=clearit>
+                                <!-- -->
+                            </div>
+		</div>
+	</td>
+</tr>
+<tr>
+	<td class="subhead">~[text:psx.html.admin_students.generaldemographics.race]</td>
+	<td>
+		<input type="hidden" id="hiddenFieldSaveRace" name="SaveRace" value="1">
+                        <input type="hidden" id="r_none_storage" name="[01]FedRaceDecline" value="0">
+                        <!-- See 'decline_race' function in raceselection_block.ftl -->
+~[brij_renderform:federalrace;:GetStudentRaceSelectionBlock]
+	</td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.schedulingreporting_ethnicity]</td>
+    <td>
+			<select id="primaryethnicity" name="[01]ethnicity" special="lists.ethnicity">
+	        <option>
+	    </select>
+	</td>
+</tr>
+<tr>
+                    <td class="bold" id="father">~[text:psx.html.admin_students.generaldemographics.father,param:(last, first)]</td>
+                    <td>
+                        <input type="text" id="current_father" name="[01]father" value="" size="25" onInput="contactFunctions.checkNameChange('father', '~(frn)');">
+                        <div id="contact_change_father" class="hide">~[text:psx.html.admin_students.generaldemographics.reason_for_name_change]
+                            <br>
+                            <select name="UPDATE_FOR_FATHER" id="contact_change_reason_father" onChange="contactFunctions.handleReasonChange('contact_change_reason_father', ['fieldFatherDayPhone', 'fieldFatherEmployer', 'fieldFatherHomePhone'])">
+                                <option value="1">~[text:psx.html.admin_students.generaldemographics.correcting_name]</option>
+                                <option value="0">~[text:psx.html.admin_students.generaldemographics.replacing_person]</option>
+                            </select>
+                        </div>
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.fathers_day_phone]</td>
+                    <td>
+                        <input type="text" id="fieldFatherDayPhone" name="[01]fatherdayphone" value="" size="13">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.fathers_employer]</td>
+                    <td>
+                        <input type="text" id="fieldFatherEmployer" name="[01]Father_Employer" value="" size="25">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.fathers_home_phone]</td>
+                    <td>
+                        <input type="text" id="fieldFatherHomePhone" name="[01]Father_home_phone" value="" size="13">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.gender]</td>
+                    <td>
+                        <select name="[01]gender" id="selectGender">~[x:codesetoptions;codetype=Gender;includeblank;value=~([01]gender)]</select>
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.grade_level]</td>
+    <td>~(grade_level)</td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.graduation_year]</td>
+                    <td>
+                        <input type="text" id="fieldGradYear" name="[01]graduation_year" value="" size="5">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.guardianship]</td>
+                    <td>
+                        <input type="text" id="fieldGuardianship" name="[01]guardianship" value="" size="13">
+                    </td>
+</tr>
+<tr>
+                    <td class="bold">
+                        <a href="mailto:~(guardianemail)">~[text:psx.html.admin_students.generaldemographics.guardian_email]</a>
+                    </td>
+                    <td>
+                        <input type="text" id="fieldGuardianEmail" name="[01]guardianemail" value="" size="30">
+                    </td>
+</tr>
+
+<tr>
+                    <td class="bold" id="mother">~[text:psx.html.admin_students.generaldemographics.mother,param:(last, first)]</td>
+                    <td>
+                        <input type="text" id="current_mother" name="[01]mother" value="" size="25" onInput="contactFunctions.checkNameChange('mother', '~(frn)');">
+                        <div id="contact_change_mother" class="hide">~[text:psx.html.admin_students.generaldemographics.reason_for_name_change]
+                            <br>
+                            <select name="UPDATE_FOR_MOTHER" id="contact_change_reason_mother" onChange="contactFunctions.handleReasonChange('contact_change_reason_mother', ['fieldMotherDayPhone', 'fieldMotherEmployer', 'fieldMotherHomePhone'])">
+                                <option value="1">~[text:psx.html.admin_students.generaldemographics.correcting_name]</option>
+                                <option value="0">~[text:psx.html.admin_students.generaldemographics.replacing_person]</option>
+                            </select>
+                        </div>
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.mothers_day_phone]</td>
+                    <td>
+                        <input type="text" id="fieldMotherDayPhone" name="[01]motherdayphone" value="" size="13">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.mothers_employer]</td>
+                    <td>
+                        <input type="text" id="fieldMotherEmployer" name="[01]Mother_Employer" value="" size="25">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.mothers_home_phone]</td>
+                    <td>
+                        <input type="text" id="fieldMotherHomePhone" name="[01]Mother_home_phone" value="" size="13">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.previous_student_id]</td>
+                    <td>
+                        <input type="text" id="fieldPrevStuId" name="[01]prevstudentid" value="" size=10>
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.ssn]</td>
+                    <td>
+                        <input type="text" id="fieldSSN" name="[01]ssn" value="" size="13" autocomplete="off">
+                    </td>
+</tr>
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.student_number]</td>
+                    <td>
+                        <input type="text" id="fieldStuNum" name="[01]student_number" value="" size="13">
+                    </td>
+</tr>
+<!-- Start insert state specific section information -->
+~[x:insertfile;state/demographics~[displaypref:districtstate].html]
+<!-- End insert state specific section information -->
 </table>
 
-<div class="button-row"><input type="hidden" name="ac" value="prim">~[submitbutton]</div>
+            <div class="button-row">
+                <input type="hidden" name="ac" value="prim">
+                ~[if.ModAccess]
+                <input type="submit" id="btnSubmit" name="btnSubmit" value="~[text:psx.html.admin_students.generaldemographics.submit]" onclick="contactFunctions.checkContactNameChanges('~(frn)', event)">
+                [/if]
+            </div>
 </div>
 <!-- End of shaded content table and bounding box -->
 
 ~[wc:admin_footer_frame_css]
 </form>
 <!--</script>-->
-~[if.~[displaypref:mappingadapter.selected]=""]
-[else]
+    ~[if.~[displaypref:mappingadapter.selected]=""] [else]
 <script type="text/javascript">
     addYuiButton("validatePrimaryAddress", validatePrimaryAddress);
     addYuiButton("validateMailingAddress", validateMailingAddress);
 </script>
 [/if]
 </body>
-</html><!-- end right frame -->
+
+</html>
+<!-- end right frame -->
