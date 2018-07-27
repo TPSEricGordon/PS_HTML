@@ -21,7 +21,8 @@
         <div class="box-round">
            ~[DirectTable.Select:U_PARENT_SESSION_TYPES;ID:-1]
            <fieldset id="parent_group">
-              <legend>Session Type Descrion</legend>
+              ~[if.~(gpv.type)=1]<legend>New Major Session Type</legend>[/if]
+              ~[if.~(gpv.type)=2]<legend>New Session Sub-Category</legend>[/if]
               <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
 
                 <tr>
@@ -32,16 +33,6 @@
                 </tr>
 
               <tr>
-                  <td class="bold">Session Type Categorey (Major/Secondary Category)</td>
-                  <td>
-                  <input type="radio" name="[U_PARENT_SESSION_TYPES]SESSION_TYPE" value="1">Major<br />
-                  <input type="radio" name="[U_PARENT_SESSION_TYPES]SESSION_TYPE" value="2">Secondary<br />
-                  </td>
-                  </tr>
-
-              </tr>
-
-              <tr>
                   <td class="bold">Session Type Description</td>
                   <td>
                     <textarea name="[U_PARENT_SESSION_TYPES]DESCRIPTION" cols="50" rows="5" maxlength="400">
@@ -49,9 +40,9 @@
                   </td>
               </tr>
 
-
+~[if.~(gpv.type)=2]
               <tr>
-                  <td class="bold">Major Category Type (Only Complete if Cayegory Type is Secondary)</td>
+                  <td class="bold">Major Category Type</td>
                   <td>
                   <select id="LINK_ID_SELECTOR" name="[U_PARENT_SESSION_TYPES]LINK_ID">
                     <option>
@@ -78,8 +69,9 @@
                              }
                            };
               </script>
+            [/if]
               <input type="hidden" name="[U_PARENT_SESSION_TYPES]SCHOOLID" value="" id="hiddenSchoolID"/>
-
+              <input type="hidden" name="[U_PARENT_SESSION_TYPES]SESSION_TYPE" value="~(gpv.type)">
 
 
             </table>
