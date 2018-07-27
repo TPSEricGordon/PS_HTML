@@ -35,10 +35,10 @@
                   </thead>
                   <tbody>
                      ~[tlist_sql;
-                     SELECT P.FIRST_NAME, P.LAST_NAME, G.CODE, G.DAY_OF_WEEK, G.MEETING_TIME
-                     FROM PS.U_PARENT_DATA P
-                     JOIN PS.U_PARENT_ENROLLMENTS PE
-                     ON P.ID = PE.U_PARENT_DATAID
+                     SELECT P.FIRSTNAME, P.LASTNAME, G.CODE, G.DAY_OF_WEEK, G.MEETING_TIME
+                     FROM PS.PERSON P
+                     JOIN PS.U_PARENT_CIRCLE_ENROLLMENTS PE
+                     ON P.ID = PE.PERSONID
                      JOIN PS.U_PARENT_GROUPS G
                      ON PE.GROUP_ID = G.ID
                      WHERE PE.ID=~(gpv.enroll_id);sqlText)]
@@ -57,7 +57,7 @@
 
 
       <div class="box-round">
-        ~[DirectTable.Select:U_PARENT_ENROLLMENTS;ID:~(gpv.enroll_id)]
+        ~[DirectTable.Select:U_PARENT_CIRCLE_ENROLLMENTS;ID:~(gpv.enroll_id)]
         <fieldset>
          <legend>Please Provide the Following Info</legend>
                <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
@@ -66,18 +66,18 @@
                  <tr>
                      <td class="bold">Date Leaving</td>
                      <td>
-                       <input type="text" name="[U_PARENT_ENROLLMENTS]DATE_LEFT" value="" size="25" maxlength="50" id="Date Left">
+                       <input type="text" name="[U_PARENT_CIRCLE_ENROLLMENTS]DATE_LEFT" value="" size="25" maxlength="50" id="Date Left">
                      </td>
                  </tr>
 
                  <tr>
                      <td class="bold">Reason for Leaving</td>
                      <td>
-                       <textarea type="text" name="[U_PARENT_ENROLLMENTS]REASON_LEFT" value="" cols="50" rows="5" id="Reason Left">
+                       <textarea type="text" name="[U_PARENT_CIRCLE_ENROLLMENTS]REASON_LEFT" value="" cols="50" rows="5" id="Reason Left">
                      </td>
                  </tr>
 
-              <input type="hidden" name="[U_PARENT_ENROLLMENTS]ENROLL_STATUS" value="" id="enroll_Status"/>
+              <input type="hidden" name="[U_PARENT_CIRCLE_ENROLLMENTS]ENROLL_STATUS" value="" id="enroll_Status"/>
 
 
              </table>

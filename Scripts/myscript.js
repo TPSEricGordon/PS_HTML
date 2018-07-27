@@ -20,4 +20,6 @@ define(['angular', 'components/shared/index'], function (angular) {
 					myJSON.data.pop();
 					$scope.myData = myJSON.data; });
 		});
+
+
 	});

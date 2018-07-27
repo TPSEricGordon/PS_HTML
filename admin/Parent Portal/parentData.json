@@ -1,36 +1,58 @@
 [
 	~[tlist_sql;
 		SELECT
-		CONCAT('/admin/parent_coaches/edit_parent.html?id=',P.ID) LINK,
-		CASE WHEN G.CODE IS NULL THEN 'None' ELSE G.CODE END AS CURRENT_GROUP,
-		'/admin/parent_coaches/enrollment/parent_enrollments.html?id='||P.ID||'&enroll_id='||PE.ID AS ENROLL_LINK,
+	 CONCAT('/admin/contacts/edit.html#?contactid=',parents.ID) LINK,
+	 CASE WHEN G.CODE IS NULL THEN 'None' ELSE G.CODE END AS CURRENT_GROUP,
+	 '/admin/parent_coaches/enrollment/parent_enrollments.html?id='||parents.ID||'&enroll_id='||PE.ID AS ENROLL_LINK,
+	 parents.ID,
+	 parents.FIRSTNAME, parents.lastname,
+	 parents.students,
+	 CONCAT('/admin/Parent_Coaches/referrals/home.html?id=',parents.ID) REFER_LINK,
+	 CONCAT('/admin/Parent_Coaches/call_logs/home.html?id=',parents.ID) CALL_LINK,
+	 PE.TPS_PARENT_ID
+FROM
+(
+	SELECT
 		P.ID,
-		P.FAMILY_ID,
-		FIRST_NAME,
-		LAST_NAME
-	FROM
-		PS.U_PARENT_DATA P
-	LEFT JOIN (
+		P.FIRSTNAME,
+		P.LASTNAME,
+		LISTAGG(S.FIRST_NAME, ' and ') WITHIN GROUP (ORDER BY S.FIRST_NAME) AS students
+	FROM PS.PERSON p
+		JOIN PS.STUDENTCONTACTASSOC SCA
+			ON p.ID = SCA.PERSONID
+		JOIN PS.STUDENTCONTACTDETAIL SCD
+			ON SCA.STUDENTCONTACTASSOCID = SCD.STUDENTCONTACTASSOCID
+		LEFT JOIN PS.STUDENTS S
+			ON SCA.STUDENTDCID = S.DCID
+	WHERE scd.ISACTIVE=1
+	AND (scd.LIVESWITHFLG = 1 OR SCD.ISCUSTODIAL=1)
+	GROUP BY P.ID, P.FIRSTNAME, P.LASTNAME
+) parents
+LEFT JOIN (
 		SELECT ID,
-			ROW_NUMBER() OVER (PARTITION BY U_PARENT_DATAID ORDER BY WHENCREATED DESC) RECENCY,
-			U_PARENT_DATAID, GROUP_ID, ENROLL_STATUS, WHENCREATED
-		 FROM PS.U_PARENT_ENROLLMENTS
+			ROW_NUMBER() OVER (PARTITION BY PERSONID ORDER BY WHENCREATED DESC) RECENCY,
+			PERSONID, GROUP_ID, ENROLL_STATUS, WHENCREATED
+		 FROM PS.U_PARENT_CIRCLE_ENROLLMENTS
 		 WHERE ENROLL_STATUS=1
 		 )PE
-		ON P.ID = PE.U_PARENT_DATAID
-	LEFT JOIN PS.U_PARENT_GROUPS G
-		ON PE.GROUP_ID = G.ID
-
-	-- WHERE G.CODE IS NOT NULL
+		 -- U PARENT DATA ID MAY WANT TO SWITCH!!!!
+		ON parents.ID = PE.PERSONID
+LEFT JOIN PS.U_PARENT_GROUPS G
+	ON PE.GROUP_ID = G.ID
+LEFT JOIN PS.U_DEF_EXT_PERSON PE
+	ON parents.ID = PE.PERSONID
 ORDER BY DBMS_RANDOM.VALUE
 	]
 		{"link":"~(link)",
 			"current_group":"~(current_group)",
 			"enroll_link":"~(enroll_link)",
 			"id":"~(id)",
-			"family_id":"~(family_id)",
 			"first_name":"~(first_name)",
-			"last_name":"~(last_name)"
+			"last_name":"~(last_name)",
+			"students":"~(students)",
+			"REFER_LINK":"~(REFER_LINK)",
+			"CALL_LINK":"~(CALL_LINK)",
+			"TPS_PARENT_ID":"~(TPS_PARENT_ID)"
 		},
 	[/tlist_sql]
 {}]

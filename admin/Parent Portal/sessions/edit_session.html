@@ -2,23 +2,25 @@
 <html>
    <!-- start right frame -->
    <head>
-      <title>Create New Session</title>
+      <title>Edit Group Sessions</title>
       ~[wc:UI_js_includes]
       ~[wc:commonscripts]
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
    </head>
    <body onload="addLists()">
-      <form id="New_Parent_Form" action="/admin/parent_coaches/sessions/home.html?new=true" method="POST">
-         ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
-            target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
-            target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/sessions/home.html"
-            target="_top"> All Sessions </a> &gt; Create New Session<!-- breadcrumb end
-            -->~[wc:admin_navigation_frame_css]
-         <h1>Creating New Parent Group Session</h1>
+
+      <form id="edit_parent_group" action="/admin/parent_coaches/sessions/home.html?changesSaved=true" method="POST">
+        ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
+           target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+           target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/sessions/home.html"
+           target="_top"> Parent Group Sessions </a> &gt; Edit Session Info<!-- breadcrumb end
+           -->~[wc:admin_navigation_frame_css]
+
+        <h1>Edit Session Info</h1>
          <!-- start of content and bounding box -->
          <div class="box-round">
-            ~[DirectTable.Select:U_PARENT_SESSIONS;ID:-1]
+            ~[DirectTable.Select:U_PARENT_SESSIONS;ID:~(gpv.id)]
             <fieldset>
                <legend>Create a New Session</legend>
 
@@ -49,7 +51,7 @@
                    </td>
                </tr>
                <script type="text/javascript">
-                        var type_ids = {};
+                        var type_ids={};
                         ~[tlist_sql;
                           SELECT ID, NAME
                           FROM PS.U_PARENT_SESSION_TYPES ST
@@ -58,7 +60,7 @@
                             type_ids['~(ID)'] = '~(NAME)';
                         [/tlist_sql]
 
-                        var subtype_ids = {};
+                        var subtype_ids={};
                         ~[tlist_sql;
                           SELECT ID, NAME
                           FROM PS.U_PARENT_SESSION_TYPES ST
@@ -113,19 +115,29 @@
 
             </fieldset>
             <div class="button-row" id="row1">
-               <input type="hidden" name="ac" value="prim">
+              <input type="hidden" name="ac" value="prim">
                <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
             </div>
       </form>
-      <script>
-          document.getElementById("btnSubmit").onclick = function() {
-          document.getElementById("hiddenSchoolID").value = ~(curschoolid);
-          document.getElementById("hiddenYearID").value = ~(curyearid);
-          };
 
-      </script>
+
+      <div class="button-row" id="row2">
+      <form id="delete_button" action="session_types.html?deleted=true" method="POST">
+      <input type="hidden" name="ac" value="prim" />
+      <input type="hidden" name="DD-U_PARENT_SESSIONS.ID:~(gpv.id)" value="1"/>
+      <button class="btnConfirmProxy" id="btnDelete">Delete</button>
+      </form>
+      </div>
+
       </div>
       ~[wc:admin_footer_frame_css]
    </body>
+   <script>
+       document.getElementById("btnSubmit").onclick = function() {
+       document.getElementById("hiddenSchoolID").value = ~(curschoolid);
+       document.getElementById("hiddenYearID").value = ~(curyearid);
+       };
+
+   </script>
 </html>
 <!-- end right frame -->

@@ -26,7 +26,7 @@
             <tbody>
                ~[tlist_sql;
                SELECT
-                FIRST_NAME || LAST_NAME AS NAME, DCID, u.GROUPVALUE
+                FIRST_NAME ||' '|| LAST_NAME AS NAME, DCID, u.GROUPVALUE
                 FROM PS.USERS u
                 WHERE GROUPVALUE = 11
                 ]
@@ -34,7 +34,7 @@
                   <td>~(NAME)</td>
                   <td align="center">
                      <a href="coach_caseload.html?coach_id=~(DCID)">
-                     View Roster
+                     View Caseload
                      </a>
                   </td>
                </tr>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Group Roster</title>
+
+    <!-- required scripts -->
+	~[wc:commonscripts]
+    <!-- Required style sheets: screen.css, and print.css -->
+	<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+	<link href="/images/css/print.css" rel="stylesheet" media="print">
+	<script>
+			var group_id = { ID: ~(gpv.id)};
+			/* require(['angular', 'myscript'], function (angular) {
+				 angular.bootstrap(document, ['myModule']);
+			}); */
+
+			require(['angular', 'components/shared/index'], function (angular) {
+				var myApp = angular.module('myModule', []);
+
+
+				myApp.controller('groupRosterController', function($scope, $http) {
+
+						$scope.myData = [];
+						$http.get('attendanceData.json?group_id=' + group_id.ID)
+						.then(function(myJSON) {
+								myJSON.data.pop();
+								$scope.myData = myJSON.data; });
+
+					});
+					angular.bootstrap(document, ['myModule']);
+				});
+			function session_function(input) {
+
+						$j(".parent_session").val(input);
+
+					}
+
+			function main_session_type(input) {
+
+				$j('#sub_type_selector').empty();
+
+				$j.ajax({
+					type: 'post', //post = 'save' the data to dB
+					url: 'session_ajax_helper.html?session_type_id=' + input,
+					success: function (data) {
+							console.log("success");
+							$j('#sub_type_selector').append(data);
+						}
+						});
+			}
+
+			function sub_type_selector_function(input){
+
+				$j('#session_selector').empty();
+
+				$j.ajax({
+					type: 'post', //post = 'save' the data to dB
+					url: 'final_session_selector.html?sub_type_id=' + input +'&main_type_id=' + $j("#session_type_selector option:selected").val(),
+					success: function (data) {
+							console.log("success");
+							$j('#session_selector').append(data);
+						}
+						});
+			}
+
+
+
+
+
+
+
+
+
+	</script>
+</head>
+<body onload="addList(session_selector,sessions)">
+	~[wc:admin_header_css]
+
+    <!-- breadcrumb start -->
+    <a href="/admin/home.html" target="_top">~[text:psx.html.admin_district.misc-district.start_page]</a>
+		&gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
+		<a href="/admin/parent_coaches/rosters/group_rosters_landing.html" target="_top"> Parent Groups </a>&gt;
+	&nbsp; Group Roster
+    <!-- breadcrumb end -->
+
+    <!-- start of main menu and content -->
+	~[wc:admin_navigation_css]
+
+    <!-- Start of Page -->
+	<h1>Parent Groups</h1>
+
+	<div class="box-round">
+		 <fieldset>
+				<legend>Current Group</legend>
+				<table class="grid" id="groups">
+					 <thead>
+
+						 <!-- NEED TO FIX THE FOLLOWING SQL -->
+								 <th class="bold" style="width:20px">Code</th>
+								 <th class="bold" style="width:65px">Meeting Day</th>
+								 <th class="bold" style="width:20px">Meeting Time</th>
+								 <th class="bold" style="width:65px">Facilitator</th>
+								 <th class="bold" style="width:65px">Language</th>
+							</tr>
+					 </thead>
+					 <tbody>
+							~[tlist_sql;
+							SELECT PG.CODE, PG.DAY_OF_WEEK, PG.MEETING_TIME,PG.FACILITATOR, PG.GROUP_LANGUAGE
+							FROM PS.U_PARENT_GROUPS PG
+							WHERE ID = ~(gpv.id);sqlText)]
+							<tr>
+								 <td>~(CODE)</td>
+								 <td>~(DAY_OF_WEEK)</td>
+								 <td>~(MEETING_TIME)</td>
+								 <td>~(FACILITATOR)</td>
+								 <td>~(GROUP_LANGUAGE)</td>
+							</tr>
+							[/tlist_sql]
+					 </tbody>
+				</table>
+			</fieldset>
+	 </div>
+
+	 <div class="box-round">
+ 		 <fieldset>
+ 				<legend>Attendance Set</legend>
+		 <tr>
+
+		     <td class="bold">Session Type</td>
+		     <td>
+		       <select id="session_type_selector" onchange="main_session_type(this.value)">
+						 <option></option>
+ 							~[tlist_sql;
+							SELECT  PST.ID, PST.NAME
+	 						FROM PS.U_PARENT_SESSION_TYPES PST
+							WHERE PST.SESSION_TYPE = 1 ]
+ 						<option value=~(ID)>~(NAME)</option>
+ 						[/tlist_sql]
+		       </select>
+
+         </td>
+
+				 <td class="bold">Sub-Type</td>
+		     <td>
+		       <select id="sub_type_selector" onchange="sub_type_selector_function(this.value)">
+						 <option></option>
+		       </select>
+         </td>
+
+				 <td class="bold">Session</td>
+				 <td>
+		       <select id="session_selector" name="[U_PARENT_ATTENDANCE]SESSION_ID" onchange="session_function(this.value)">
+		         <option></option>
+							 ~[tlist_sql;
+							 SELECT  PS.ID, PS.NAME
+ 						 FROM PS.U_PARENT_SESSIONS PS]
+						 <option value=~(ID)>~(NAME)</option>
+						 [/tlist_sql]
+		       </select>
+
+         </td>
+		</tr>
+</fieldset>
+
+</div>
+
+	<div class="box-round" data-ng-controller="groupRosterController" data-ng-cloak>
+		<div id="myGrid" data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
+			<fieldset>
+			<legend>Roster</legend>
+			<table class="grid">
+			<thead>
+				<tr>
+					<th class="bold">Parents</th>
+					<th class="bold" >Students</th>
+					<th class="bold">ID</th>
+					<th class="bold">Attendance Code</th>
+					<th class="bold">Reason Absent</th>
+					<th class="bold">Comments</th>
+				</tr>
+			</thead>
+			</table>
+
+
+
+	<div  data-ng-repeat="item in myData">
+	<form action="group_rosters_landing.html?saved=true" method="POST" id="form{{ item.ID }}">
+
+	<table>
+		<tbody>
+				<tr>
+					<td width="12%">{{ item.PARENT_NAME }}</td>
+					<td width="12%">{{ item.STUDENTS }}</td>
+					<td><input type="text" name="[U_PARENT_ATTENDANCE]PARENT_ID" value="{{ item.ID }}" size="5" maxlength="40" readonly></td>
+					<td>
+						<input id="parent_session{{ item.ID }}" class="parent_session" type="hidden" name="[U_PARENT_ATTENDANCE]SESSION_ID" value="">
+					</td>
+					<td>
+
+						<select name="[U_PARENT_ATTENDANCE]ATTENDANCE_STRING" value="">
+							<option>
+							<option value="Present">Present
+							<option value="Absent">Absent
+ 		       </select>
+					</td>
+
+					<td>
+
+						<select name="[U_PARENT_ATTENDANCE]REASON_STRING" value="">
+							<option>
+							<option value="0">Unknown
+							<option value="1">Forgot
+						 	<option value="2">Advanced Notice
+							<option value="3">Health Issue
+							<option value="4">Logistical Difficulty
+							<option value="5">Family Emergency
+							<option value="6">Other
+					</td>
+					<td>
+						<textarea name="[U_PARENT_ATTENDANCE]OTHER_NOTES" rows="3" cols="40" maxlength="100" value=""></textarea>
+	 <input type="hidden" name="ac" value="prim">
+					</td>
+			</tr>
+
+		</tbody>
+		</table>
+		</form>
+		</div>
+
+
+	</fieldset>
+		</div>
+
+	</div>
+
+	<button onclick="save_attendance()">Submit Attendance
+	</button>
+
+
+	<!-- end of content area -->
+	~[wc:admin_footer_css]
+</body>
+
+<script>
+
+
+function save_attendance(){
+
+		$j( ".validatedForm" ).each(function( index ) {
+				$j.ajax({
+					type: 'post', //post = 'save' the data to dB
+
+					data: $j(this).serialize(), //gather all values from form into 'data'
+					success: function () {
+					    console.log("success");
+                                            //add in any code to execute after success
+					}
+				  });
+		});
+
+    document.location.href = "group_rosters_landing.html?saved=true";
+         alert("Records Saved");
+}
+
+</script>
+
+
+
+</html>

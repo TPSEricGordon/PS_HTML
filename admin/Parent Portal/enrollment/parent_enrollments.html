@@ -8,6 +8,7 @@
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
    </head>
+
    <body>
          ~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html"
             target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
@@ -18,9 +19,11 @@
          <h1>Parent Enrollments</h1>
          <!-- start of content and bounding box -->
         ~[if.~(gpv.new_enrollment)=true]<div class="feedback-confirm">You Successfully Enrolled the Parent Into a New Group</div>[/if]
+
         <h3> ~[tlist_sql;
-        SELECT FIRST_NAME, LAST_NAME
-        FROM PS.U_PARENT_DATA P
+        SELECT
+           FIRSTNAME, LASTNAME
+        FROM PS.PERSON P
         WHERE ID=~(gpv.id;sqlText) ]
            <td>~(FIRST_NAME)</td>
            <td>~(LAST_NAME)</td>
@@ -29,8 +32,6 @@
 
         <div class="box-round">
           <fieldset>
-
-
           <legend>Enrollment History</legend>
         <table class="grid" id="groups">
            <thead>
@@ -44,21 +45,27 @@
            </thead>
            <tbody>
               ~[tlist_sql;
-              SELECT PG.CODE, PG.DAY_OF_WEEK, PG.MEETING_TIME,
-            	CASE WHEN ENROLL_STATUS=0 THEN 'Previous Enrollment'
-            		WHEN ENROLL_STATUS =1 THEN 'Current Enrollment'
-            	END AS ENROLL_STATUS, REASON_LEFT
-              FROM U_PARENT_ENROLLMENTS PE
+              SELECT
+              	PG.CODE, PG.DAY_OF_WEEK, PG.MEETING_TIME,
+              	CASE WHEN PE.ENROLL_STATUS=0 THEN 'Previous Enrollment'
+              		WHEN PE.ENROLL_STATUS =1 THEN 'Current Enrollment'
+              		END AS ENROLL_STATUS, PE.REASON_LEFT,
+
+              	PE.PERSONID
+
+              FROM PS.U_PARENT_CIRCLE_ENROLLMENTS PE
               	JOIN PS.U_PARENT_GROUPS PG
               		ON PE.GROUP_ID = PG.ID
-                 WHERE PE.U_PARENT_DATAID=  ~(gpv.id)
+
+              WHERE PE.PERSONID = ~(gpv.id)
+
               ORDER BY PE.ENROLL_STATUS, PE.WHENCREATED
               ]
               <tr>
-                <td> ~(EDIT)</td>
-                 <td>~(GROUP_ID)</td>
+                <td> ~(CODE)</td>
+                 <td>~(DAY_OF_WEEK)</td>
+                 <td>~(MEETING_TIME)</td>
                  <td>~(ENROLL_STATUS)</td>
-                 <td>~(PARENT_ID)</td>
                  <td>~(REASON_LEFT)</td>
                </tr>
               [/tlist_sql]
@@ -72,7 +79,6 @@
 
     ~[if.~(gpv.enroll_id)=""]
            <a href="parent_enrollment_new.html?id=~(gpv.id)" id="btnNew" name="btnNew" class="button">Enroll in a Group</a>
-
       [else]
         <a href="unenroll_parent.html?id=~(gpv.id)&enroll_id=~(gpv.enroll_id)" id="btnNew" name="btnNew" class="button">Change Group</a>
     [/if]

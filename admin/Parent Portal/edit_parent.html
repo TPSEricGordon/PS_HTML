@@ -8,7 +8,10 @@
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
    </head>
-   <body onload="new_parent_id()">
+   <body onload="pgp_link()">
+
+
+
       <form id="edit_parent_info" action="/admin/parent_coaches/edit_parent.html?id=~(id)&changesSaved=true" method="POST">
          ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
             target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
@@ -18,46 +21,55 @@
          <h1>Edit Parent Information</h1>
          <!-- start of content and bounding box -->
         ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
+
+        <h3> ~[tlist_sql;
+        SELECT
+           FIRSTNAME, LASTNAME
+        FROM PS.PERSON P
+        WHERE ID=~(gpv.id;sqlText) ]
+           <td>~(FIRST_NAME)</td>
+           <td>~(LAST_NAME)</td>
+
+        [/tlist_sql]</h3>
+
          <div class="box-round">
-            ~[DirectTable.Select:U_PARENT_DATA;ID:~(gpv.id)]
+            ~[DirectTable.Select:U_DEF_EXT_PERSON;PERSONID:~(gpv.id)]
             <fieldset id="Parent_Data">
                <legend>Parent Data</legend>
-
+               <div align="center">
+                 <a href="https://theprimaryschool.powerschool.com/admin/contacts/edit.html#?contactid=~(gpv.id)" id="contact_button" name="btn" class="button">Back to Contact Info</a>
+               </div>
                <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
                <colgroup><col style="width:20%"><col></colgroup>
+
+
                <tr>
-                   <td class="bold">Parent Name (First, Last)</td>
+                   <td class="bold">Family ID</td>
                    <td>
-                     <input type="text" name="[U_PARENT_DATA]FIRST_NAME" value="" size="25" maxlength="50" id="firstName">
-                     <input type="text" name="[U_PARENT_DATA]LAST_NAME" value="" size="15" maxlength="30" id="lastName">
+                     <input type="text" name="[U_DEF_EXT_PERSON]FAMILY_ID" value="" size="25" maxlength="50" >
                    </td>
                </tr>
+
+               <tr>
+                   <td class="bold">TPS Parent ID</td>
+                   <td>
+                     <input type="text" name="[U_DEF_EXT_PERSON]TPS_PARENT_ID" value="" size="25" maxlength="50" >
+                   </td>
+               </tr>
+
 
                <tr>
                    <td class="bold">Nickname</td>
                    <td>
-                     <input type="text" name="[U_PARENT_DATA]NICKNAME" value="" size="25" maxlength="50" >
+                     <input type="text" name="[U_DEF_EXT_PERSON]NICKNAME" value="" size="25" maxlength="50" >
                    </td>
                </tr>
 
-               <tr>
-                   <td class="bold">Parent Coach Assignment</td>
-                   <td>
-                     <select name="[U_PARENT_DATA]PARENT_COACH" id="parent_coach">
-                       <<option value=""></option>
-                       <<option value=57>Shawneece</option>
-                       <<option value=60>Valentina</option>
-                       <<option value=67>Cristina</option>
-                       <<option value=68>Stephanie</option>
-                       <<option value=72>Yadira</option>
-                     </select>
-                   </td>
-
-              </tr>
               <tr>
                 <td class="bold">
                  Current Parent Group Enrollments
                 </td>
+
                 <td>
                 <table class="grid" id="groups">
                    <thead>
@@ -67,7 +79,7 @@
                          <th style="width:65px">Day of the week</th>
                          <th style="width:20px">Code</th>
                          <th style="width:65px">Day of Week</th>
-                      </tr>
+
                    </thead>
                    <tbody>
                       ~[tlist_sql;
@@ -98,56 +110,14 @@
 -->
 
                </td>
+            </tr>
 
-              </tr>
-
-               <tr>
-                 <td class="bold" >
-                   Parent ID<br />
-                   Family ID
-                 </td>
-                 <td>
-                  ~([U_PARENT_DATA]PARENTID)
-                   <br />
-                   ~([U_PARENT_DATA]FAMILY_ID)
-                 </td>
-               </tr>
-
-
-
-               <tr>
-                 <td class="bold">Address</td>
-                 <td>
-                   <input type="text" name="[U_PARENT_DATA]ADDRESS" value="" size="30" maxlength="50" >
-                   <input type="text" name="[U_PARENT_DATA]APARTMENT" value="" size="7" maxlength="10">
-                 </td>
-
-               </tr>
-
-
-               <tr>
-                 <td class="bold">City, State, Zip</td>
-
-                 <td>
-                   <input type="text" name="[U_PARENT_DATA]CITY" value="" size="30" maxlength="50" >
-                   <input type="text" name="[U_PARENT_DATA]STATE" value="" size="4" maxlength="2">
-                   <input type="text" name="[U_PARENT_DATA]ZIP" value="" size="7" maxlength="5">
-                 </td>
-               </tr>
-
-               <tr>
-                    <td class="bold">Gender</td>
-                    <td>
-                    <input type="radio" name="[U_PARENT_DATA]GENDER" value="Male">Male<br />
-                                        <input type="radio" name="[U_PARENT_DATA]GENDER" value="Female">Female
-                    </td>
-               </tr>
                <tr>
                  <td class="bold">
                    Preferred Language
                  </td>
                  <td>
-                   <select name="[U_PARENT_DATA]PREFERRED_LANGUAGE">
+                   <select name="[U_DEF_EXT_PERSON]PREFERRED_LANGUAGE">
                      <<option value=""></option>
                      <<option value="English">English</option>
                      <<option value="Spanish">Spanish</option>
@@ -161,42 +131,16 @@
                  <td class="bold">Birthday</td>
 
                  <td>
-                   <input type="text" name="[U_PARENT_DATA]BIRTHDATE" value="" size="30" maxlength="50" >
+                   <input type="text" name="[U_DEF_EXT_PERSON]BIRTHDATE" value="" size="30" maxlength="50" >
                   </td>
                </tr>
 
                <tr>
                  <td class="bold">
-                   E-Mails
-                 </td>
-                 <td>
-                   1.<input type="text" name="[U_PARENT_DATA]EMAIL" value="" size="30" maxlength="50"  />
-
-                   <br />
-                   2.<input type="text" name="[U_PARENT_DATA]EMAIL2" value="" size="30" maxlength="50"  />
-                 </td>
-               </tr>
-               <tr>
-                 <td class="bold">
-                   Phone Numbers (Can Text)
-                 </td>
-                 <td>
-                   1. <input type="text" name="[U_PARENT_DATA]PHONE" value="" size="15" maxlength="15"  />
-                   <input type="radio" name="[U_PARENT_DATA]CAN_TEXT" value="Yes">Yes
-                   <input type="radio" name="[U_PARENT_DATA]CAN_TEXT" value="No">No
-
-                   <br />
-                   2. <input type="text" name="[U_PARENT_DATA]PHONE2" value="" size="15" maxlength="15"  />
-                   <input type="radio" name="[U_PARENT_DATA]CAN_TEXT2" value="Yes">Yes
-                   <input type="radio" name="[U_PARENT_DATA]CAN_TEXT2" value="No">No
-                 </td>
-               </tr>
-               <tr>
-                 <td class="bold">
                    Employment
                  </td>
                  <td>
-                   <select id="selectEmployment" name="[U_PARENT_DATA]EMPLOYED_CURRENTLY">
+                   <select id="selectEmployment" name="[U_DEF_EXT_PERSON]EMPLOYED_CURRENTLY">
                        <<option value=""></option>
                        <option value="In school/training full time">In school/training full time</option>
                        <option value="Working full time, In school/training part time">Working full time, In school/training part time</option>
@@ -221,12 +165,12 @@
                <tr>
                     <td class="bold">Comfort With English</td>
                     <td>
-                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I feel comfortable using English in all interactions">I feel comfortable using English in all interactions<br />
-                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I feel comfortable using English for work">I feel comfortable using English for work<br />
-                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I can use English for daily errands">I can use English for daily errands<br />
-                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I don't understand or speak English at all">I don't understand or speak English at all<br />
-                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="I understand some English but don't speak it">I understand some English but don't speak it<br />
-                    <input type="radio" name="[U_PARENT_DATA]COMFORT_WITH_ENGLISH" value="">Unknown<br />
+                    <input type="radio" name="[U_DEF_EXT_PERSON]COMFORT_WITH_ENGLISH" value="I feel comfortable using English in all interactions">I feel comfortable using English in all interactions<br />
+                    <input type="radio" name="[U_DEF_EXT_PERSON]COMFORT_WITH_ENGLISH" value="I feel comfortable using English for work">I feel comfortable using English for work<br />
+                    <input type="radio" name="[U_DEF_EXT_PERSON]COMFORT_WITH_ENGLISH" value="I can use English for daily errands">I can use English for daily errands<br />
+                    <input type="radio" name="[U_DEF_EXT_PERSON]COMFORT_WITH_ENGLISH" value="I don't understand or speak English at all">I don't understand or speak English at all<br />
+                    <input type="radio" name="[U_DEF_EXT_PERSON]COMFORT_WITH_ENGLISH" value="I understand some English but don't speak it">I understand some English but don't speak it<br />
+                    <input type="radio" name="[U_DEF_EXT_PERSON]COMFORT_WITH_ENGLISH" value="">Unknown<br />
                     </td>
                </tr>
                <tr>
@@ -235,7 +179,7 @@
                    Race
                  </td>
                  <td>
-                   <select name="[U_PARENT_DATA]ETHNICITY">
+                   <select name="[U_DEF_EXT_PERSON]ETHNICITY">
                      <<option value=""></option>
                      <option value="Hispanic/Latino">Hispanic/Latino</option>
                      <option value="">Not Hispanic/Latino</option>
@@ -243,7 +187,7 @@
 
                  <br /><br />
 
-                   <select name="[U_PARENT_DATA]RACE">
+                   <select name="[U_DEF_EXT_PERSON]RACE">
                      <<option value="">Unknown</option>
                      <<option value="Black/African American">Black/African American</option>
                      <<option value="Asian">Asian</option>
@@ -260,7 +204,7 @@
                    Highest Level of Schooling
                  </td>
                  <td>
-                   <select>
+                    <select id="EployedID" name="[U_DEF_EXT_PERSON]HIGHEST_LEVEL_SCHOOLING">
                      <<option value=""></option>
                      <<option value="Higher Education, BA or Advanced Degree">Higher Education, BA or Advanced Degree</option>
                      <<option value="Trade or Technical/Vocational Degree">Trade or Technical/Vocational Degree</option>
@@ -279,7 +223,7 @@
                    PGP GOAL
                  </td>
                  <td>
-                   <textarea name="[U_PARENT_DATA]PGP_GOAL" cols="50" rows="5"></textarea>
+                   <textarea name="[U_DEF_EXT_PERSON]PGP_GOAL" cols="50" rows="5"></textarea>
                  <br />
                  <a href="" id="pgp_link">Open PGP</a>
 
@@ -289,19 +233,19 @@
                  var link={};
                  ~[tlist_sql;
                    SELECT P.PGP_LINK
-                   FROM PS.U_PARENT_DATA P
-                   WHERE P.ID =~(gpv.id)
+                   FROM PS.U_DEF_EXT_PERSON P
+                   WHERE P.PERSONID =~(gpv.id)
                  ;]
-                     link['pgp']= ~(pgp_link) ;
+                     link['pgp']= "~(pgp_link)"
                  [/tlist_sql]
 
-                 function new_parent_id(){
+                 function pgp_link(){
                      var yourElement = document.getElementById("pgp_link")
                      yourElement.setAttribute('href', link['pgp']);
                     }
 
                  </script>
-                 <script>
+<!--                 <script>
 
                  var max_id={};
                  ~[tlist_sql;
@@ -315,7 +259,7 @@
                      document.getElementById("parent_id").value = max_id['ID'];
                     }
 
-                 </script>
+                 </script>-->
 
 
                 </td>
@@ -325,14 +269,12 @@
                    LINK to PGP
                  </td>
                  <td>
-                   <input name="[U_PARENT_DATA]PGP_LINK" size="50" value="" id="link">
+                   <input name="[U_DEF_EXT_PERSON]PGP_LINK" size="50" value="" id="link">
                  </td>
                </tr>
 
 
              </table>
-
-
 
             </fieldset>
           </table>

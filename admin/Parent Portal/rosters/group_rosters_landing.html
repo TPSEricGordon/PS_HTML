@@ -6,6 +6,23 @@
       ~[wc:commonscripts]
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
+      <script>
+    			require(['angular', 'components/shared/index'], function (angular) {
+    				var myApp = angular.module('myModule', ['powerSchoolModule']);
+
+
+    				myApp.controller('rosterLandingController', function($scope, $http) {
+
+    						$scope.myData = [];
+    						$http.get('rosterLandingData.json')
+    						.then(function(myJSON) {
+    								myJSON.data.pop();
+    								$scope.myData = myJSON.data; });
+    					});
+    					angular.bootstrap(document, ['myModule']);
+
+    				});
+    	</script>
    </head>
    <body>
       ~[wc:admin_navigation_css]
@@ -14,45 +31,33 @@
       &gt; <a href="/admin/parent_coaches/home.html" target="_top"> Parent Portal </a>&gt;
       &nbsp; Parent Groups~[wc:admin_navigation_frame_css]
       <h1>Parent Groups</h1>
+      ~[if.~(gpv.saved)=true]<div class="feedback-confirm">You Successfully Took Attendance!</div>[/if]
       <!-- start of content and bounding box -->
-      <div class="box-round">
-         <table class="grid" id="groups">
-            <thead>
-               <tr style="border:1px solid grey;">
-                  <th class="bold" style="width:20px;text-align: center">Meeting</th>
-                  <th class="bold" style="width:20px">Facilitators</th>
-                  <th class="bold" style="width:65px">Rosters</th>
-                  <th class="bold" style="width:65px">Attendance</th>
-               </tr>
-            </thead>
-            <tbody>
-               ~[tlist_sql;
-                SELECT CODE || ' - '|| DAY_OF_WEEK || '''s, ' || MEETING_TIME AS Meeting,
-                	FACILITATOR || ' & '||FACILITATOR2 AS Facilitators,
-                	ID AS "ROSTER_ID",
-                	ID AS "Take Attendance"
-                FROM PS.U_PARENT_GROUPS PG
-                -- WHERE YEARID=~(curyearid)
-                ORDER BY CODE]
-               <tr>
-                  <td>~(Meeting)</td>
-                  <td>~(Facilitators)</td>
-                  <td align="center">
-                     <a href="group_roster.html?group_id=~(ROSTER_ID)">
-                     View Roster
-                     </a>
-                  </td>
-                  <td align="center">
-                     <a href="group_attendance_home.html?id=~(View Roster)">
-                     Take Attendance
-                     </a>
-                  </td>
-               </tr>
-               [/tlist_sql]
-            </tbody>
-         </table>
-      </div>
-      <br>
+      <div class="box-round" data-ng-controller="rosterLandingController" data-ng-cloak>
+    		<div id="myGrid" data-pss-grid-widget data-data="myData" data-filtered-data="myDataFiltered" data-client-side-pagination="true" >
+    			<table class="grid">
+    			<thead>
+    				<tr>
+    					<th data-pss-sort-fields="MEETING" class="bold">Group</th>
+    					<th data-pss-sort-fields="FACILITATORS" class="bold">Group Facilitators</th>
+    					<th class="bold" style="width:60px">Roster</th>
+    					<th class="bold">Take Attendance</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+    				<tr data-ng-repeat="item in myDataFiltered" >
+    					<td>{{ item.MEETING }}</td>
+    					<td>{{ item.FACILITATORS }}</td>
+    					<td><a ng-href="group_roster.html?group_id={{ item.ID}}">View Roster</a></td>
+    					<td><a ng-href="group_attendance.html?id={{ item.ID }}">Take Attendance</a></td>
+
+    				</tr>
+    			</tbody>
+    		</table>
+
+    		</div>
+
+    	</div>
       <!-- end of content of bounding box -->
       ~[wc:admin_footer_frame_css]
    </body>
