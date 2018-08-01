@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+	<!-- non framed -->
+	<head>
+		<title>~[text:psx.html.contacts.title]</title>
+		~[wc:commonscripts]
+		<link href="/images/css/screen.css" rel="stylesheet" media="screen"/>
+		<link href="/images/css/print.css" rel="stylesheet" media="print"/>
+<script>
+
+    var url_string = window.location.href;
+
+    var pStart = url_string.indexOf("contactid=", url_string.indexOf("#?")) + 10;
+    var pEnd = url_string.indexOf("&", pStart);
+    var contactID = 0;
+    if (pEnd > 0)
+      contactID = url_string.substring(pStart, pEnd);
+    else
+      contactID = url_string.substring(pStart);
+
+		var parent_data_link = '/admin/parent_coaches/edit_parent.html?id='+ contactID;
+		console.log(parent_data_link);
+
+		function update_parent_link(){
+			var yourElement = document.getElementById("tps_link_button");
+			yourElement.setAttribute('href', parent_data_link);
+
+		}
+</script>
+</head>
+
+
+	<body data-ng-controller="contactMainController" data-ng-cloak onload="update_parent_link()">
+		~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">~[text:psx.html.contacts.start_page]</a> &gt; <a href="/admin/contacts/search.html">~[text:psx.html.contacts.breadcrumb]</a> &gt; <span data-ng-if="context.newContact">~[text:psx.html.contacts.create_contact]</span><span data-ng-if="!context.newContact">~[text:psx.html.contacts.edit_contact]</span><!-- breadcrumb end -->~[wc:admin_navigation_css]
+		<h1>{{context.pageHeader}}</h1>
+		<!-- start of content and bounding box -->
+
+        <div id="feedback-unsaved" class="feedback-alert" data-ng-if="!contactform.$pristine">
+            <p>~[text:psx.html.contacts.you_have_unsaved_changes]</p>
+        </div>
+        <div id="feedback-success" class="feedback-confirm" data-ng-if="context.successArray.length > 0" >
+            <p data-ng-if="context.successArray.length == 1">{{context.successArray[0]}}</p>
+            <ul data-ng-if="context.successArray.length > 1">
+				<li data-ng-repeat="success in context.successArray track by $index">{{success}}</li>
+            </ul>
+        </div>
+        <div id="feedback-error" class="feedback-error alert-dismissable" data-ng-if="context.errorArray.length > 0" >
+            <p data-ng-if="context.errorArray.length == 1">{{context.errorArray[0]}}</p>
+            <ul data-ng-if="context.errorArray.length > 1">
+				<li data-ng-repeat="error in context.errorArray track by $index">{{error}}</li>
+			</ul>
+		</div>
+
+		<form id="contactform" name="contactform" data-ng-submit="submitPage($event)" data-pss-validation-form data-dirty-state-check="true" data-ng-show="context.displayNormalBody">
+            <h2 id="demographics-header" data-ng-click="toggleDivCollapse($event)" class="expanded">~[text:psx.html.contacts.demographics]</h2>
+            <div id="demographic-fields" class="fluid-form">
+                <div>
+					<div id="prefix-div">
+						<label for="prefix-input">~[text:psx.html.contacts.prefix]</label>
+						~[if.security.fieldLevel=PERSON.PREFIXCODESETID=VIEWONLY]
+						{{context.currentContact.prefixObj.value}}
+						[else]
+						<select id="prefix-input" name="prefix-input"
+								data-ng-model="context.currentContact.prefixObj"
+								data-ng-options="o.value for o in prefixOptions | filter:codesetFilter(context.currentContact.prefixObj) track by o.code"
+								data-ng-change="changePrefix()"
+								data-pss-validation-field="PERSON.PREFIXCODESETID">
+						</select>
+						[/if]
+					</div>
+					<div id="first-name-div">
+						<label for="first-name-input" >~[text:psx.html.contacts.first_name]</label>
+						<input type="text" id="first-name-input" data-ng-model="context.currentContact.firstName" data-pss-validation-field="PERSON.FIRSTNAME" />
+					</div>
+					<div id="middle-name-div">
+						<label for="middle-name-input" >~[text:psx.html.contacts.middle_name]</label>
+						<input type="text" id="middle-name-input" data-ng-model="context.currentContact.middleName" data-pss-validation-field="PERSON.MIDDLENAME" />
+					</div>
+					<div id="last-name-div">
+						<label for="last-name-input" >~[text:psx.html.contacts.last_name]</label>
+						<input type="text" id="last-name-input" data-ng-model="context.currentContact.lastName" data-pss-validation-field="PERSON.LASTNAME" />
+					</div>
+					<div id="suffix-div">
+						<label for="suffix-input">~[text:psx.html.contacts.suffix]</label>
+						~[if.security.fieldLevel=PERSON.SUFFIXCODESETID=VIEWONLY]
+						{{context.currentContact.suffixObj.value}}
+						[else]
+						<select id="suffix-input" name="suffix-input"
+								data-ng-model="context.currentContact.suffixObj"
+								data-ng-options="o.value for o in suffixOptions | filter:codesetFilter(context.currentContact.suffixObj) track by o.code"
+								data-ng-change="changeSuffix()"
+								data-pss-validation-field="PERSON.SUFFIXCODESETID">
+						</select>
+						[/if]
+					</div>
+                </div>
+                <div>
+					<div id="gender-div">
+						<label for="gender-input">~[text:psx.html.contacts.gender]</label>
+						~[if.security.fieldLevel=PERSON.GENDERCODESETID=VIEWONLY]
+						{{context.currentContact.genderObj.value}}
+						[else]
+                        <select id="gender-input" name="gender-input"
+								data-ng-model="context.currentContact.genderObj"
+								data-ng-options="o.value for o in genderOptions | filter:codesetFilter(context.currentContact.genderObj) track by o.code"
+								data-ng-change="changeGender()"
+								data-pss-validation-field="PERSON.GENDERCODESETID">
+						</select>
+                    	[/if]
+					</div>
+				</div>
+                <div>
+					<div id="employer-div">
+						<label for="employer-input" >~[text:psx.html.contacts.employer]</label>
+						<input type="text" id="employer-input" data-ng-model="context.currentContact.employer" data-pss-validation-field="PERSON.EMPLOYER" />
+					</div>
+                </div>
+                <div>
+					<div id="contact-active-div">
+                    	<input type="checkbox" data-pss-validation-field="PERSON.ISACTIVE" id="active-input" data-ng-model="context.currentContact.active" data-ng-click="handleActiveClick()"/></td>
+                    	<label for="active-input">~[text:psx.html.contacts.active]</label>
+					</div>
+			    </div>
+
+
+
+
+
+					<div>
+					<a id="tps_link_button" href="" name="btn" class="button">Further TPS Data</a>
+          </div>
+
+					<script>
+
+					var link={};
+					~[tlist_sql;
+						SELECT CONCAT('/admin/parent_coaches/edit_parent.html?id=',)
+						FROM PS.U_DEF_EXT_PERSON P
+						WHERE P.PERSONID = ~(gpv.contactid)
+					;]
+							link['pgp']= "~(pgp_link)"
+					[/tlist_sql]
+
+					function pgp_link(){
+							var yourElement = document.getElementById("pgp_link")
+							yourElement.setAttribute('href', link['pgp']);
+						 }
+
+					</script>
+
+
+
+
+
+
+
+
+
+            </div>
+			<h2 id="web-account-header" data-ng-click="toggleDivCollapse($event)" class="expanded">~[text:psx.html.contacts.webaccountaccess]</h2>
+            <div id="web-account-div" data-ng-controller="contactAccountController" class="box-round">
+				<table id="web-account-table" class="grid" data-ng-if="context.currentContact.hasAccessAccount()">
+                    <colgroup>
+						<col width="5%">
+						<col width="auto">
+						<col width="auto">
+                    </colgroup>
+					<tr>
+						<th>~[text:psx.html.contacts.accountenabled]</th>
+						<th>~[text:psx.html.contacts.username]</th>
+						<th>~[text:psx.html.contacts.recovery_email]</th>
+					</tr>
+					<tr class="center">
+						<td id="web-account-disabled-ind" data-ng-class="{'checkmark-icon': context.currentContact.contactAccount.enabled}"><center><em id="web-account-disabled-em" name="web-account-disabled-em" data-pss-validation-field="PCAS_ACCOUNT.ISENABLED"/></center></td>
+						<td id="web-account-user-name"><span id="web-account-user-name-display" name="web-account-user-name-display" data-ng-bind="context.currentContact.contactAccount.userName" data-pss-validation-field="PCAS_ACCOUNT.USERNAME"/></td>
+						<td id="web-account-email"><span id="web-account-email-display" name="web-account-email-display" data-ng-bind="context.currentContact.contactAccount.recoveryEmail" data-pss-validation-field="PCAS_EMAILCONTACT.EMAILADDRESS"/></td>
+		            </tr>
+		        </table>
+				~[if.modaccess]
+				<div class="button-row">
+					<div class="relativeButtons">
+						<input type="button" data-ng-if="!context.currentContact.hasAccessAccount()" data-ng-click="addAccountDialog()" id="add-account-button" name="add-account-button" value="Add Account"/>
+						<input type="button" data-ng-if="context.currentContact.hasAccessAccount()" data-ng-click="editAccountDialog()" id="edit-account-button" name="edit-account-button" value="Edit Account"/>
+					</div>
+				</div>
+				[/if]
+		    </div>
+            <h2 id="relationship-header" data-ng-click="toggleDivCollapse($event)" class="expanded">~[text:psx.html.contacts.relationship.students]</h2>
+            <div data-ng-controller="contactStudentController" class="box-round">
+				<div id="relationship-detail-conflict-feedback" class="feedback-alert" data-ng-if="context.doMerge && context.relationshipDetailConflict">
+					<p>~[text:psx.html.contacts.relationship.student_details_conflict_encountered_to_resolve_edit_or_remove_the_relationship_detail]</p>
+				</div>
+			  	<div class="button-row">
+					<div class="relativeButtons">
+						<input id="show-all-relationships-checkbox" name="show-all-relationships-checkbox" type="checkbox" data-ng-disabled="!demoContext.hasEndDateAccess || context.isMergeMode" data-ng-model="demoContext.showAllStudentRelationships" data-ng-change="saveShowAllStudentRelationships()" data-pss-ignore-dirty-state="true"/>
+						<label for="show-all-relationships-checkbox" data-ng-bind="getShowAllRelationshipMessageWithCount()"></label>
+						<input type="button" data-ng-click="addStudentDialog()" id="add-student-search-button" name="add-student-search-button" value="~[text:psx.html.contacts.relationship.addstudents]"/>
+					</div>
+				</div>
+				<script>
+			        var _curSchoolNumber = ~(curschoolid);
+			    </script>
+			    <div id="relationship-table-div"
+			         data-pss-grid-widget
+			         data-data="context.currentContact.contactStudents"
+			         data-filtered-data="context.currentContact.filteredStudents"
+			         data-filter-constraint="no-filters"
+			         data-no-grid-box="true">
+			        <table id="relationship-table" class="grid">
+                        <colgroup>
+							<col width="auto">
+							<col width="200px">
+							<col width="auto">
+							<col width="auto">
+							<col width="auto">
+							<col width="auto">
+							<col width="auto">
+							<col width="auto">
+							<col width="auto">
+							<col width="auto">
+							<col width="auto">
+							<col width="1%">
+                        </colgroup>
+						<tr>
+							<th data-pss-sort-fields="schoolAbbr,lastFirst">~[text:psx.html.contacts.relationship.school]</th>
+							<th data-pss-sort-fields="lastFirst,endDate|date" data-primary-sort="ascending" data-fixed-sorts="{endDate: 'descending'}">~[text:psx.html.contacts.relationship.studentname]</th>
+							<th data-pss-sort-fields="activeDetail.relationship,lastFirst">~[text:psx.html.contacts.relationship.relationship]</th>
+							<th data-pss-sort-fields="activeDetail.custodial|number,lastFirst">~[text:psx.html.contacts.relationship.custody]</th>
+							<th data-pss-sort-fields="activeDetail.livesWith|number,lastFirst">~[text:psx.html.contacts.relationship.liveswith]</th>
+							<th data-pss-sort-fields="activeDetail.schoolPickup|number,lastFirst">~[text:psx.html.contacts.relationship.schoolpickup]</th>
+							<th data-pss-sort-fields="activeDetail.emergency|number,lastFirst">~[text:psx.html.contacts.relationship.emergcontact]</th>
+							<th data-pss-sort-fields="originalContactType.value,lastFirst">~[text:psx.html.contacts.relationship.originalcontacttype]</th>
+							<th data-pss-sort-fields="activeDetail.startDate|date,lastFirst">~[text:psx.html.contacts.relationship.startdate]</th>
+							<th data-pss-sort-fields="activeDetail.endDate|date,lastFirst">~[text:psx.html.contacts.relationship.enddate]</th>
+							<th data-pss-sort-fields="canAccessData|number,lastFirst">~[text:psx.html.contacts.relationship.dataaccess]</th>
+							<th>~[text:psx.html.contacts.relationship.action]</th>
+						</tr>
+						<tr data-ng-repeat="contactStudent in context.currentContact.filteredStudents"
+						data-ng-style="!contactStudent.current && {'font-style':'italic'}"
+                        data-ng-if="!contactStudent.deleted"
+						class="center"
+						data-ng-class="{'hide': !demoContext.showAllStudentRelationships && !contactStudent.current, 'markedDelete':contactStudent.deleted, 'feedback-alert':contactStudent.detailConflict}">
+							<td id="relationship-schoolabbr-{{$index}}"><span id="relationship-schoolabbr-display-{{$index}}" name="relationship-schoolabbr-display-{{$index}}" data-ng-bind="contactStudent.schoolAbbr" data-pss-validation-field="SCHOOLS.ABBREVIATION" /></td>
+							<td id="relationship-lastfirst-{{$index}}" class="left">
+								<span data-ng-if = "!contactStudent.isInCurrentSchool || contactStudent.lastNameNoAccess" id="relationship-lastfirst-display-{{$index}}" name="relationship-lastfirst-display-{{$index}}" >{{contactStudent.lastFirst}}</span>
+								<a data-ng-if = "contactStudent.isInCurrentSchool && !contactStudent.lastNameNoAccess" id="relationship-lastfirst-display-anchor-{{$index}}"  name="relationship-lastfirst-display-anchor-{{$index}}" href="/admin/students/home.html?frn=001{{contactStudent.dcid}}">{{contactStudent.lastFirst}}</a>
+							</td>
+							<td id="relationship-relationshiptype-{{$index}}"><span id="relationship-relationshiptype-display-{{$index}}" name="relationship-relationshiptype-display-{{$index}}"  data-pss-validation-field="STUDENTCONTACTDETAIL.RELATIONSHIPTYPECODESETID" data-ng-bind="relationshipTypeCodeSetLookup[contactStudent.activeDetail.relationship].value"/></td>
+							<td id="relationship-custody-{{$index}}" data-ng-class="{'checkmark-icon': contactStudent.activeDetail.custodial}"><center><em id="relationship-custody-display-{{$index}}" name="relationship-custody-display-{{$index}}"  data-pss-validation-field="STUDENTCONTACTDETAIL.ISCUSTODIAL" /></center></td>
+							<td id="relationship-liveswith-{{$index}}" data-ng-class="{'checkmark-icon': contactStudent.activeDetail.livesWith}"><center><em id="relationship-liveswith-display-{{$index}}" name="relationship-liveswith-display-{{$index}}"  data-pss-validation-field="STUDENTCONTACTDETAIL.LIVESWITHFLG"/></center></td>
+							<td id="relationship-schoolpickup-{{$index}}" data-ng-class="{'checkmark-icon': contactStudent.activeDetail.schoolPickup}"><center><em id="relationship-schoolpickup-display-{{$index}}" name="relationship-schoolpickup-display-{{$index}}"  data-pss-validation-field="STUDENTCONTACTDETAIL.SCHOOLPICKUPFLG"/></center></td>
+							<td id="relationship-emergcontact-{{$index}}" data-ng-class="{'checkmark-icon': contactStudent.activeDetail.emergency}"><center><em id="relationship-emergContact-display-{{$index}}" name="relationship-emergContact-display-{{$index}}"  data-pss-validation-field="STUDENTCONTACTDETAIL.ISEMERGENCY"/></center></td>
+							<td id="relationship-originalcontacttype-{{$index}}" ><span id="relationship-originalcontacttype-display-{{$index}}" name="relationship-originalcontacttype-display-{{$index}}"  data-pss-validation-field="ORIGINALCONTACTMAP.ORIGINALCONTACTTYPE" data-ng-bind="contactStudent.originalContactType.value" /></td>
+							<td id="relationship-startdate-{{$index}}" ><span id="relationship-startdate-display-{{$index}}" name="relationship-startdate-display-{{$index}}" data-ng-bind="localizedDate(contactStudent.activeDetail.startDate)" data-pss-validation-field="STUDENTCONTACTDETAIL.STARTDATE" /></td>
+							<td id="relationship-enddate-{{$index}}" ><span id="relationship-enddate-display-{{$index}}" name="relationship-enddate-display-{{$index}}" data-ng-bind="localizedDate(contactStudent.activeDetail.endDate)" data-pss-validation-field="STUDENTCONTACTDETAIL.ENDDATE" /></td>
+							<td id="relationship-dataaccess-{{$index}}" data-ng-class="{'checkmark-icon': contactStudent.canAccessData}"><center><em id="relationship-dataaccess-display-{{$index}}" name="relationship-dataaccess-display-{{$index}}"/></center></td>
+                            <td id="relationship-actions={{$index}}" class="td-button-holder nowrap right" data-ng-class="{'feedback-caution':contactStudent.detailConflict}">
+								<div>
+									<button type="button" aria-label="~[text:psx.html.contacts.edit]" id="edit-details-button-{{$index}}" name="edit-details-button-{{$index}}" data-ng-click="editDetailsDialog(contactStudent, $index)" data-ng-disabled="contactStudent.deleted" title="~[text:psx.html.contacts.edit]">
+										<em class="ui-icon-white ui-icon-pencil ui-icon"></em>
+									</button>
+									~[if.modaccess]
+									<button type="button" aria-label="~[text:psx.html.contacts.delete]" id="toggle-delete-relationship-button-{{$index}}" name="toggle-delete-relationship-button-{{$index}}" data-ng-click="openDeleteStudentPanel($index, contactStudent);" title="~[text:psx.html.contacts.delete]">
+										<em class="ui-icon-white ui-icon ui-icon-minusthick"></em>
+									</button>
+									[/if]
+								</div>
+								<input id="studentdcid-{{$index}}" name="studentdcid[{{$index}}]" type="hidden" value="{{contactStudent.dcid}}">
+								<input id="studentcontactassocid-{{$index}}" name="studentcontactassocid[{{$index}}]" type="hidden" value="{{contactStudent.studentContactId}}">
+								<input id="studentcontactdetailid-{{$index}}" name="studentcontacdetailid[{{$index}}]" type="hidden" value="{{contactStudent.activeDetail.studentContactDetailId}}">
+							</td>
+			            </tr>
+			        </table>
+			    </div>
+			</div>
+
+			<h2 id="phone-header" data-ng-click="toggleDivCollapse($event)" class="expanded">~[text:psx.html.contacts.phone_numbers]</h2>
+            <div data-ng-controller="contactPhoneController" class="box-round">
+				<div class="button-row">
+					~[if.security.fieldLevel=PERSONPHONENUMBERASSOC.PHONENUMBERASENTERED=FULLACCESS]
+					<input type="button" data-ng-click="addPhoneDialog()" id="add-phone-button" name="add-phone-button" value="~[text:psx.html.contacts.phone.add]">
+					[/if]
+				</div>
+				<table id="phone-number-table" class="grid">
+					<colgroup>
+						<col width="1%">
+						<col width="15%">
+						<col width="40%">
+						<col width="10%">
+						<col width="10%">
+						<col width="1%">
+					</colgroup>
+					<tr>
+						<th>~[text:psx.html.contacts.phone.order]</th>
+						<th>~[text:psx.html.contacts.phone.type]</th>
+						<th>~[text:psx.html.contacts.phone.number]</th>
+						<th>~[text:psx.html.contacts.phone.preferred]</th>
+						<th>~[text:psx.html.contacts.phone.sms]</th>
+						<th>~[text:psx.html.contacts.phone.action]</th>
+					</tr>
+                    <tr data-ng-repeat=" phone in context.currentContact.phones | orderBy:'sequence' "
+                        class="center"
+                        data-ng-if="!phone.deleted"
+                        id="phone-row-{{$index}}">
+                        <td id="phone-sort-button-{{$index}}" class="td-button-holder nowrap">
+							<div class="button-sort">
+                                <button type="button" id="sort-up-phone-button-{{$index}}" name="sort-up-phone-button-{{$index}}" class="up" data-ng-click="moveUpOrder($index)" data-ng-disabled="$first" aria-label="~[text:psx.html.contacts.phone.order_up]" title="{{ $first ? '~[text:psx.html.contacts.phone.order_up_disabled]' : '~[text:psx.html.contacts.phone.order_up]' }}"><em></em></button>
+                                <button type="button" id="sort-down-phone-button-{{$index}}" name="sort-down-phone-button-{{$index}}" class="down" data-ng-click="moveDownOrder($index)" data-ng-disabled="$last" aria-label="~[text:psx.html.contacts.phone.order_down]" title="{{ $last ? '~[text:psx.html.contacts.phone.order_down_disabled]' : '~[text:psx.html.contacts.phone.order_down]' }}"><em></em></button>
+							</div>
+						</td>
+						<td id="phone-type-{{$index}}"><span id="phone-type-display-{{$index}}" name="phone-type-display-{{$index}}" data-ng-bind="phoneTypeCodeSetLookup[phone.phoneType].value" data-pss-validation-field="PERSONPHONENUMBERASSOC.PHONETYPECODESETID" /></td>
+						<td id="phone-number-{{$index}}"><span><span id="phone-number-display-{{$index}}" name="phone-number-display-{{$index}}" data-ng-bind="phone.phoneNumber" data-pss-validation-field="PERSONPHONENUMBERASSOC.PHONENUMBERASENTERED" /></span>
+					        <span id="phone-number-ext-display-{{$index}}" name="phone-number-ext-display-{{$index}}" data-ng-bind="phone.extension !== '' && phone.extension != null ? ' x' + phone.extension : ''" data-pss-validation-field="PHONENUMBER.PHONENUMBEREXT" /></td>
+					    <td id="phone-preferred-{{$index}}" data-ng-class="{'checkmark-icon': phone.preferred}"><center><em id="phone-preferred-display-{{$index}}" name="phone-preferred-display-{{$index}}" data-pss-validation-field="PERSONPHONENUMBERASSOC.ISPREFERRED"/></center></td>
+						<td id="phone-sms-{{$index}} "data-ng-class="{'checkmark-icon': phone.sms}"><center><em id="phone-sms-display-{{$index}}" name="phone-sms-display-{{$index}}" data-pss-validation-field="PHONENUMBER.ISSMS"/></center></td>
+                        <td id="phone-action-{{$index}}" class="td-button-holder nowrap">
+							<div>
+                                <button type="button" aria-label="~[text:psx.html.contacts.edit]" id="edit-phone-button-{{$index}}" name="edit-phone-button-{{$index}}" data-ng-click="editPhoneDialog(phone)" title="~[text:psx.html.contacts.edit]">
+									<em class="ui-icon-white ui-icon-pencil ui-icon"></em>
+								</button>
+								~[if.modaccess]
+                                <button type="button" aria-label="~[text:psx.html.contacts.delete]" id="toggle-delete-phone-button-{{$index}}" name="toggle-delete-phone-button-{{$index}}" data-ng-click="openDeletePhonePanel($index, phone)" title="~[text:psx.html.contacts.delete]">
+									<em class="ui-icon-white ui-icon ui-icon-minusthick"></em>
+								</button>
+								[/if]
+							</div>
+							<input id="personphonenumberassocid-{{$index}}" name="personphonenumbersassocid[{{$index}}]" type="hidden" value="{{phone.contactsPhoneId}}">
+							<input id="phonenumberid-{{$index}}" name="phonenumberid[{{$index}}]" type="hidden" value="{{phone.phoneNumberId}}">
+						</td>
+					</tr>
+		  		</table>
+			</div>
+
+			<h2 id="email-address-header" data-ng-click="toggleDivCollapse($event)" class="expanded">~[text:psx.html.contacts.emailaddresses]</h2>
+            <div data-ng-controller="contactEmailController" class="box-round">
+				~[if.security.fieldLevel=EMAILADDRESS.EMAILADDRESS=FULLACCESS]
+				<div class="button-row">
+					<input type="button" data-ng-click="addEmailDialog()" id="add-email-address-button" name="add-email-address-button" value="~[text:psx.html.contacts.email.add]">
+				</div>
+				[/if]
+				<table id="email-address-table" class="grid">
+					<colgroup>
+						<col style="width: auto">
+						<col style="width: auto">
+						<col style="width: auto">
+						<col style="width: 1%">
+					</colgroup>
+					<tr>
+						<th>~[text:psx.html.contacts.email.primary]</th>
+						<th>~[text:psx.html.contacts.email.type]</th>
+						<th>~[text:psx.html.contacts.emailaddress]</th>
+						<th>~[text:psx.html.contacts.email.action]</th>
+					</tr>
+					<tr id="email-row-{{$index}}"
+						data-ng-repeat="email in context.currentContact.emails"
+						class="center"
+                        data-ng-if="!email.deleted">
+						<td id="email-primary-{{$index}}" data-ng-class="{'checkmark-icon': email.primary}"><center><em id="primary-radio-display-{{$index}}" name="primary-radio-display-{{$index}}" data-pss-validation-field="PERSONEMAILADDRESSASSOC.ISPRIMARYEMAILADDRESS"/></center></td>
+						<td id="email-type-{{$index}}"><span id="email-type-display-{{$index}}" name="email-type-display-{{$index}}" data-ng-bind="emailTypeCodeSetLookup[email.type].value" data-pss-validation-field="PERSONEMAILADDRESSASSOC.EMAILTYPECODESETID" /></td>
+						<td id="email-address-{{$index}}"><span id="email-address-display-{{$index}}" name="email-address-display-{{$index}}" data-ng-bind="email.address" data-pss-validation-field="EMAILADDRESS.EMAILADDRESS" /></td>
+						<td id="email-action-{{$index}}" class="td-button-holder nowrap">
+							<div>
+								<button type="button" aria-label="~[text:psx.html.contacts.edit]" id="edit-email-button-{{$index}}" name="edit-email-button-{{$index}}" data-ng-click="editEmailDialog($index)" title="~[text:psx.html.contacts.edit]">
+									<em class="ui-icon-white ui-icon-pencil ui-icon"></em>
+								</button>
+								~[if.modaccess]
+								<button type="button" data-ng-disabled="email.primary === true" aria-label="~[text:psx.html.contacts.delete]" id="toggle-delete-email-button-{{$index}}" name="toggle-delete-email-button-{{$index}}" data-ng-click="openDeleteEmailPanel($index, email)" title="~[text:psx.html.contacts.delete]">
+									<em class="ui-icon-white ui-icon ui-icon-minusthick"></em>
+								</button>
+								[/if]
+							</div>
+							<input id="personemailaddressassocid-{{$index}}" name="personemailaddressassocid[{{$index}}]" type="hidden" value="{{email.contactEmailId}}">
+							<input id="emailaddresid-{{$index}}" name="emailaddressid[{{$index}}]" type="hidden" value="{{email.emailId}}">
+						</td>
+					</tr>
+				</table>
+			</div>
+
+		  	<h2 id="physical-address-header" data-ng-click="toggleDivCollapse($event)" class="expanded">~[text:psx.html.contacts.addresses]</h2>
+            <div data-ng-controller="contactAddressController" class="box-round" >
+				<div class="button-row" >
+					<div class="relativeButtons">
+						<input id="show-all-addresses-checkbox" name="show-all-addresses-checkbox" type="checkbox" data-ng-disabled="context.isMergeMode" data-ng-model="showAllAddresses" data-ng-change="saveShowAllAddresses()" data-pss-ignore-dirty-state="true"/>
+						<label for="show-all-addresses-checkbox" data-ng-bind="getShowAllAddressesMessageWithCount()"></label>
+						~[if.security.fieldLevel=PERSONADDRESS.STREET=FULLACCESS]
+                        <input type="button" data-ng-click="addAddressDialog()" id="add-physical-address-button" name="add-physical-address-button" value="~[text:psx.html.contacts.address.add]"/>
+						[/if]
+					</div>
+        	    </div>
+
+				<table id="physical-address-table" class="grid">
+                    <colgroup>
+                        <col style="width: 1%">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: 1%">
+                    </colgroup>
+                    <tr>
+						<th>~[text:psx.html.contacts.address.order]</th>
+						<th>~[text:psx.html.contacts.address.type]</th>
+						<th>~[text:psx.html.contacts.address.line1]<br>~[text:psx.html.contacts.address.line2]</th>
+						<th>~[text:psx.html.contacts.address.unit]</th>
+						<th>~[text:psx.html.contacts.address.city]</th>
+						<th>~[text:psx.html.contacts.address.state_province]</th>
+						<th>~[text:psx.html.contacts.address.postalcode]</th>
+						<th>~[text:psx.html.contacts.address.country]</th>
+						<th>~[text:psx.html.contacts.address.startdate]</th>
+						<th>~[text:psx.html.contacts.address.enddate]</th>
+						<th>~[text:psx.html.contacts.address.action]</th>
+                    </tr>
+                    <tr data-ng-repeat="address in context.currentContact.addresses | filter: !showAllAddresses ? {current: true} : {}  | orderBy:'sequence' "
+                        class="center"
+                        data-ng-if="!address.deleted"
+                        data-ng-style="!address.current && {'font-style':'italic'}">
+                        <td id="address-sort-button-{{$index}}" class="td-button-holder nowrap">
+							<span class="button-sort" >
+                                <button type="button" id="sort-up-address-button-{{$index}}" name="sort-up-address-button-{{$index}}" class="up" data-ng-click="moveUpOrder($index, address)" data-ng-disabled="$first || addressOrderRestricted"  aria-label="~[text:psx.html.contacts.address.order_up]" title="{{ $first ? '~[text:psx.html.contacts.address.order_up_disabled]' : '~[text:psx.html.contacts.address.order_up]' }}"><em></em></button>
+                                <button type="button" id="sort-down-address-button-{{$index}}" name="sort-down-address-button-{{$index}}" class="down" data-ng-click="moveDownOrder($index, address)" data-ng-disabled="$last || addressOrderRestricted"  aria-label="~[text:psx.html.contacts.address.order_down]" title="{{ $last ? '~[text:psx.html.contacts.address.order_down_disabled]' : '~[text:psx.html.contacts.address.order_down]' }}"><em></em></button>
+							</span>
+						</td>
+						<td id="address-type-{{$index}}" ><span id="address-type-display-{{$index}}" name="address-type-display-{{$index}}" data-ng-bind="addressTypeCodeSetLookup[address.addressType].value" data-pss-validation-field="PERSONADDRESSASSOC.ADDRESSTYPECODESETID" /></td>
+						<td>
+							<div id="physical-address-display-{{$index}}" name="physical-address-display-{{$index}}" >
+								<span data-ng-bind="address.street" data-pss-validation-field="PERSONADDRESS.STREET" ></span>
+								<br>
+								<span data-ng-bind="address.linetwo" data-pss-validation-field="PERSONADDRESS.LINETWO" ></span>
+							</div>
+						</td>
+						<td id="address-unit-{{$index}}"><span id="address-unit-display-{{$index}}" name="address-unit-display-{{$index}}" data-ng-bind="address.unit" data-pss-validation-field="PERSONADDRESS.UNIT" /></td>
+						<td id="address-city-{{$index}}"><span id="address-city-display-{{$index}}" name="address-city-display-{{$index}}" data-ng-bind="address.city" data-pss-validation-field="PERSONADDRESS.CITY" /></td>
+						<td id="address-state-{{$index}}"><span id="address-state-display-{{$index}}" name="address-state-display-{{$index}}" data-ng-bind="stateCodesetDisplayMap[address.state].code" data-pss-validation-field="PERSONADDRESS.STATESCODESETID" /></td>
+						<td id="address-zip-{{$index}}"><span id="address-zip-display-{{$index}}" name="address-zip-display-{{$index}}" data-ng-bind="address.postalcode" data-pss-validation-field="PERSONADDRESS.POSTALCODE" /></td>
+						<td id="address-country-{{$index}}"><span id="address-country-display-{{$index}}" name="address-country-display-{{$index}}" data-ng-bind="countryCodesetDisplayMap[address.country].code" data-pss-validation-field="PERSONADDRESS.COUNTRYCODESETID" /></td>
+						<td id="address-startdate-{{$index}}"><span id="address-startdate-display-{{$index}}" name="address-startdate-display-{{$index}}" data-ng-bind="localizedDate(address.startDate)" data-pss-validation-field="PERSONADDRESSASSOC.STARTDATE" /></td>
+						<td id="address-enddate-{{$index}}"><span id="address-enddate-display-{{$index}}" name="address-enddate-display-{{$index}}"  data-ng-bind="localizedDate(address.endDate)" data-pss-validation-field="PERSONADDRESSASSOC.ENDDATE" /></td>
+                        <td id="address-action-{{$index}}" class="td-button-holder nowrap">
+							<div>
+                                <button type="button" aria-label="~[text:psx.html.contacts.address.edit]" id="edit-address-button-{{$index}}" name="edit-address-button-{{$index}}" data-ng-click="editAddressDialog(address)" data-ng-disabled="address.deleted" title="~[text:psx.html.contacts.address.edit]">
+									<em class="ui-icon-white ui-icon-pencil ui-icon"></em>
+								</button>
+								~[if.modaccess]
+                                <button type="button" aria-label="~[text:psx.html.contacts.address.delete]" id="toggle-delete-address-button-{{$index}}" name="toggle-delete-address-button-{{$index}}" data-ng-click="openDeleteAddressPanel(address)" title="~[text:psx.html.contacts.address.delete]">
+									<em class="ui-icon-white ui-icon ui-icon-minusthick"></em>
+								</button>
+								[/if]
+							</div>
+							<input id="personaddressassocid-{{$index}}" name="personaddressassocid[{{$index}}]" type="hidden" value="{{address.contactsAddressId}}">
+							<input id="personaddresid-{{$index}}" name="personaddressid[{{$index}}]" type="hidden" value="{{address.addressId}}">
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--
+			<h2 id="language-header" data-ng-click="toggleDivCollapse($event)" class="expanded">~[text:psx.html.contacts.languages]</h2>
+			<div data-ng-controller="contactLanguageController" data-ng-form="language-form" class="box-round">
+				<div class="button-row">
+					<input type="button" data-ng-click="this['language-form'].$setDirty();addLanguageDialog()" id="add-language-button" name="add-language-button" value="~[text:psx.html.contacts.language.add]">
+				</div>
+				<table id="language-table" class="grid">
+					<th>~[text:psx.html.contacts.language.order]</th>
+					<th>~[text:psx.html.contacts.language.language]</th>
+					<th>~[text:psx.html.contacts.language.read]</th>
+					<th>~[text:psx.html.contacts.language.speak]</th>
+					<th>~[text:psx.html.contacts.language.action]</th>
+					<tr data-ng-repeat=" language in context.currentContact.languages | orderBy:'sequence' " style="text-align: center;">
+						<td>
+							<div class="button-sort" >
+								<button type="button" id="sort-up-language-button-{{$index}}" name="sort-up-language-button-{{$index}}" class="up" data-ng-click="this['language-form'].$setDirty();moveUpOrder($index)" data-ng-disabled="$first"><em></em></button>
+								<button type="button" id="sort-down-language-button-{{$index}}" name="sort-down-language-button-{{$index}}" class="down" data-ng-click="this['language-form'].$setDirty();moveDownOrder($index)" data-ng-disabled="$last"><em></em></button>
+							</div>
+						</td>
+						<td><span id="language-address-display-{{$index}}" name="language-address-display-{{$index}}" data-ng-bind="getDisplayLanguage(language)" data-pss-validation-field="PERSON_LANGUAGE.LANGUAGEISOCODE"></td>
+						<td data-ng-class="{'checkmark-icon': language.canRead}"><em id="language-read-display-{{$index}}" name="language-canRead-display-{{$index}}" data-pss-validation-field="PERSON_LANGUAGE.CAN_READ" /></td>
+						<td data-ng-class="{'checkmark-icon': language.canSpeak}"><em id="language-speak-display-{{$index}}" name="language-canSpeak-display-{{$index}}" data-pss-validation-field="PERSON_LANGUAGE.CAN_SPEAK" /></td>
+						<td>
+							<div>
+								!!! REPLACE THIS WITH BUTTONS WHEN THE LANGUAGE SECTIONS IS ADDED !!!
+								<a class="button inline" data-ng-click="this['language-form'].$setDirty();editLanguageDialog(language)" id="edit-language-button-{{$index}}" name="edit-language-button-{{$index}}"><span tabindex="0" class="ui-icon-white ui-icon-pencil">&nbsp;</span></a>
+								<a class="button inline" data-ng-click="this['language-form'].$setDirty();toggleMarkDeletion(language)" id="toggle-delete-language-button-{{$index}}" name="toggle-delete-language-button-{{$index}}"><span tabindex="0" class="ui-icon-white" data-ng-class="{'ui-icon-minusthick': !language.deleted, 'ui-icon-arrowreturnthick-1-w': language.deleted}">&nbsp;</span></a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+  			-->
+			<div>
+				<p id="contact-id-label"><strong>~[text:psx.html.contacts.contactid]</strong> <span data-ng-bind="context.currentContact.contactId" data-pss-validation-field="PERSON.ID"></span></p>
+				~[if.modaccess]
+				<div class="button-row">
+					<input type="button" id="real-delete-button" class="button confirmationReq" data-ng-if="context.deleteSelected" data-ng-click="deleteContact()" value ="~[text:psx.html.contacts.confirmdelete]"/>
+					<input class="button" type="button" id="cancel-delete-button" data-ng-if="context.deleteSelected" data-ng-click="context.deleteSelected=false" value ="~[text:psx.html.contacts.cancel]">
+					<input class="button" type="button" id="fake-delete-button" data-ng-show="!context.isMergeMode" data-ng-if="!context.deleteSelected && !context.newContact" data-ng-click="context.deleteSelected=true" value ="~[text:psx.html.contacts.delete]"/>
+					<button id="submit-button" type="submit" class="button" data-ng-disabled="(!context.doMerge && (!contactform.$dirty || contactform.$invalid)) || (context.doMerge && context.relationshipDetailConflict)"/>
+						<span data-ng-if="!context.isMergeMode" >~[text:psx.html.contacts.submit]</span>
+						<span data-ng-if="context.isMergeMode" >~[text:psx.html.contacts.merge]</span>
+					</button>
+				</div>
+				[/if]
+			</div>
+    	</form>
+		<!-- end of content of bounding box -->
+		<div id="consolidateDialog" class="hide" style=margin-left:10px;margin-right:10px;width:500px;>
+			<div>~[text:psx.html.admin_contacts.consolidate.this_action_is_irreversible]</div>
+			<div>&nbsp;</div>
+			<div>~[text:psx.html.admin_contacts.consolidate.you_are_about_to_save]</div>
+			<li style="margin-left:10px;">{{context.consolidateMasterName}}</li>
+			<div>~[text:psx.html.admin_contacts.consolidate.and_delete]</div>
+			<li data-ng-repeat="consolidatedName in context.consolidatedNames"style="margin-left:10px;">{{consolidatedName}}</li>
+		</div>
+		<div id="delete-item-div" class="hide" name="delete-item-div">
+		</div>
+		~[wc:admin_footer_css]
+		<div id="slide-out-panel" data-ng-include="panel.template">
+		</div>
+		<script>
+		  	require(['angular','components/contacts/index', 'components/widgets/dirtyInputHelper/index'],function(angular){
+		    	angular.bootstrap(document,['contactsModule']);
+		  	});
+		</script>
+		<script type=text/ng-template id=emailtemplate.html>
+		    ~[x:insertfile;emailtemplate.html;;preserveheaders]
+		</script>
+		<script type=text/ng-template id=phonetemplate.html>
+		    ~[x:insertfile;phonetemplate.html;;preserveheaders]
+		</script>
+		<script type=text/ng-template id=languagetemplate.html>
+		    ~[x:insertfile;languagetemplate.html;;preserveheaders]
+		</script>
+		<script type=text/ng-template id=addresstemplate.html>
+		    ~[x:insertfile;addresstemplate.html;;preserveheaders]
+		</script>
+		<script type=text/ng-template id=demographicstemplate.html>
+			~[x:insertfile;demographicstemplate.html;;preserveheaders]
+		</script>
+		<script type=text/ng-template id=accountTemplate.html>
+			~[x:insertfile;accountTemplate.html;;preserveheaders]
+		</script>
+		<script>
+			~[if.district.office]
+			var isDistrict = true;
+			[/if.district.office]
+			 ~[brij_render_insert:i18n_svc:frontPageNameLettersJSON]
+		</script>
+		<script>
+			var canEditUserName = true;
+			~[if.sp.restrict_usernamechange.guardian=true]
+				canEditUserName = false;
+			[/if]
+		</script>
+		<script type=text/ng-template id=studentSearch.html>
+		    ~[x:insertfile;studentSearch.html;;preserveheaders]
+		</script>
+		<script>
+			var emailOff = false;
+			var reportsOff = false;
+			~[if#emailOff.pref.emailoff=1]
+				emailOff = true;
+			[/if]
+			~[if#reportOff.pref.emailreportsoff=1]
+				reportsOff = true;
+			[/if]
+			var sendNowEnabled = !emailOff && !reportsOff;
+		</script>
+	 </body>
+</html><!-- non framed -->
