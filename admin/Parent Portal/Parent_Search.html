@@ -36,7 +36,7 @@
     			<tr>
 						<th class="bold" style="width:20px">Contact Details</th>
 						<th data-pss-sort-fields="enroll_link" class="bold" style="width:20px">Current Enrollment</th>
-						<th class="bold" style="width:20px">Referrals</th>
+						<th class="bold" style="width:20px" >Referrals</th>
 						<th data-pss-sort-fields="TPS_PARENT_ID" class="bold">ID</th>
     				<th data-pss-sort-fields="first_name" >First Name</th>
     				<th data-pss-sort-fields="last_name" >Last Name</th>
@@ -46,12 +46,12 @@
     		<tbody>
     			<tr data-ng-repeat="item in myDataFiltered" >
 						<td><a ng-href="{{ item.link }}">Edit Parent</a></td>
-						<td><a ng-href="{{ item.enroll_link }}">{{ item.current_group }}</a></td>
-						<td><a ng-href="{{ item.REFER_LINK }}">View/Add Referrals</a></td>
-						<td>{{ item.TPS_PARENT_ID }}</td>
-    				<td>{{ item.first_name }}</td>
-    				<td>{{ item.last_name }}</td>
-						<td>{{ item.students }}</td>
+						<td style="text-align: center"><a ng-href="{{ item.enroll_link }}">{{ item.current_group }}</a></td>
+						<td style="text-align: center"><a ng-href="{{ item.REFER_LINK }}">View/Add Referrals</a></td>
+						<td style="text-align: center">{{ item.TPS_PARENT_ID }}</td>
+    				<td style="text-align: center">{{ item.first_name }}</td>
+    				<td style="text-align: center">{{ item.last_name }}</td>
+						<td style="text-align: center">{{ item.students }}</td>
     			</tr>
     		</tbody>
     	</table>
