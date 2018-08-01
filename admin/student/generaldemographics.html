@@ -71,6 +71,59 @@
     </td>
 </tr>
 
+<tr>
+  <td class="bold">Nickname
+
+  </td>
+<td>
+  <input type="text" name="[Students.U_Students_Extension]Nickname" value="" size="25" >
+</td>
+
+</tr>
+
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.student_number]</td>
+                    <td>
+                        <input type="text" id="fieldStuNum" name="[01]student_number" value="" size="13">
+                    </td>
+</tr>
+
+<tr>
+  <td class="bold">Family ID</td>
+  <td><input type="text" id="fieldStuNum" name="[01]Family_Ident" value="" size="13"></td>
+</tr>
+
+<tr>
+<td class="bold">Parent Coach</td>
+<td>
+<select name="[Students.U_Students_Extension]PARENT_COACH_EMAIL">
+  <<option value=""></option>
+  <<option value="shawneece@theprimaryschool.org">Shawneece</option>
+  <<option value="valentina@theprimaryschool.org">Valentina</option>
+  <<option value="cristina@theprimaryschool.org">Cristina</option>
+  <<option value="stephanie@theprimaryschool.org">Stephanie</option>
+  <<option value="marla@theprimaryschool.org">Marla</option>
+  <<option value="yadira@theprimaryschool.org">Yadira</option>
+  <<option value="jessica@theprimaryschool.org">Jessica</option>
+  <<option value="joyce.latufahamokioa@theprimaryschool.org">Joyce</option>
+  <<option value="veronica.sierra@theprimaryschool.org">Veronica</option>
+</select>
+</td>
+</tr>
+
+<tr>
+  <td class="bold">CC Teacher Email</td>
+  <td><input type="text" id="fieldStuNum" name="[Students.U_Students_Extension]CC_TEACHER_EMAIL" value="" size="33"></td>
+</tr>
+
+
+<tr>
+    <td class="bold">~[text:psx.html.admin_students.generaldemographics.age]</td>
+    <td id="studentAge">~(age)</td>
+</tr>
+
+
+
 <tr class="headerrow">
     <td colspan="2" class="bold">~[text:psx.html.admin_students.generaldemographics.home_address]</td>
 </tr>
@@ -333,12 +386,7 @@
                         <input type="text" id="fieldSSN" name="[01]ssn" value="" size="13" autocomplete="off">
                     </td>
 </tr>
-<tr>
-    <td class="bold">~[text:psx.html.admin_students.generaldemographics.student_number]</td>
-                    <td>
-                        <input type="text" id="fieldStuNum" name="[01]student_number" value="" size="13">
-                    </td>
-</tr>
+
 <!-- Start insert state specific section information -->
 ~[x:insertfile;state/demographics~[displaypref:districtstate].html]
 <!-- End insert state specific section information -->
