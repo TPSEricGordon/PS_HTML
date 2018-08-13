@@ -1,0 +1,18 @@
+[
+	~[tlist_sql;
+    SELECT CODE || ' - '|| DAY_OF_WEEK || '''s, ' || MEETING_TIME AS Meeting,
+      FACILITATOR || ' and '||FACILITATOR2 AS Facilitators,
+      ID AS ROSTER_ID,
+      ID AS Take_Attendance
+    FROM PS.U_PARENT_GROUPS PG
+    -- WHERE YEARID=~(curyearid)
+    ORDER BY CODE
+	]
+
+		{"MEETING":"~(Meeting)",
+			"FACILITATORS":"~(Facilitators)",
+			"ROSTER_ID":"~(ROSTER_ID)",
+			"ID":"~(Take_Attendance)"
+		},
+	[/tlist_sql]
+{}]

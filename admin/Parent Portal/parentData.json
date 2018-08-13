@@ -47,9 +47,9 @@ ORDER BY DBMS_RANDOM.VALUE
 			"current_group":"~(current_group)",
 			"enroll_link":"~(enroll_link)",
 			"id":"~(id)",
-			"first_name":"~(first_name)",
-			"last_name":"~(last_name)",
-			"students":"~(students)",
+			"first_name":"~(first_name;json)",
+			"last_name":"~(last_name;json)",
+			"students":"~(students;json)",
 			"REFER_LINK":"~(REFER_LINK)",
 			"CALL_LINK":"~(CALL_LINK)",
 			"TPS_PARENT_ID":"~(TPS_PARENT_ID)"

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>Referral Tracking</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+
+   <body>
+         ~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html"
+            target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+            target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_search.html"
+            target="_top"> Parent Search </a> &gt; Referral Tracking<!-- breadcrumb end
+            -->
+          ~[wc:admin_navigation_css]
+         <h1>Referral Tracking</h1>
+         <!-- start of content and bounding box -->
+        ~[if.~(gpv.new_enrollment)=true]<div class="feedback-confirm">You Logged a Referral</div>[/if]
+
+        <h3> ~[tlist_sql;
+        SELECT
+           PE.TPS_PARENT_ID, FIRSTNAME, LASTNAME
+        FROM PS.PERSON P
+          JOIN PS.U_DEF_EXT_PERSON PE
+            ON P.ID = PE.PERSONID
+        WHERE ID=~(gpv.id;sqlText) ]
+           <td>~(TPS_PARENT_ID) - </td>
+           <td>~(FIRST_NAME)</td>
+           <td>~(LAST_NAME)</td>
+
+        [/tlist_sql]</h3>
+
+        <div class="box-round">
+          <fieldset>
+          <legend>All Referrals</legend>
+        <table class="grid" id="groups">
+           <thead>
+              <tr style="border:1px solid grey;">
+                 <th class="bold" style="text-align: center">Referral Type</th>
+                 <th class="bold">Organization</th>
+                 <th class="bold" style="width:25px">Date</th>
+                 <th class="bold">Other Notes</th>
+                 <th class="bold" style="width:50px">Date Followed Up</th>
+                 <th class="bold" style="width:50px">Result</th>
+                 <th class="bold" style="width:25px">Edit</th>
+              </tr>
+           </thead>
+           <tbody>
+              ~[tlist_sql;
+              SELECT
+                PR.REFERRAL_TYPE, PR.ORGANIZATION, PR.DATE_REFERRED, PR.NOTES,
+                PR.FOLLOW_UP_DATE, PR.RESULT, '/admin/Parent_Coaches/referrals/edit.html?id='||PR.ID||'&p_id='||~(gpv.id) As edit_link
+              FROM PS.U_PARENT_REFERRALS PR
+              WHERE PR.PERSONID = ~(gpv.id)
+              ]
+              <tr>
+                <td> ~(REFERRAL_TYPE)</td>
+                 <td>~(ORGANIZATION)</td>
+                 <td>~(DATE_REFERRED;json)</td>
+                 <td>~(NOTES)</td>
+                 <td>~(FOLLOW_UP_DATE)</td>
+                 <td>~(RESULT)</td>
+                 <td><a href="~(edit_link)"><img src="/images/btn_edit.gif" width="16" height="16" border="0"></a></td>
+               </tr>
+              [/tlist_sql]
+              </fieldset>
+           </tbody>
+        </table>
+
+
+        <p style="text-align: center">
+        <a href="parent_referral_new.html?id=~(gpv.id)" id="btnNew" name="btnNew" class="button">Add Referral</a>
+        </p>
+
+
+
+      </div>
+
+<!-- end of content area -->
+	~[wc:admin_footer_frame_css]
+</body>
+</html>

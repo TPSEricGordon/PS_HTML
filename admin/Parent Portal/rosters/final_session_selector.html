@@ -1,0 +1,8 @@
+<option></option>
+~[tlist_sql;
+SELECT   PS.ID, PS.NAME
+FROM PS.U_PARENT_SESSIONS PS
+WHERE PS.TYPE_ID = ~(gpv.main_type_id)
+AND PS.SUBTYPE_ID= ~(gpv.sub_type_id)]
+<option value=~(ID)>~(NAME)</option>
+[/tlist_sql]

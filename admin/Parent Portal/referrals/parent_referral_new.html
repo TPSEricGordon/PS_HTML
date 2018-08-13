@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+   <!-- start right frame -->
+   <head>
+      <title>New FSC Referral</title>
+      ~[wc:UI_js_includes]
+      ~[wc:commonscripts]
+      <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+      <link href="/images/css/print.css" rel="stylesheet" media="print">
+   </head>
+   <body onload="addList('group_ID_dropDown', terms)">
+
+
+<!-- WANT TO FIX IN ORDER TO NAVIGATE BACK TO PARENT ENROLLMENTS..... WOULD NEED GPV VALUE OF:
+                        ?id='||P.ID||'&enroll_id='||PE.ID
+
+     <form id="new_enrollment" action="/admin/parent_coaches/enrollment/parent_enrollments.html?id=~(gpv.id)&new_enrollment=true&enroll_id=hold" method="POST">
+-->
+
+<form action="/admin/parent_coaches/referrals/home.html?new_referral=true&id=~(gpv.id)" method="POST">
+       ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html"
+          target="_top"> Start Page </a> &gt; <a href="/admin/parent_coaches/home.html"
+          target="_top"> Parent Portal </a>&gt;<a href="/admin/parent_coaches/parent_search.html"
+          target="_top"> Parent Search </a> &gt;<a href="/admin/parent_coaches/referrals/home.html?id=~(gpv.id)"
+          target="_top"> Parent Referrals </a> &gt; New Parent Referral<!-- breadcrumb end
+          -->~[wc:admin_navigation_frame_css]
+       <h1>New Parent Referral</h1>
+      <!-- start of content and bounding box -->
+
+        <div class="box-round">
+           ~[DirectTable.Select:U_PARENT_REFERRALS;ID:-1]
+           <fieldset id="parent_enrollment">
+              <legend>New Referral</legend>
+              <table border="0" cellspacing="0" cellpadding="4" class="linkDescList">
+
+                <input type="hidden" name="PERSON.ID" value="" id="hiddenParentID"/>
+
+                <!-- Populates on Submit Button Press! -->
+
+                <tr>
+                    <td class="bold">Referral Type</td>
+                    <td>
+                      <select id="group_ID_dropDown" name="[U_PARENT_REFERRALS]REFERRAL_TYPE">
+                        <option>
+                          <option value="Food">Food Security</option>
+                          <option value="Financial">Financial</option>
+                          <option value="Housing">Housing</option>
+                          <option value="Relationships">Relationships</option>
+                          <option value="Transporation">Transporation</option>
+                          <option value="Utilities">Utilities</option>
+                          <option value="Other">Other</option>
+                        </option>
+                      </select>
+                        </td>
+                </tr>
+
+                <tr>
+                    <td class="bold">Organization</td>
+                    <td>
+                        <input name="[U_PARENT_REFERRALS]ORGANIZATION" value=""/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="bold">Date Referred</td>
+                    <td>
+                      <input name="[U_PARENT_REFERRALS]DATE_REFERRED" value="">
+                    </td>
+                </tr>
+                <tr>
+                  <td class="bold">
+                    Other Notes
+                  </td>
+                  <td>
+                    <textarea name="[U_PARENT_REFERRALS]NOTES" cols="50" rows="5"></textarea>
+                  </td>
+                </tr>
+
+               <input type="hidden" name="[U_PARENT_REFERRALS]SCHOOLID" value="" id="hiddenSchoolID"/>
+               <input type="hidden" name="[U_PARENT_REFERRALS]YEAR_ID" value="" id="hiddenYearID"/>
+             </fieldset>
+            </table>
+
+           <div class="button-row" id="row1">
+              <input type="hidden" name="ac" value="prim">
+              <button name="btnSubmit" id="btnSubmit" type="submit">Submit</button>
+           </div>
+
+      </form>
+      </div>
+      ~[wc:admin_footer_frame_css]
+   </body>
+   <script>
+    document.getElementById("btnSubmit").onclick = function() {
+    document.getElementById("hiddenParentID").value = ~(gpv.id);
+    document.getElementById("hiddenSchoolID").value = ~(curschoolid);
+    document.getElementById("hiddenYearID").value = ~(curyearid);
+    };
+
+   </script>
+</html>
+<!-- end right frame -->

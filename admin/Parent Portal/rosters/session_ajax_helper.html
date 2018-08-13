@@ -1,0 +1,7 @@
+<option></option>
+~[tlist_sql;
+SELECT  PST.ID, PST.NAME
+FROM PS.U_PARENT_SESSION_TYPES PST
+WHERE PST.LINK_ID = ~(gpv.session_type_id)]
+<option value=~(ID)>~(NAME)</option>
+[/tlist_sql]
