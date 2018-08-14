@@ -7,8 +7,31 @@
       ~[wc:commonscripts]
       <link href="/images/css/screen.css" rel="stylesheet" media="screen">
       <link href="/images/css/print.css" rel="stylesheet" media="print">
+
+      <script>
+
+
+          function organization_filter(input) {
+
+            $j('#session_type_selector').empty();
+
+            $j.ajax({
+              type: 'post', //post = 'save' the data to dB
+              url: 'referrals_ajax_helper.html?r_type=' + input,
+              success: function (data) {
+                  console.log("success");
+                  $j('#session_type_selector').append(data);
+                }
+                });
+          }
+
+
+
+
+      </script>
+
    </head>
-   <body onload="addList('group_ID_dropDown', terms)">
+   <body>
 
 
 <!-- WANT TO FIX IN ORDER TO NAVIGATE BACK TO PARENT ENROLLMENTS..... WOULD NEED GPV VALUE OF:
@@ -40,26 +63,43 @@
                 <tr>
                     <td class="bold">Referral Type</td>
                     <td>
-                      <select id="group_ID_dropDown" name="[U_PARENT_REFERRALS]REFERRAL_TYPE">
+                      <select id="REFERRAL_TYPE_SELECT" name="[U_PARENT_REFERRALS]REFERRAL_TYPE" onchange="organization_filter(this.value)">
                         <option>
-                          <option value="Food">Food Security</option>
-                          <option value="Financial">Financial</option>
-                          <option value="Housing">Housing</option>
-                          <option value="Relationships">Relationships</option>
-                          <option value="Transporation">Transporation</option>
-                          <option value="Utilities">Utilities</option>
-                          <option value="Other">Other</option>
+                          <option value=2>Food Security</option>
+                          <option value=1>Financial</option>
+                          <option value=3>Housing</option>
+                          <option value=4>Relationships</option>
+                          <option value=5>Transporation</option>
+                          <option value=6>Utilities</option>
+                          <option value=0>Other</option>
                         </option>
                       </select>
                         </td>
                 </tr>
 
-                <tr>
+                <!--<tr>
                     <td class="bold">Organization</td>
                     <td>
-                        <input name="[U_PARENT_REFERRALS]ORGANIZATION" value=""/>
+                        <input id="ORG_SELECT" name="[U_PARENT_REFERRALS]ORGANIZATION" value=""/>
                     </td>
-                </tr>
+                </tr>-->
+
+                <tr>
+
+                    <td class="bold">Organization</td>
+                    <td>
+                      <select id="session_type_selector" name="[U_PARENT_REFERRALS]ORGANIZATION" value="" >
+                        <option></option>
+                         ~[tlist_sql;
+                         SELECT  ID, AGENCY_NAME
+                         FROM PS.U_PARENT_REFERRAL_AGENCIES
+                         ]
+                       <option value=~(ID)>~(NAME)</option>
+                       [/tlist_sql]
+                      </select>
+
+                    </td>
+                 </tr>
 
                 <tr>
                     <td class="bold">Date Referred</td>

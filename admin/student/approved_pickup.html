@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<title>Approved Pickups</title>
 <!-- required scripts -->
 	~[wc:commonscripts]
 <!-- Required style sheets: screen.css, and print.css -->
+	<script src="/scripts/tlistCustomization.js"></script>
 	<link href="/images/css/screen.css" rel="stylesheet" media="screen">
 	<link href="/images/css/print.css" rel="stylesheet" media="print">
 </head>
@@ -21,7 +23,24 @@
 ~[if.~(gpv.changesSaved)=true]<div class="feedback-confirm">~[text:psx.common.changes_recorded]</div>[/if]
 	<div class="box-round">
 		~[tlist_child:STUDENTS.U_STUDENTS_EXTENSION.U_APPROVED_PICKUPS;displaycols:APPROVED_PICKUP_NAME, APPROVED_PICKUP_PHONE, APPROVED_PICKUP_RELATIONSHIP;fieldNames:Name,Phone,Relationship;type:html]
-        <div class="button-row"><input type="hidden" name="ac" value="prim">~[submitbutton]</div>
+		<script>
+					var InstValues = [];
+					InstValues.push(['Grandfather','Grandfather']);
+					InstValues.push(['Grandmother','Grandmother']);
+					InstValues.push(['Brother','Brother']);
+					InstValues.push(['Sister','Sister']);
+					InstValues.push(['Uncle','Uncle']);
+					InstValues.push(['Godmother','Godmother']);
+					InstValues.push(['Godfather','Godfather']);
+					InstValues.push(['Grandparent','Grandparent']);
+					InstValues.push(['Aunt','Aunt']);
+					InstValues.push(['Cousin','Cousin']);
+					InstValues.push(['Family Friend','Family Friend']);
+					InstValues.push(['Other','Other']);
+					tlistText2DropDownValNamePair('APPROVED_PICKUP_RELATIONSHIP',InstValues);
+			</script>
+			<br>
+				<div class="button-row"><input type="hidden" name="ac" value="prim">~[submitbutton]</div>
 	</div>
 </form>
 <!-- end of content area -->

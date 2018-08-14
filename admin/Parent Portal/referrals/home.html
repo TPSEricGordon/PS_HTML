@@ -51,11 +51,20 @@
            <tbody>
               ~[tlist_sql;
               SELECT
-              PR.REFERRAL_TYPE, PR.ORGANIZATION, TO_CHAR( PR.DATE_REFERRED, 'YYYY-MM-DD'), PR.NOTES,
-              TO_CHAR( PR.FOLLOW_UP_DATE, 'MM-DD-YYYY'),
-              CASE WHEN ACCESSED=1 THEN 'Yes' ELSE 'No' END,
-              '/admin/Parent_Coaches/referrals/edit.html?id='||PR.ID||'&p_id=' As edit_link
-              FROM PS.U_PARENT_REFERRALS PR
+                CASE
+                	WHEN PR.REFERRAL_TYPE = '1' THEN 'Financial'
+                	WHEN PR.REFERRAL_TYPE = '2' THEN 'Food Security'
+                	WHEN PR.REFERRAL_TYPE = '3' THEN 'Housing'
+                	WHEN PR.REFERRAL_TYPE = '4' THEN 'Relationships'
+                	WHEN PR.REFERRAL_TYPE = '5' THEN 'Transportation'
+                	WHEN PR.REFERRAL_TYPE = '6' THEN 'Utilities'
+                ELSE 'Other' END AS REFERRAL_TYPE,
+                PR.ORGANIZATION AS ORGANIZATION, TO_CHAR( PR.DATE_REFERRED, 'YYYY-MM-DD'), PR.NOTES,
+                TO_CHAR( PR.FOLLOW_UP_DATE, 'MM-DD-YYYY'),
+                CASE WHEN ACCESSED=1 THEN 'Yes'  WHEN ACCESSED=0 THEN 'No' ELSE '' END,
+                '/admin/Parent_Coaches/referrals/edit.html?id='||PR.ID||'&p_id='||~(gpv.id) As edit_link
+                FROM PS.U_PARENT_REFERRALS PR
+
               WHERE PR.PERSONID = ~(gpv.id)
               ]
               <tr>
