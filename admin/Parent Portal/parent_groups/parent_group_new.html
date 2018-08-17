@@ -77,15 +77,10 @@
                      <input type="text" name="[U_PARENT_GROUPS]LOCATION" value="" size="20" />
                   </td>
               </tr>
-              <tr>
-                <td class="bold">School Year</td>
-                <td>
-                
-               </td>
-              </tr>
+              
 
                 <input type="hidden" name="[U_PARENT_GROUPS]YEARID" value="" id="YEARID"/>
-
+                <input type="hidden" name="[U_PARENT_GROUPS]SCHOOLID" value="" id="hiddenSchoolID"/>
             </table>
 
 
@@ -102,6 +97,8 @@
 
     document.getElementById("btnSubmit").onclick = function() {
     document.getElementById("YEARID").value = ~(curyearid);
+    document.getElementById("hiddenSchoolID").value = ~(curschoolid);
+
     };
 
    </script>

@@ -81,11 +81,15 @@
                <tr>
                  <td class="bold">School Year</td>
                  <td>
-                 <select name="[U_PARENT_GROUPS]YEARID">
+                 <select name="[U_PARENT_GROUPS]YEARID" value="">
+                   <option></option>
                    <<option value=27>2017-2018</option>
+                   <<option value=28>2018-2019</option>
+                   <<option value=29>2019-2020</option>
                  </select>
                 </td>
                </tr>
+               <input type="hidden" name="[U_PARENT_GROUPS]SCHOOLID" value="" id="hiddenSchoolID"/>
 
 
              </table>
@@ -106,5 +110,14 @@
       </div>
       ~[wc:admin_footer_frame_css]
    </body>
+   <script>
+
+    document.getElementById("btnSubmit").onclick = function() {
+    document.getElementById("hiddenSchoolID").value = ~(curschoolid);
+
+    };
+
+   </script>
+
 </html>
 <!-- end right frame -->
